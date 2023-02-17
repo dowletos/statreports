@@ -16,10 +16,11 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path,include
-
+from users.views import RegisterView
 from users.views import *
 from django.conf import settings
 from django.conf.urls.static import static
+from users.views import *
 
 
 urlpatterns = [
@@ -27,8 +28,8 @@ urlpatterns = [
     path('',mainpage),
     path('login',user_login,name='login'),
     path('logout',user_logout,name='logout'),
-    path('users_edit',users_edit,name='users_edit'),
-    path('profiles',user_profile_settings,name='profiles')
+    path('users_edit',RegisterView.as_view(), name='users_edit')
+
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,8 @@
+<!doctype html>
+
+{% load static %}
+    {% if not request.user.is_authenticated %}
+        {% block content %} {% endblock %}
+    {% else %}
+        {% include 'modules.html' %}
+    {% endif %}

@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.108.0">
+    <title>{{ title }}</title>
+
+
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .b-example-divider {
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
+
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+    </style>
+
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/heroes.css' %}" rel="stylesheet">
+  </head>
+  <body>
+
+<main>
+
+
+    {% if not request.user.is_authenticated %}
+
+     <div class="b-example-divider text-justify"><center></center></div>
+<BR><BR>
+  <div class="container col-xl-10 col-xxl-8 px-4 py-5">
+    <div class="row align-items-center g-lg-5 py-5">
+      <div class="col-lg-7 text-center text-lg-start">
+        <h1 class="display-5 fw-bold lh-1 mb-3">Добро пожаловать в электронную систему Центрального банка Туркменистана</h1><br>
+        <p class="col-lg-10 fs-4 text-justify">Данный сайт предназначен для осуществления _________ операций. В случае возникновения вопросов просим связаться по нижеуказанным номерам телефона:</p>
+      </div>
+      <div class="col-md-10 mx-auto col-lg-5">
+
+        <form method="post" class="p-4 p-md-5 border rounded-3 bg-light" name=login action="{% url 'login' %}">
+          {% csrf_token %}
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+            <label for="username">Имя пользователя</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="password" class="form-control" id="password" name="password" placeholder="password">
+            <label for="password">Пароль</label>
+          </div>
+          <div class="checkbox mb-3">
+            <label>
+              <input type="checkbox" value="remember-me"> Запомнить меня
+            </label>
+          </div>
+          <button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button>
+          <hr class="my-4">
+          <small class="text-center"><center><a href="" class="alert-link"> РЕГИСТРАЦИЯ </a></small>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+<br>
+<div class="container">
+  <footer class="py-3 my-4">
+    <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+
+    </ul>
+    <p class="text-center text-muted">&copy; 2023 ЦБТ</p>
+  </footer>
+</div>
+
+
+</main>
+
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+
+  </body>
+</html>
+{% endif %}
+{% endblock %}
+
+

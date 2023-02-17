@@ -1,0 +1,126 @@
+{% extends "modules.html" %}
+{% load static %}
+{% block content %}
+    <div class="bd-example-snippet bd-code-snippet"><div class="bd-example">
+        <nav>
+          <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Создание пользователя</button>
+            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Редактирование пользователей</button>
+            <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</button>
+          </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+          <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="flex-shrink-0 p-3 bg-white" style="width: 100%;text-align:justify">
+
+      <div class="bd-heading sticky-xl-top align-self-start mt-5 mb-3 mt-xl-0 mb-xl-2">
+        <h3>Персональные данные</h3>
+
+      </div>
+
+      <div >
+
+        <div class="bd-example-snippet bd-code-snippet"><div class="bd-example">
+        <form class="row g-3" action="{% url 'profiles' %}">
+          {% csrf_token %}
+
+          <div class="col-md-4 form-group">
+
+            <label for="{{ NF.first_name.id_for_label }}" class="form-label">{{ NF.first_name.label }}</label>
+            <input type="text" class="form-control "  id="{{ NF.first_name.id_for_label }}" value="" required>
+            <div class="valid-feedback">
+               {{ NF.non_field.errors }}
+            </div>
+          </div>
+
+            <div class="col-md-4 form-group">
+
+            <label for="{{ NF.last_name.id_for_label }}" class="form-label">{{ NF.last_name.label }}</label>
+            <input type="text" class="form-control " id="{{ NF.last_name.id_for_label }}" value="" required>
+            <div class="valid-feedback">
+               {{ NF.non_field.errors }}
+            </div>
+          </div>
+
+
+          <div class="col-md-8">
+            <label for="{{ NF.bank_id.label }}" class="form-label">{{ NF.bank_id.label }}</label>
+
+            <select class="form-select" id="{{NF.bank_id.}}" required>
+               {% for value in NF.bank_id %}
+
+                 {{ value }}
+
+                {% endfor %}
+            </select>
+
+            <div class="invalid-feedback">
+              Please select a valid state.
+            </div>
+          </div>
+
+          <div class="col-md-4 form-group">
+          </div>
+
+          <div class="col-md-4 form-group">
+
+            <label for="{{ NF.password_a.id_for_label }}" class="form-label">{{ NF.password_a.label }}</label>
+            <input type="password" class="form-control "  id="{{ NF.password_a.id_for_label }}" value="" required>
+            <div class="valid-feedback">
+               {{ NF.non_field.errors }}
+            </div>
+          </div>
+
+          <div class="col-md-4 form-group">
+
+            <label for="{{ NF.password_b.id_for_label }}" class="form-label">{{ NF.password_b.label }}</label>
+            <input type="password" class="form-control " id="{{ NF.password_b.id_for_label }}" value="" required>
+            <div class="valid-feedback">
+               {{ NF.non_field.errors }}
+            </div>
+          </div>
+
+
+
+
+          <div class="col-12">
+             <div class="col-md-4 form-group">
+              <input class="form-check-input " type="checkbox" value="" id="{{ NF.is_active.id_for_label }}" required>
+              <label class="form-check-label" for="{{ NF.is_active.id_for_label }}">&nbsp;&nbsp;{{ NF.is_active.label }}
+              </label>
+              <div class="invalid-feedback">
+                  {{ NF.non_field.errors }}
+              </div>
+            </div>
+          </div>
+
+
+
+
+          <div class="col-12">
+            <button class="btn btn-primary" type="submit">Submit form</button>
+          </div>
+        </form>
+        </div></div>
+
+
+      </div>
+    </article>
+ </div>
+
+
+
+          </div>
+          <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <p>This is some placeholder content the <strong>Profile tab's</strong> associated content. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling. You can use it with tabs, pills, and any other <code>.nav</code>-powered navigation.</p>
+          </div>
+          <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+            <p>This is some placeholder content the <strong>Contact tab's</strong> associated content. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling. You can use it with tabs, pills, and any other <code>.nav</code>-powered navigation.</p>
+          </div>
+        </div>
+        </div></div>
+
+
+
+
+{% endblock %}
