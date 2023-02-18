@@ -15,19 +15,31 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .forms import *
 from django.core.files.storage import FileSystemStorage
-
+from django.urls import reverse
 
 
 
 class RegisterView(FormView):
+
     template_name = 'users/users_edit.html'
+
     form_class = RegisterForm
     success_url = '/'
-    print('ok')
+
+
+
+    def get(self, request):
+        pass
+        UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
+        RF = RegisterForm()
+        return render(self.request, 'users/users_edit.html',
+                      {'title': 'Добро пожаловать', 'UserSet': UserSet, 'form': RF})
 
     def form_valid(self, form):
-        user = form.save()
         UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
+        user_copy=self.request.user
+        user = form.save()
+
         userX=self.request.POST.get("username")
 
         self.request.user.username=user
@@ -35,39 +47,41 @@ class RegisterView(FormView):
         self.request.user.is_staff=False
         self.request.user.is_superuser = False
 
+        if self.request.POST.get("is_active")==None:
+            self.request.user.is_active = False
+
 
 
 
         if self.request.method == 'POST':
             NF = register_new_user_form(self.request.POST, instance=self.request.user)
-            PF = ProfileForm(self.request.POST, self.request.FILES, instance=self.request.user.profile)
+            PF = ProfileForm(self.request.POST,  instance=self.request.user.profile)
 
-            print(NF.errors)
-            print(PF.errors)
-            print(NF.fields)
-            print(PF.fields)
-            print(self.request.FILES)d
+
             for z in NF.data:
                print(f'NF~~~~~~{z}')
 
             for v in PF.data:
                 print(f'PF~~~~~~{v}')
-
+            print(NF.is_valid())
+            print(PF.is_valid())
+            print(NF.errors)
+            print(PF.errors)
             if NF.is_valid() and PF.is_valid():
                 NF.save()
-                print('ooook')
+
                 PF.save()
-                print(self.request.FILES)
-                print('test')
-                if self.request.FILES['avatar']:
-                    upload = self.request.FILES['avatar']
-                    fss = FileSystemStorage()
-                    file = fss.save(upload.name, upload)
-                    file_url = fss.url(file)
+                #print(self.request.FILES)
+
+               #if self.request.FILES['avatar']:
+               #     upload = self.request.FILES['avatar']
+               #     fss = FileSystemStorage()
+               #     file = fss.save(upload.name, upload)
+               #     file_url = fss.url(file)
 
                 messages.success(self.request, f'Your account has been sent for approval!')
-                return render(self.request, 'users/users_edit.html',
-                              { 'PF': PF,'NF': NF, 'title': 'Добро пожаловать', 'UserSet': UserSet})
+
+                return redirect(reverse('users_edit'))
         else:
             NF = register_new_user_form()
             PF = ProfileForm(self.request.POST)

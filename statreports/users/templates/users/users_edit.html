@@ -18,18 +18,38 @@
       <div >
 
         <div class="bd-example-snippet bd-code-snippet"><div class="bd-example">
-
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
          <div class="center">
-	  <form method="POST" novaldiate enctype="multipart/form-data" action="{% url 'users_edit' %}" >
+	  <form method="POST" novaldiate enctype="multipart/form-data" action="{% url 'users_edit' %}"  >
 	  	{% csrf_token %}
 	    <h2 class="text-center">Персональные данные</h2>
 		{% for field in form %}
+          {% if field.name == 'is_active' %}
+          <div class="col-12"><br>
+          <div class="mb-3 form-check form-switch">
+              <label class="form-check-label" for="{{ field.name }}">{{ field.label }}</label>
+            <input class="form-check-input" type="checkbox" name="{{ field.name }}" role="switch" id="{{ field.name }}" >
+          </div>
+
+              {% if field.errors %}
+	        		<small class="error" style="color:red;font-size:15pt">{{ field.errors|striptags  }}</small><br>
+	        	{% endif %}
+            </div>
+          {% else %}
 	    		{{ field.label_tag }}
 	        	{{ field }}
 	        	{% if field.errors %}
 	        		<small class="error" style="color:red;font-size:15pt">{{ field.errors|striptags  }}</small><br>
 	        	{% endif %}
+          {% endif %}
 		{% endfor %}
+
 
 		   <div class="col-md-12">
             <button class="form-group btn btn-primary" type="submit" style="width:100%">Регистрация</button>
@@ -38,132 +58,6 @@
 		</form>
 	</div>
 
- {% comment %}
-<form action="{% url 'users_edit' %}" method="POST" class="form-group row g-3" >
-          {% csrf_token %}
-
-          {{ form.as_p }}
-          {{ PF.as_p }}
-
-             {% if NF.non_field_errors %}
-        <div class="form-group text-error">
-            {{ form.non_field_errors }}
-        </div>
-         {% endif %}
-
-    {% for field in NF.visible_fields %}
-
-        {% if field.errors %}
-            <span><font color="red">{{ field.errors|striptags }}</font></span>
-        {% endif %}
-    {% endfor %}
-
-     <div class="form-group col-md-4 ">
-
-            <label for="{{ NF.username.id_for_label }}" class="form-label">{{ NF.username.label }}</label>
-            <input type="text" class="form-control" name="{{ NF.username.name }}" id="{{ NF.username.id_for_label }}" value="" required>
-            <div class="valid-feedback">
-               {% for error in NF.username.errors %}
-                <p style="color: red">{{ error }}</p>
-                {% endfor %}
-
-            </div>
-          </div>
-
-          <div class="form-group col-md-4 ">
-
-            <label for="{{ NF.email.id_for_label }}" class="form-label">{{ NF.email.label }}</label>
-            <input type="text" class="form-control " name="{{ NF.email.name }}" id="{{ NF.email.id_for_label }}" value="" required>
-            <div class="valid-feedback">
-               {{ NF.email.errors }}
-            </div>
-          </div>
-
- <div class="form-group col-md-4 ">
-          </div>
-
-            <div class="form-group col-md-4 ">
-
-            <label for="{{ NF.last_name.id_for_label }}" class="form-label">{{ NF.last_name.label }}</label>
-            <input type="text" class="form-control " name="{{ NF.last_name.name }}" id="{{ NF.last_name.id_for_label }}" value="" required>
-            <div class="valid-feedback">
-               {{ NF.last_name.errors }}
-            </div>
-          </div>
-
-
-          <div class="form-group col-md-4 ">
-
-            <label for="{{ NF.first_name.id_for_label }}" class="form-label">{{ NF.first_name.label }}</label>
-            <input type="text" class="form-control" name="{{ NF.first_name.name }}" id="{{ NF.first_name.id_for_label }}" value="" required>
-            <div class="valid-feedback">
-               {{ NF.first_name.errors }}
-
-            </div>
-          </div>
-
-
-
-
-
-
-
-          <div class="form-group col-md-8">
-            <label for="{{ NF.bankid_FK.label }}" class="form-label">{{ NF.bankid_FK.label }}</label>
-
-            <select class="form-select" id="{{NF.bankid_FK.id}}" required name="{{ NF.bankid_FK.name }}">
-               {% for value in NF.bankid_FK %}
-
-                 {{ value }}
-
-                {% endfor %}
-            </select>
-
-            <div class="invalid-feedback">
-              {{ NF.bankid_FK.errors }}
-            </div>
-          </div>
-
-          <div class="form-group col-md-4 ">
-          </div>
-
-          <div class="form-group col-md-4 ">
-
-            <label for="{{ NF.password1.id_for_label }}" class="form-label">{{ NF.password1.label }}</label>
-            <input type="password" class="form-control "  id="{{ NF.password1.id_for_label }}" value="" required name="{{ NF.password1.name }}">
-            <div class="valid-feedback">
-               {{ NF.password1.errors }}
-            </div>
-          </div>
-
-          <div class="form-group col-md-4">
-
-            <label for="{{ NF.password2.id_for_label }}" class="form-label">{{ NF.password2.label }}</label>
-            <input type="password" class="form-control " id="{{ NF.password2.id_for_label }}" value="" required name="{{ NF.password2.name }}">
-            <div class="valid-feedback">
-               {{ NF.password2.errors }}
-            </div>
-          </div>
-
-          <div class="col-md-8 form-group">
-          </div>
-
-
-          <div class="col-12">
-             <div class="form-group col-md-4 ">
-                 <label class="form-check-label" for="{{ NF.is_active.label }}">&nbsp;&nbsp;{{ NF.is_active.label }}&nbsp;&nbsp;
-              <input class="form-check-input " type="checkbox" name="{{ NF.is_active.name }}" id="{{ NF.is_active.id_for_label }}" required>
-
-              </label>
-              <div class="invalid-feedback">
-                  {{ NF.is_active.errors }}
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group col-md-8 ">
-          </div>
- {% endcomment %}
 
 
 

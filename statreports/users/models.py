@@ -79,7 +79,7 @@ class profiles(models.Model):
     class Meta:
         unique_together = ('profileIndex_FK', 'categoryID_FK', 'subCategoryID_FK')
         verbose_name = 'Профиль'
-        verbose_name_plural = '2. ПРОФИЛИ'
+        verbose_name_plural = '1. ПРОФИЛИ'
         ordering = ['profileID']
 
 
@@ -92,7 +92,7 @@ class userRights(models.Model):
     class Meta:
         unique_together = ('userID', 'profilesIndex_FK')
         verbose_name = 'Права'
-        verbose_name_plural = '3. ПРАВА ПОЛЬЗОВАТЕЛЕЙ'
+        verbose_name_plural = '2. ПРАВА ПОЛЬЗОВАТЕЛЕЙ'
         ordering = ['userID']
 
 
@@ -143,24 +143,31 @@ class View_UserSet(models.Model):
 
 class Profile(models.Model):
     bankid_FK = models.TextField(max_length=90, blank=True)
-    avatar = models.ImageField(default='avatar.png', upload_to='uploads/')
+    #avatar = models.TextField(max_length=90, blank=True)
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
 
 
     def __str__(self):
-        return f'{self.user.username} Profile'
+        return f'{self.user.username} Settings'
+
+    class Meta:
+
+        verbose_name = 'Справочник доп.польз.данных'
+        verbose_name_plural = 'Справочник доп.польз.данных'
+        ordering = ['id']
 
     def save(self, *args, **kwargs):
         # save the profile first
         super().save(*args, **kwargs)
 
-        img = Image.open(self.avatar.path)
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
+       # img = Image.open(self.avatar.path)
+       # if img.height > 300 or img.width > 300:
+       #     output_size = (300, 300)
             # create a thumbnail
-            img.thumbnail(output_size)
+       #     img.thumbnail(output_size)
             # overwrite the larger image
-            img.save(self.avatar.path)
+       #     img.save(self.avatar.path)
 
            
