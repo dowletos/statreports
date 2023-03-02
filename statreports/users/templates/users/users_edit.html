@@ -5,8 +5,8 @@
         <nav>
           <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
             <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Создание пользователя</button>
-            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Редактирование пользователей</button>
-            <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</button>
+            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Редактирование данных пользователей</button>
+
           </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
@@ -19,11 +19,14 @@
 
         <div class="bd-example-snippet bd-code-snippet"><div class="bd-example">
         {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
+        {% for message in messages %}
+            {% if message.tags in 'users_edit' %}
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+            {% endif %}
+        {% endfor %}
         {% endif %}
          <div class="center">
 	  <form method="POST" novaldiate enctype="multipart/form-data" action="{% url 'users_edit' %}"  >
@@ -72,11 +75,153 @@
 
           </div>
           <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-            <p>This is some placeholder content the <strong>Profile tab's</strong> associated content. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling. You can use it with tabs, pills, and any other <code>.nav</code>-powered navigation.</p>
+
+          <div class="tab-content" id="nav-tabContent">
+          <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="flex-shrink-0 p-3 bg-white" style="width: 100%;text-align:justify">
+
+
+
+
+      <div >
+
+        <div class="bd-example-snippet bd-code-snippet"><div class="bd-example">
+        {% if messages %}
+        {% for message in messages %}
+
+            {% if message.tags in 'users_update' %}
+
+             <script>
+                $(document).ready(function() {
+                $('#nav-profile-tab').click();
+                });
+             </script>
+
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+            Данные пользователя успешно обновлены!
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+            {% endif %}
+        {% endfor %}
+        {% endif %}
+         <div class="center">
+
+	    <h2 class="text-center">Редактирование данных пользователей</h2>
+          <div class="col-12"><br>
+
+          <select name="username" class="form-select is-valid" required="" id="upd_username">
+          <option value="" selected="">---------</option>
+
+		  {% for f1,f2 in UF %}
+          <option value="{{ f1 }}">{{ f2}}</option>
+
+
+
+
+		  {% endfor %}
+          </select>
+              <small class="error" style="color:red;font-size:13pt" id="id_upd_user_errorform"></small>
+              <br>
+
+
+
+
+ <div >
+
+        <div class="bd-example-snippet bd-code-snippet"><div class="bd-example">
+
+         <div class="center">
+	    <form method="POST" novaldiate enctype="multipart/form-data" action="{% url 'users_update' %}"  >
+	  	  {% csrf_token %}
+
+		{% for field in CF %}
+          {% if field.name == 'is_active' %}
+          <div class="col-12"><br>
+          <div class="mb-3 form-check form-switch">
+              <label class="form-check-label" for="{{ field.name }}">{{ field.label }}</label>
+            <input class="form-check-input" type="checkbox" name="{{ field.name }}" role="switch" id="{{ field.id_for_label }}" >
           </div>
-          <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-            <p>This is some placeholder content the <strong>Contact tab's</strong> associated content. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling. You can use it with tabs, pills, and any other <code>.nav</code>-powered navigation.</p>
+              {% if field.errors %}
+	        		<small class="error" style="color:red;font-size:15pt">{{ field.errors|striptags  }}</small><br>
+	        	{% endif %}
+            </div>
+          {% else %}
+	    		{{ field.label_tag }}
+	        	{{ field }}
+	        	{% if field.errors %}
+	        		<small class="error" style="color:red;font-size:15pt">{{ field.errors|striptags  }}</small><br>
+	        	{% endif %}
+          {% endif %}
+		{% endfor %}
+
+		   <div class="col-md-12">
+            <button class="form-group btn btn-primary" type="submit" style="width:100%">Обновить данные</button>
           </div>
+
+		</form>
+	</div>
+
+        </div>
+
+      </div>
+    </article>
+ </div>
+
+             {% block javascript %}
+  <script>
+  $('#upd_username').change(function () {
+    // создаем AJAX-вызов
+    $.ajax({
+        data: $(this).serialize(), // получаяем данные формы
+        url: "{% url 'check_usersinfo' %}",
+        data: {
+               'userid':  $('#upd_username').children("option:selected").val()
+               },
+        // если успешно, то
+        success: function (response) {
+
+            if (response.is_checked == 1) {
+
+               $('#upd_username').removeClass('is-invalid').addClass('is-valid')
+               $('#id_upd_id').val(response.id)
+               $('#id_upd_username').val(response.username)
+               $('#id_upd_first_name').val(response.first_name)
+               $('#id_upd_last_name').val(response.last_name)
+               $('#id_upd_email').val(response.email)
+
+               if (response.is_active==true) {
+                    $('#id_upd_is_active').attr('checked','')
+               }
+               else
+               {
+                    $('#id_upd_is_active').removeAttr('checked')
+               }
+               $('#id_upd_bankid_FK').val(response.bankid_FK)
+               $('#id_upd_user_errorform').empty()
+
+              }
+            else {
+                $('#upd_username').removeClass('is-valid').addClass('is-invalid')
+                $('#id_upd_user_errorform').empty()
+                $('#id_upd_user_errorform').append('Данный пользователь не существует!')
+
+            }
+
+
+        },
+        // если ошибка, то
+        error: function (response) {
+            // предупредим об ошибке
+            console.log(response.responseJSON.errors)
+        }
+    });
+    return false;
+});
+  </script>
+{% endblock javascript %}
+
+          </div>
+
         </div>
         </div></div>
 
@@ -84,3 +229,4 @@
 
 
 {% endblock %}
+

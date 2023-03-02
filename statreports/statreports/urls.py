@@ -24,11 +24,16 @@ from users.views import *
 
 
 urlpatterns = [
+    path('__debug__/', include('debug_toolbar.urls')),
     path('admin/', admin.site.urls),
     path('',mainpage),
     path('login',user_login,name='login'),
     path('logout',user_logout,name='logout'),
-    path('users_edit',RegisterView.as_view(), name='users_edit')
+    path('users_edit',RegisterView.as_view(), name='users_edit'),
+    path('users_update',UpdateUser.as_view(), name='users_update'),
+    path('check_usersinfo',GetUsersData.as_view(),name='check_usersinfo'),
+    #path('users_rights', CreateUserRights.as_view(), name='users_rights'),
+
 
 ]
 
