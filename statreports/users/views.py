@@ -168,6 +168,19 @@ class UpdateUser(RegisterView):
         4. Category items
 '''
 class CreateUserRights(FormView):
+    template_name = 'users/users_rights.html'
+    form_class = RegisterForm
+    success_url = '/'
+    def get(self, request):
+        UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
+        if not CheckUserRights.check_user_permissions(self,UserSet, 'users_edit'):
+            return redirect(reverse('logout'))
+        RF = RegisterForm()
+        UF = tuple((z1, f'{z2} {z3}') for z1, z2, z3 in get_user_model().objects.values_list('id', 'first_name', 'last_name'))
+        CF = update_user_form(auto_id='id_upd_%s')
+        return render(self.request, 'users/users_rights.html',
+                      {'title': 'Добро пожаловать', 'UserSet': UserSet, 'form': RF, 'UF': UF, 'CF': CF})
+
     def post(self,request):
         UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
         if not CheckUserRights.check_user_permissions(self,UserSet, 'users_rights'):

@@ -32,7 +32,7 @@ urlpatterns = [
     path('users_edit',RegisterView.as_view(), name='users_edit'),
     path('users_update',UpdateUser.as_view(), name='users_update'),
     path('check_usersinfo',GetUsersData.as_view(),name='check_usersinfo'),
-    #path('users_rights', CreateUserRights.as_view(), name='users_rights'),
+    path('users_rights', CreateUserRights.as_view(), name='users_rights'),
 
 
 ]
