@@ -33,7 +33,9 @@ urlpatterns = [
     path('users_update',UpdateUser.as_view(), name='users_update'),
     path('check_usersinfo',GetUsersData.as_view(),name='check_usersinfo'),
     path('users_rights', CreateUserRights.as_view(), name='users_rights'),
-
+    path('users_rights_elements_update', ElementsManagementController.as_view(), name='users_rights_elements_update'),
+    path('users_rights_profiles', ProfileIndexManagementController.as_view(), name='users_rights_profiles'),
+    path('users_rights_categories', CategoriesManagementController.as_view(), name='users_rights_categories'),
 
 ]
 

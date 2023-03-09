@@ -1,0 +1,597 @@
+<!-- Content -->
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="page-header">
+        <h3>Examples</h3>
+      </div>
+      <div class="alert alert-warning">
+        <i class="fa fa-warning fa-lg"></i>&nbsp;
+        The file <strong>example.php</strong> and <strong>add_new.php</strong>does not exist, so sending the ajax request will fail.
+        <br><br>
+        Add row is only simulation without Ajax request :-)
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="page-header">
+        <h4>Example #9</h4>
+      </div>
+      <p class="help-block">Add new row to table.</p>
+
+      <div class="m-t-20">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs">
+          <li class="active"><a href="#tab" data-toggle="tab">Table</a></li>
+          <li><a href="#tab1" data-toggle="tab">Html</a></li>
+          <li><a href="#tab2" data-toggle="tab">JavaScript</a></li>
+          <li><a href="#tab3" data-toggle="tab">PHP Save edit or delete rows in table</a></li>
+          <li><a href="#tab4" data-toggle="tab">PHP Add new row to DB</a></li>
+          <li><a href="#tab5" data-toggle="tab">JSFIDDLE</a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div class="tab-pane fade in active" id="tab">
+            <div class="row">
+              <div class="col-md-12 m-b-20">
+                <input type="button" value="Add row" id="addRow9" class="btn btn-info pull-right">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="table-responsive">
+                  <table class="table table-striped table-bordered" id="example9">
+                    <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Make</th>
+                      <th>Model</th>
+                      <th>Year</th>
+                      <th>Platform</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>BMW</td>
+                      <td>5-Series</td>
+                      <td>2018</td>
+                      <td>G30</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>BMW</td>
+                      <td>6-Series, M6</td>
+                      <td>2009</td>
+                      <td>F12/F13</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>Ford</td>
+                      <td>Mustang</td>
+                      <td>2015</td>
+                      <td>(6th gen)</td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>Ford</td>
+                      <td>Explorer</td>
+                      <td>2017</td>
+                      <td>(5th gen)</td>
+                    </tr>
+                    <tr class="hidden">
+                      <td>5</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="tab1">
+<pre class="prettyprint linenums">
+&lt;div class="row"&gt;
+  &lt;div class="col-md-12 m-b-20"&gt;
+    &lt;input type="button" value="Add row" id="addRow9" class="btn btn-info pull-right"&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="row"&gt;
+  &lt;div class="col-md-12"&gt;
+    &lt;div class="table-responsive"&gt;
+      &lt;table class="table table-striped table-bordered" id="example9"&gt;
+        &lt;thead&gt;
+        &lt;tr&gt;
+          &lt;th&gt;#&lt;/th&gt;
+          &lt;th&gt;Make&lt;/th&gt;
+          &lt;th&gt;Model&lt;/th&gt;
+          &lt;th&gt;Year&lt;/th&gt;
+          &lt;th&gt;Platform&lt;/th&gt;
+        &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+        &lt;tr&gt;
+          &lt;td&gt;1&lt;/td&gt;
+          &lt;td&gt;BMW&lt;/td&gt;
+          &lt;td&gt;5-Series&lt;/td&gt;
+          &lt;td&gt;2018&lt;/td&gt;
+          &lt;td&gt;G30&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+          &lt;td&gt;2&lt;/td&gt;
+          &lt;td&gt;BMW&lt;/td&gt;
+          &lt;td&gt;6-Series, M6&lt;/td&gt;
+          &lt;td&gt;2009&lt;/td&gt;
+          &lt;td&gt;F12/F13&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+          &lt;td&gt;3&lt;/td&gt;
+          &lt;td&gt;Ford&lt;/td&gt;
+          &lt;td&gt;Mustang&lt;/td&gt;
+          &lt;td&gt;2015&lt;/td&gt;
+          &lt;td&gt;(6th gen)&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+          &lt;td&gt;4&lt;/td&gt;
+          &lt;td&gt;Ford&lt;/td&gt;
+          &lt;td&gt;Explorer&lt;/td&gt;
+          &lt;td&gt;2017&lt;/td&gt;
+          &lt;td&gt;(5th gen)&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+          </div>
+          <div class="tab-pane fade" id="tab2">
+<pre class="prettyprint linenums">
+$('#example9').Tabledit({
+  url: 'ajax/example.php',
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'make'],[2, 'year'],[3, 'model'],[4, 'platform']]
+  }
+});
+
+$("#addRow9").on('click', function () {
+  // Getting value
+  var ID = '3';
+
+  $.ajax({
+    type: "POST",
+    url: "ajax/add_new.php",
+    datatype: 'html',
+    data: {
+      ID: ID
+    },
+    success: function (data) {
+
+      // Add 'html' data to table
+      $('#example9 tbody').html(data);
+
+      // Update Tabledit plugin
+      $('#example9').Tabledit('update');
+
+    },
+    error: function () {
+
+    }
+  })
+});
+</pre>
+          </div>
+          <div class="tab-pane fade" id="tab3">
+<pre class="prettyprint linenums">
+&lt;?php
+
+// Basic example of PHP script to handle with jQuery-Tabledit plug-in.
+// Note that is just an example. Should take precautions such as filtering the input data.
+
+header('Content-Type: application/json');
+
+// CHECK REQUEST METHOD
+if ($_SERVER['REQUEST_METHOD']=='POST') {
+  $input = filter_input_array(INPUT_POST);
+} else {
+  $input = filter_input_array(INPUT_GET);
+}
+
+// PHP QUESTION TO MYSQL DB
+
+// Connect to DB
+
+  /*  Your code for new connection to DB*/
+
+
+// Php question
+if ($input['action'] === 'edit') {
+
+  // PHP code for edit action
+
+} else if ($input['action'] === 'delete') {
+
+  // PHP code for edit delete
+
+} else if ($input['action'] === 'restore') {
+
+  // PHP code for edit restore
+
+}
+
+// Close connection to DB
+
+/*  Your code for close connection to DB*/
+
+// RETURN OUTPUT
+echo json_encode($input);
+
+?&gt;
+</pre>
+          </div>
+          <div class="tab-pane fade" id="tab4">
+<pre class="prettyprint linenums">
+&lt;?php
+
+// Basic example of PHP script to handle with jQuery-Tabledit plug-in.
+// Note that is just an example. Should take precautions such as filtering the input data.
+
+if (!isset($_SERVER['HTTP_X_REQUESTED_WITH'])) die("Nothing to see here");
+
+// Get value from ajax
+$ID = $_POST['ID'];
+
+// PHP QUESTION TO MYSQL DB
+
+// Connect to DB
+
+  /*  Your code for new connection to DB*/
+
+// Php question
+
+  /*  Your code for insert data to DB */
+
+$result = /*  Your code for select data from DB */
+
+while ($row = $result->fetch_assoc()) {
+  $edata .= '&lt;tr&gt;
+                 &lt;td&gt;' . $row["id"] . '&lt;/td&gt;
+                 &lt;td&gt;' . $row["make"] . '&lt;/td&gt;
+                 &lt;td&gt;' . $row["year"] . '&lt;/td&gt;
+                 &lt;td&gt;' . $row["model"] . '&lt;/td&gt;
+                 &lt;td&gt;' . $row["platform"] . '&lt;/td&gt;
+              &lt;/tr&gt;
+             ';
+}
+
+// RETURN OUTPUT
+echo $edata;
+
+?&gt;
+</pre>
+          </div>
+          <div class="tab-pane fade" id="tab5">
+            <h5>Live test on JSFIDDLE only with /echo/json without php functions</h5>
+            <iframe width="100%" height="400" src="https://jsfiddle.net/BluesatKV/n99u5prp/embedded/result,html,js,css/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="page-header">
+        <h4>Example #10</h4>
+      </div>
+      <p class="help-block">Add new row to table before all rows. </p>
+
+      <div class="m-t-20">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs">
+          <li class="active"><a href="#tab6" data-toggle="tab">Table</a></li>
+          <li><a href="#tab7" data-toggle="tab">Html</a></li>
+          <li><a href="#tab8" data-toggle="tab">JavaScript</a></li>
+          <li><a href="#tab9" data-toggle="tab">PHP Save edit or delete rows in table</a></li>
+          <li><a href="#tab10" data-toggle="tab">PHP Add new row to DB</a></li>
+          <li><a href="#tab11" data-toggle="tab">JSFIDDLE</a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div class="tab-pane fade in active" id="tab6">
+            <div class="row">
+              <div class="col-md-12 m-b-20">
+                <input type="button" value="Add row" id="addRow10" class="btn btn-info pull-right">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="table-responsive">
+                  <table class="table table-striped table-bordered" id="example10">
+                    <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Make</th>
+                      <th>Model</th>
+                      <th>Year</th>
+                      <th>Platform</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>BMW</td>
+                      <td>5-Series</td>
+                      <td>2018</td>
+                      <td>G30</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>BMW</td>
+                      <td>6-Series, M6</td>
+                      <td>2009</td>
+                      <td>F12/F13</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>Ford</td>
+                      <td>Mustang</td>
+                      <td>2015</td>
+                      <td>(6th gen)</td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>Ford</td>
+                      <td>Explorer</td>
+                      <td>2017</td>
+                      <td>(5th gen)</td>
+                    </tr>
+                    <tr class="hidden">
+                      <td>5</td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="tab7">
+<pre class="prettyprint linenums">
+&lt;div class="row"&gt;
+  &lt;div class="col-md-12 m-b-20"&gt;
+    &lt;input type="button" value="Add row" id="addRow10" class="btn btn-info pull-right"&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="row"&gt;
+  &lt;div class="col-md-12"&gt;
+    &lt;div class="table-responsive"&gt;
+      &lt;table class="table table-striped table-bordered" id="example10"&gt;
+        &lt;thead&gt;
+        &lt;tr&gt;
+          &lt;th&gt;#&lt;/th&gt;
+          &lt;th&gt;Make&lt;/th&gt;
+          &lt;th&gt;Model&lt;/th&gt;
+          &lt;th&gt;Year&lt;/th&gt;
+          &lt;th&gt;Platform&lt;/th&gt;
+        &lt;/tr&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+        &lt;tr&gt;
+          &lt;td&gt;1&lt;/td&gt;
+          &lt;td&gt;BMW&lt;/td&gt;
+          &lt;td&gt;5-Series&lt;/td&gt;
+          &lt;td&gt;2018&lt;/td&gt;
+          &lt;td&gt;G30&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+          &lt;td&gt;2&lt;/td&gt;
+          &lt;td&gt;BMW&lt;/td&gt;
+          &lt;td&gt;6-Series, M6&lt;/td&gt;
+          &lt;td&gt;2009&lt;/td&gt;
+          &lt;td&gt;F12/F13&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+          &lt;td&gt;3&lt;/td&gt;
+          &lt;td&gt;Ford&lt;/td&gt;
+          &lt;td&gt;Mustang&lt;/td&gt;
+          &lt;td&gt;2015&lt;/td&gt;
+          &lt;td&gt;(6th gen)&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+          &lt;td&gt;4&lt;/td&gt;
+          &lt;td&gt;Ford&lt;/td&gt;
+          &lt;td&gt;Explorer&lt;/td&gt;
+          &lt;td&gt;2017&lt;/td&gt;
+          &lt;td&gt;(5th gen)&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+</pre>
+          </div>
+          <div class="tab-pane fade" id="tab8">
+<pre class="prettyprint linenums">
+$('#example10').Tabledit({
+  url: 'ajax/example.php',
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'make'],[2, 'year'],[3, 'model'],[4, 'platform']]
+  }
+});
+
+$('#addRow10').click(function() {
+  var table = $('#example10');
+  var body = $('#example10 tbody');
+  var nextId = body.find('tr').length + 1;
+  table.prepend($('<tr><td>' + nextId + '</td><td></td><td></td><td></td><td></td></tr>'));
+  table.Tabledit('update');
+});
+</pre>
+          </div>
+          <div class="tab-pane fade" id="tab9">
+<pre class="prettyprint linenums">
+&lt;?php
+
+// Basic example of PHP script to handle with jQuery-Tabledit plug-in.
+// Note that is just an example. Should take precautions such as filtering the input data.
+
+header('Content-Type: application/json');
+
+// CHECK REQUEST METHOD
+if ($_SERVER['REQUEST_METHOD']=='POST') {
+  $input = filter_input_array(INPUT_POST);
+} else {
+  $input = filter_input_array(INPUT_GET);
+}
+
+// PHP QUESTION TO MYSQL DB
+
+// Connect to DB
+
+  /*  Your code for new connection to DB*/
+
+
+// Php question
+if ($input['action'] === 'edit') {
+
+  // PHP code for edit action
+
+} else if ($input['action'] === 'delete') {
+
+  // PHP code for edit delete
+
+} else if ($input['action'] === 'restore') {
+
+  // PHP code for edit restore
+
+}
+
+// Close connection to DB
+
+/*  Your code for close connection to DB*/
+
+// RETURN OUTPUT
+echo json_encode($input);
+
+?&gt;
+</pre>
+          </div>
+          <div class="tab-pane fade" id="tab10">
+<pre class="prettyprint linenums">
+&lt;?php
+
+// Basic example of PHP script to handle with jQuery-Tabledit plug-in.
+// Note that is just an example. Should take precautions such as filtering the input data.
+
+if (!isset($_SERVER['HTTP_X_REQUESTED_WITH'])) die("Nothing to see here");
+
+// Get value from ajax
+$ID = $_POST['ID'];
+
+// PHP QUESTION TO MYSQL DB
+
+// Connect to DB
+
+  /*  Your code for new connection to DB*/
+
+// Php question
+
+  /*  Your code for insert data to DB */
+
+$result = /*  Your code for select data from DB */
+
+while ($row = $result->fetch_assoc()) {
+  $edata .= '&lt;tr&gt;
+                 &lt;td&gt;' . $row["id"] . '&lt;/td&gt;
+                 &lt;td&gt;' . $row["make"] . '&lt;/td&gt;
+                 &lt;td&gt;' . $row["year"] . '&lt;/td&gt;
+                 &lt;td&gt;' . $row["model"] . '&lt;/td&gt;
+                 &lt;td&gt;' . $row["platform"] . '&lt;/td&gt;
+              &lt;/tr&gt;
+             ';
+}
+
+// RETURN OUTPUT
+echo $edata;
+
+?&gt;
+</pre>
+          </div>
+          <div class="tab-pane fade" id="tab11">
+            <h5>Live test on JSFIDDLE only with /echo/json without php functions</h5>
+            <iframe width="100%" height="400" src="https://jsfiddle.net/BluesatKV/pp3Lwz0s/16/embedded/result,html,js,css/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="js/jquery.tabledit.min.js?=v1.2.7"></script>
+<script>
+  $(document).ready(function () {
+    // Example #9
+    $('#example9').Tabledit({
+      url: 'ajax/example.php',
+      columns: {
+        identifier: [0, 'id'],
+        editable: [[1, 'make'], [2, 'year'], [3, 'model'], [4, 'platform']]
+      }
+    });
+
+    // Add row only as simulation
+    $("#addRow9").on('click', function () {
+      // Clone last tr
+      var $tableBody = $('#example9').find("tbody");
+      var $trLast = $tableBody.find("tr:last");
+
+      $trNew = $trLast.clone();
+      $trLast.after($trNew);
+
+      var id = $tableBody.find("tr:last td:first").text();
+
+      var currentPage = parseInt(id);
+      ++currentPage;
+
+      $tableBody.find("tr:last td:first").text(currentPage);
+
+      // Visible before last tr
+      $('#example9 tr:last').prev("tr").attr('class', 'visible');
+
+    });
+
+    // Example #10
+    $('#example10').Tabledit({
+      url: 'ajax/example.php',
+      columns: {
+        identifier: [0, 'id'],
+        editable: [[1, 'make'], [2, 'year'], [3, 'model'], [4, 'platform']]
+      }
+    });
+
+    $('#addRow10').click(function() {
+      var table = $('#example10');
+      var body = $('#example10 tbody');
+      var nextId = body.find('tr').length + 1;
+      table.prepend($('<tr><td>' + nextId + '</td><td></td><td></td><td></td><td></td></tr>'));
+      table.Tabledit('update');
+    });
+
+    prettyPrint();
+
+  });
+</script>

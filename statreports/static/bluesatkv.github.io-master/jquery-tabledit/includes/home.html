@@ -1,0 +1,150 @@
+<div class="jumbotron feature">
+  <div class="container">
+
+    <div id="feature-carousel" class="carousel slide" data-ride="carousel">
+      <ol class="carousel-indicators">
+        <li data-target="#feature-carousel" data-slide-to="0" class="active"></li>
+        <li data-target="#feature-carousel" data-slide-to="1"></li>
+        <li data-target="#feature-carousel" data-slide-to="2"></li>
+      </ol>
+      <div class="carousel-inner" role="listbox">
+        <div class="item active">
+          <a href="#">
+            <img class="img-responsive" src="img/img01.png" alt="">
+          </a>
+          <div class="carousel-caption">
+            <h3>Inline editor for HTML tables compatible with Bootstrap</h3>
+            <p>
+              <a class="btn btn-primary btn-lg" href="https://github.com/BluesatKV/jquery-tabledit/archive/v1.2.7.zip" role="button">Download jQuery-Tabledit by BluesatKV</a>
+            </p>
+            <div class="caption-text">
+              <div class="small">Currently v1.2.7</div>
+              <div class="small">Author of original code <a href="https://github.com/markcell/jQuery-Tabledit" target="_blank">markcell</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <a href="#">
+            <img class="img-responsive" src="img/img02.png" alt="">
+          </a>
+          <div class="carousel-caption">
+            <h3>Inline editor for HTML tables compatible with Bootstrap</h3>
+            <p>
+              <a class="btn btn-primary btn-lg" href="https://github.com/BluesatKV/jquery-tabledit/archive/v1.2.7.zip" role="button">Download jQuery-Tabledit by BluesatKV</a>
+            </p>
+            <div class="caption-text">
+              <div class="small">Currently v1.2.7</div>
+              <div class="small">Author of original code <a href="https://github.com/markcell/jQuery-Tabledit" target="_blank">markcell</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <a href="#">
+            <img class="img-responsive" src="img/img03.png" alt="">
+          </a>
+          <div class="carousel-caption">
+            <h3>Inline editor for HTML tables compatible with Bootstrap</h3>
+            <p>
+              <a class="btn btn-primary btn-lg" href="https://github.com/BluesatKV/jquery-tabledit/archive/v1.2.7.zip" role="button">Download jQuery-Tabledit by BluesatKV</a>
+            </p>
+            <div class="caption-text">
+              <div class="small">Currently v1.2.7</div>
+              <div class="small">Author of original code <a href="https://github.com/markcell/jQuery-Tabledit" target="_blank">markcell</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <a class="left carousel-control" href="#feature-carousel" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="right carousel-control" href="#feature-carousel" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- Content -->
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="page-header">
+        <h4>Key Features</h4>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <dl>
+        <dt>Inline Editor</dt>
+        <dd class="text-justify">It is possible to edit inline like a spreadsheet or with buttons to change between edit and view mode.</dd>
+      </dl>
+    </div>
+    <div class="col-sm-6">
+      <dl>
+        <dt>Columns</dt>
+        <dd class="text-justify">You must choose a table column to use as identifier column and choose the ones you want to turn into editable columns.</dd>
+      </dl>
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-sm-6">
+      <dl>
+        <dt>Edit, Delete and Restore</dt>
+        <dd class="text-justify">Edit the pre-selected columns with button to save or delete a row with confirmation button and the possibility of restoring it.</dd>
+      </dl>
+    </div>
+    <div class="col-sm-6">
+      <dl>
+        <dt>Compatible with Bootstrap</dt>
+        <dd class="text-justify">It is used some Bootstrap components, glyphicons and CSS classes.</dd>
+      </dl>
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-sm-6">
+      <dl>
+        <dt>Customizable</dt>
+        <dd class="text-justify">Possibility of changing the CSS classes and contents of buttons and other things.</dd>
+      </dl>
+    </div>
+    <div class="col-sm-6">
+      <dl>
+        <dt>Examples and Documentation</dt>
+        <dd class="text-justify">On this site you can see some examples with the corresponding source code and its documentation.</dd>
+      </dl>
+    </div>
+    <div class="clearfix"></div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="page-header">
+        <h4>Getting started with Select2</h4>
+      </div>
+      <p><strong>1. </strong>Download Jquery-Tabledit</p>
+      <p><strong>2. </strong>Include the following lines of code in the your HTML. </p>
+      <p><code>&lt;script src="your_folder_with_jquery-tabledit/jquery.tabledit.js"&gt;&lt;/script&gt;</code></p>
+      <p><strong>3. </strong>Initialize Jquery Tabledit on the <code>&lt;table id="my_table"&gt;</code> element that you want</p>
+<pre class="prettyprint linenums">
+$('#my_table').Tabledit({
+  url: 'ajax/example.php',
+  columns: {
+      identifier: [0, 'id'],
+      editable: [[1, 'nickname'], [2, 'firstname'], [3, 'lastname']]
+  }
+});
+</pre>
+      <p><strong>4. </strong>Check out the <a href="#examples">examples page</a> to start using the additional features of Jquery-Tabledit.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  $(document).ready(function() {
+
+    prettyPrint();
+
+  });
+</script>

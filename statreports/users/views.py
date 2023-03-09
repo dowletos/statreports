@@ -16,7 +16,9 @@ from .forms import *
 from django.core.files.storage import FileSystemStorage
 from django.urls import reverse
 from django.http import JsonResponse
-
+from django.db.models import Q
+from django.shortcuts import get_object_or_404
+from django.http.request import QueryDict
 
 '''
 USER ACCESS RIGHTS CHECKING CLASS
@@ -102,9 +104,9 @@ class GetUsersData(FormView):
         UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
         if not CheckUserRights.check_user_permissions(self,UserSet, 'users_edit'):
             return redirect(reverse('logout'))
-        RF = RegisterForm()
+
         UF = tuple((z1, f'{z2} {z3}') for z1, z2, z3 in get_user_model().objects.values_list('id', 'first_name', 'last_name'))
-        CF = update_user_form()
+
         user_id=request.GET.get('userid')
         if User.objects.filter(id__iexact=user_id).exists():
             datax=tuple(get_user_model().objects.filter(id__iexact=user_id).values('id','username', 'first_name', 'last_name','email','is_active'))[0]
@@ -204,6 +206,606 @@ class CreateUserRights(FormView):
                 PF = ProfileForm(self.request.POST)
         return render(self.request, 'users/users_edit.html',
                           {'PF': PF, 'title': 'Добро пожаловать', 'UserSet': UserSet})
+
+
+
+
+
+
+'''
+    'ELEMENTS' REFERENCE TABLE EDITTING CONTROLLER CLASS
+        1. EDIT/DELETE/ADD NEW ELEMENTS
+        2. SORTING DATA
+        3. FILTERING DATA
+        4. PAGINATION OF RECORDS
+'''
+
+class ElementsManagementController(FormView):
+
+    def post(self, request):
+        UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
+        if not CheckUserRights.check_user_permissions(self,UserSet, 'users_rights'):
+            return redirect(reverse('logout'))
+        datax = subCategory.objects.all().values_list('pk', 'subCategoryTitle', 'subCategoryLink','subCategorySort').order_by('-pk')
+        datax_count = datax.count()
+        if 'FORMSELECTOR' in self.request.POST:
+                                            try:
+                                                if 'search[value]' not in self.request.POST:
+                                                    searchF = 0
+                                                else:
+                                                    searchF = self.request.POST.get('search[value]')
+
+                                                if 'length' not in self.request.POST:
+                                                    showNumber = -1
+                                                else:
+                                                    showNumber = int(self.request.POST.get('length'))
+
+                                                if 'order[0][column]' not in self.request.POST:
+                                                    orderColumn=-1
+                                                else:
+                                                    orderColumn = int(self.request.POST.get('order[0][column]'))
+
+                                                if 'order[0][dir]' not in self.request.POST:
+                                                    orderType = 'asc'
+                                                else:
+                                                    orderType = self.request.POST.get('order[0][dir]')
+
+                                                if 'start' not in self.request.POST:
+                                                    pageStart = 0
+                                                else:
+                                                    pageStart = int(self.request.POST.get('start'))
+
+                                            except Exception as err:
+                                                print(f'ERROR: {err}')
+
+                                            z = [i for i in (datax._fields)]
+
+                                            if (len(searchF) > 0):
+                                                datax = datax.filter(
+                                                    Q(pk__icontains=searchF) | Q(subCategoryTitle__icontains=searchF) | Q(
+                                                        subCategoryLink__icontains=searchF) | Q(subCategorySort__icontains=searchF)).values_list('pk','subCategoryTitle','subCategoryLink','subCategorySort')
+
+                                            if (orderColumn != -1) and (orderColumn<=len(z)-1):
+                                                    if orderType=='asc':
+                                                        datax=datax.order_by(z[orderColumn])
+                                                    else:
+                                                        datax = datax.order_by(z[orderColumn]).reverse()
+
+                                            if (showNumber != -1):
+                                                if pageStart>=0:
+                                                    datax = datax[pageStart:pageStart+showNumber]
+                                                else:
+                                                    datax = datax[0:showNumber]
+
+                                            context = {
+                                                'draw': self.request.POST.get('draw'),
+                                                'recordsTotal': datax_count,
+                                                'recordsFiltered': datax_count,
+                                                'data': tuple(datax)
+                                            }
+
+                                            return JsonResponse(context, status=200)
+
+
+        elif ('action' in self.request.POST):
+
+            if self.request.POST.get('action')=='delete':
+
+                if 'id' in self.request.POST:
+
+                    try:
+                        item_id=int(self.request.POST.get('id'))
+                        if item_id>0:
+                            Status=subCategory.objects.filter(subCategoryID=item_id).delete()
+                            deleteMessage=f'Запись № {item_id} успешно удалена!'
+                        else:
+                            return JsonResponse("", status=400)
+                    except Exception as err:
+                        print(f'ERROR: {err}')
+                        deleteMessage=f'Ошибка удаления записи № {item_id}!'
+                        context = {
+                            'id': item_id,
+                            'action': "delete",
+                            'message': deleteMessage
+                        }
+                        return JsonResponse(context, status=400)
+
+                    context = {
+                        'id': item_id,
+                        'action': "delete",
+                        'message': deleteMessage
+                    }
+
+                return JsonResponse(context, status=200)
+
+            elif (self.request.POST.get('action')=='edit'):
+
+                if 'id' in self.request.POST:
+
+                    try:
+
+                        item_id = int(self.request.POST.get('id'))
+                        if item_id > 0:
+                            kwargs_upd = {'data': self.request.POST}
+
+                            kwargs_upd['instance'] = subCategory.objects.get(subCategoryID=item_id)
+
+                            SF = SubCategoryForm(**kwargs_upd)
+
+                            if SF.is_valid():
+                               SF.save()
+                               deleteMessage = f'Запись № {item_id} успешно обновлена!'
+
+
+                               context = {
+                                    'id': item_id,
+                                    'action': "delete",
+                                    'message': deleteMessage
+                               }
+                               return JsonResponse(context, status=200)
+
+                    except Exception as err:
+                        print(f'ERROR: {err}')
+                    deleteMessage = f'Ошибка удаления записи № {item_id}!'
+
+                    context = {
+                            'id': item_id,
+                            'action': "delete",
+                            'message': deleteMessage
+                    }
+
+                    return JsonResponse(context, status=400)
+
+            elif (self.request.POST.get('action')=='new'):
+
+                    try:
+
+                        item_id = 9999999
+                        draft_request_data=self.request.POST.copy()
+                        draft_request_data['subCategoryTitle'] = "_____NEW____"
+                        draft_request_data['subCategoryLink'] =  "_____NEW____"
+                        draft_request_data['subCategorySort'] = 99999999
+
+                        self.request.POST= draft_request_data
+                        SF = SubCategoryForm(self.request.POST)
+                        if SF.is_valid():
+                           SF.save()
+                           deleteMessage = f'Запись № {item_id} успешно добавлена!'
+                    except Exception as err:
+                        print(f'ERROR: {err}')
+                        deleteMessage = f'Ошибка удаления записи № {item_id}!'
+
+                        context = {
+                            'id': item_id,
+                            'action': "delete",
+                            'message': deleteMessage
+                        }
+                        return JsonResponse(context, status=400)
+
+                    datax_count = datax.count()
+
+
+                    context = {
+                        'id':item_id,
+                        'subCategoryTitle': draft_request_data['subCategoryTitle'],
+                        'subCategoryLink': draft_request_data['subCategoryLink'],
+                        'subCategorySort':  draft_request_data['subCategorySort']
+
+                    }
+
+
+                    return JsonResponse(context, status=200)
+
+
+        context = {
+            'id': "-1",
+            'action': "None"
+        }
+
+        return JsonResponse(context, status=400)
+
+
+
+
+
+'''
+    'ELEMENTS' REFERENCE TABLE EDITTING CONTROLLER CLASS
+        1. EDIT/DELETE/ADD NEW ELEMENTS
+        2. SORTING DATA
+        3. FILTERING DATA
+        4. PAGINATION OF RECORDS
+'''
+
+class ProfileIndexManagementController(FormView):
+
+    def post(self, request):
+        UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
+        if not CheckUserRights.check_user_permissions(self,UserSet, 'users_rights'):
+            return redirect(reverse('logout'))
+        datax = profilesIndex.objects.all().values_list('profileIndex_PK', 'profileIndexTitle').order_by('-profileIndex_PK')
+        datax_count = datax.count()
+        if 'FORMSELECTOR' in self.request.POST:
+                                            try:
+                                                if 'search[value]' not in self.request.POST:
+                                                    searchF = 0
+                                                else:
+                                                    searchF = self.request.POST.get('search[value]')
+
+                                                if 'length' not in self.request.POST:
+                                                    showNumber = -1
+                                                else:
+                                                    showNumber = int(self.request.POST.get('length'))
+
+                                                if 'order[0][column]' not in self.request.POST:
+                                                    orderColumn=-1
+                                                else:
+                                                    orderColumn = int(self.request.POST.get('order[0][column]'))
+
+                                                if 'order[0][dir]' not in self.request.POST:
+                                                    orderType = 'asc'
+                                                else:
+                                                    orderType = self.request.POST.get('order[0][dir]')
+
+                                                if 'start' not in self.request.POST:
+                                                    pageStart = 0
+                                                else:
+                                                    pageStart = int(self.request.POST.get('start'))
+
+                                            except Exception as err:
+                                                print(f'ERROR: {err}')
+
+                                            z = [i for i in (datax._fields)]
+
+                                            if (len(searchF) > 0):
+                                                datax = datax.filter(
+                                                    Q(profileIndex_PK__icontains=searchF) | Q(profileIndexTitle__icontains=searchF)).values_list('profileIndex_PK','profileIndexTitle')
+
+                                            if (orderColumn != -1) and (orderColumn<=len(z)-1):
+                                                    if orderType=='asc':
+                                                        datax=datax.order_by(z[orderColumn])
+                                                    else:
+                                                        datax = datax.order_by(z[orderColumn]).reverse()
+
+                                            if (showNumber != -1):
+                                                if pageStart>=0:
+                                                    datax = datax[pageStart:pageStart+showNumber]
+                                                else:
+                                                    datax = datax[0:showNumber]
+
+                                            context = {
+                                                'draw': self.request.POST.get('draw'),
+                                                'recordsTotal': datax_count,
+                                                'recordsFiltered': datax_count,
+                                                'data': tuple(datax)
+                                            }
+
+                                            return JsonResponse(context, status=200)
+
+
+        elif ('action' in self.request.POST):
+
+            if self.request.POST.get('action')=='delete':
+
+                if 'id' in self.request.POST:
+
+                    try:
+                        item_id=int(self.request.POST.get('id'))
+                        if item_id>0:
+                            Status=profilesIndex.objects.filter(profileIndex_PK=item_id).delete()
+                            deleteMessage=f'Запись № {item_id} успешно удалена!'
+                        else:
+                            return JsonResponse("", status=400)
+                    except Exception as err:
+                        print(f'ERROR: {err}')
+                        deleteMessage=f'Ошибка удаления записи № {item_id}!'
+                        context = {
+                            'id': item_id,
+                            'action': "delete",
+                            'message': deleteMessage
+                        }
+                        return JsonResponse(context, status=400)
+
+                    context = {
+                        'id': item_id,
+                        'action': "delete",
+                        'message': deleteMessage
+                    }
+
+                return JsonResponse(context, status=200)
+
+            elif (self.request.POST.get('action')=='edit'):
+
+                if 'id' in self.request.POST:
+
+                    try:
+
+                        item_id = int(self.request.POST.get('id'))
+                        if item_id > 0:
+                            kwargs_upd = {'data': self.request.POST}
+
+                            kwargs_upd['instance'] = profilesIndex.objects.get(profileIndex_PK=item_id)
+
+                            SF = profilesIndexForm(**kwargs_upd)
+
+                            if SF.is_valid():
+                               SF.save()
+                               deleteMessage = f'Запись № {item_id} успешно обновлена!'
+
+
+                               context = {
+                                    'id': item_id,
+                                    'action': "delete",
+                                    'message': deleteMessage
+                               }
+                               return JsonResponse(context, status=200)
+
+                    except Exception as err:
+                        print(f'ERROR: {err}')
+                    deleteMessage = f'Ошибка удаления записи № {item_id}!'
+
+                    context = {
+                            'id': item_id,
+                            'action': "delete",
+                            'message': deleteMessage
+                    }
+
+                    return JsonResponse(context, status=400)
+
+            elif (self.request.POST.get('action')=='new'):
+
+                    try:
+
+                        item_id = 9999999
+                        draft_request_data=self.request.POST.copy()
+                        draft_request_data['profileIndexTitle'] = "_____NEW____"
+
+
+                        self.request.POST= draft_request_data
+                        SF = profilesIndexForm(self.request.POST)
+                        if SF.is_valid():
+                           SF.save()
+                           deleteMessage = f'Запись № {item_id} успешно добавлена!'
+                    except Exception as err:
+                        print(f'ERROR: {err}')
+                        deleteMessage = f'Ошибка удаления записи № {item_id}!'
+
+                        context = {
+                            'id': item_id,
+                            'action': "delete",
+                            'message': deleteMessage
+                        }
+                        return JsonResponse(context, status=400)
+
+                    datax_count = datax.count()
+
+
+                    context = {
+                        'id':item_id,
+                        'profileIndexTitle': draft_request_data['profileIndexTitle']
+
+                    }
+
+
+                    return JsonResponse(context, status=200)
+
+
+        context = {
+            'id': "-1",
+            'action': "None"
+        }
+
+        return JsonResponse(context, status=400)
+
+
+
+
+
+
+
+
+'''
+    'ELEMENTS' REFERENCE TABLE EDITTING CONTROLLER CLASS
+        1. EDIT/DELETE/ADD NEW ELEMENTS
+        2. SORTING DATA
+        3. FILTERING DATA
+        4. PAGINATION OF RECORDS
+'''
+
+class CategoriesManagementController(FormView):
+
+    def post(self, request):
+        UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
+        if not CheckUserRights.check_user_permissions(self,UserSet, 'users_rights'):
+            return redirect(reverse('logout'))
+        datax = category.objects.all().values_list('categoryID', 'categoryTitle').order_by('-categoryID')
+        datax_count = datax.count()
+        if 'FORMSELECTOR' in self.request.POST:
+                                            try:
+                                                if 'search[value]' not in self.request.POST:
+                                                    searchF = 0
+                                                else:
+                                                    searchF = self.request.POST.get('search[value]')
+
+                                                if 'length' not in self.request.POST:
+                                                    showNumber = -1
+                                                else:
+                                                    showNumber = int(self.request.POST.get('length'))
+
+                                                if 'order[0][column]' not in self.request.POST:
+                                                    orderColumn=-1
+                                                else:
+                                                    orderColumn = int(self.request.POST.get('order[0][column]'))
+
+                                                if 'order[0][dir]' not in self.request.POST:
+                                                    orderType = 'asc'
+                                                else:
+                                                    orderType = self.request.POST.get('order[0][dir]')
+
+                                                if 'start' not in self.request.POST:
+                                                    pageStart = 0
+                                                else:
+                                                    pageStart = int(self.request.POST.get('start'))
+
+                                            except Exception as err:
+                                                print(f'ERROR: {err}')
+
+                                            z = [i for i in (datax._fields)]
+
+                                            if (len(searchF) > 0):
+                                                datax = datax.filter(
+                                                    Q(categoryID_PK__icontains=searchF) | Q(categoryTitle__icontains=searchF)).values_list('categoryID','categoryTitle')
+
+                                            if (orderColumn != -1) and (orderColumn<=len(z)-1):
+                                                    if orderType=='asc':
+                                                        datax=datax.order_by(z[orderColumn])
+                                                    else:
+                                                        datax = datax.order_by(z[orderColumn]).reverse()
+
+                                            if (showNumber != -1):
+                                                if pageStart>=0:
+                                                    datax = datax[pageStart:pageStart+showNumber]
+                                                else:
+                                                    datax = datax[0:showNumber]
+
+                                            context = {
+                                                'draw': self.request.POST.get('draw'),
+                                                'recordsTotal': datax_count,
+                                                'recordsFiltered': datax_count,
+                                                'data': tuple(datax)
+                                            }
+
+                                            return JsonResponse(context, status=200)
+
+
+        elif ('action' in self.request.POST):
+
+            if self.request.POST.get('action')=='delete':
+
+                if 'id' in self.request.POST:
+
+                    try:
+                        item_id=int(self.request.POST.get('id'))
+                        if item_id>0:
+                            Status=category.objects.filter(categoryID=item_id).delete()
+                            deleteMessage=f'Запись № {item_id} успешно удалена!'
+                        else:
+                            return JsonResponse("", status=400)
+                    except Exception as err:
+                        print(f'ERROR: {err}')
+                        deleteMessage=f'Ошибка удаления записи № {item_id}!'
+                        context = {
+                            'id': item_id,
+                            'action': "delete",
+                            'message': deleteMessage
+                        }
+                        return JsonResponse(context, status=400)
+
+                    context = {
+                        'id': item_id,
+                        'action': "delete",
+                        'message': deleteMessage
+                    }
+
+                return JsonResponse(context, status=200)
+
+            elif (self.request.POST.get('action')=='edit'):
+
+                if 'id' in self.request.POST:
+
+                    try:
+
+                        item_id = int(self.request.POST.get('id'))
+                        if item_id > 0:
+                            kwargs_upd = {'data': self.request.POST}
+
+                            kwargs_upd['instance'] = category.objects.get(categoryID=item_id)
+
+                            SF = categoryForm(**kwargs_upd)
+                            print(SF.errors)
+                            if SF.is_valid():
+                               SF.save()
+                               deleteMessage = f'Запись № {item_id} успешно обновлена!'
+
+
+                               context = {
+                                    'id': item_id,
+                                    'action': "delete",
+                                    'message': deleteMessage
+                               }
+                               return JsonResponse(context, status=200)
+
+                    except Exception as err:
+                        print(f'ERROR: {err}')
+                    deleteMessage = f'Ошибка удаления записи № {item_id}!'
+
+                    context = {
+                            'id': item_id,
+                            'action': "delete",
+                            'message': deleteMessage
+                    }
+
+                    return JsonResponse(context, status=400)
+
+            elif (self.request.POST.get('action')=='new'):
+
+                    try:
+
+                        item_id = 9999999
+                        draft_request_data=self.request.POST.copy()
+                        draft_request_data['categoryTitle'] = "_____NEW____"
+
+
+                        self.request.POST= draft_request_data
+                        SF = categoryForm(self.request.POST)
+                        print(SF.errors)
+                        if SF.is_valid():
+
+                           SF.save()
+                           deleteMessage = f'Запись № {item_id} успешно добавлена!'
+                    except Exception as err:
+                        print(f'ERROR: {err}')
+                        deleteMessage = f'Ошибка удаления записи № {item_id}!'
+
+                        context = {
+                            'id': item_id,
+                            'action': "delete",
+                            'message': deleteMessage
+                        }
+                        return JsonResponse(context, status=400)
+
+                    datax_count = datax.count()
+
+
+                    context = {
+                        'id':item_id,
+                        'categoryTitle': draft_request_data['categoryTitle']
+
+                    }
+
+
+                    return JsonResponse(context, status=200)
+
+
+        context = {
+            'id': "-1",
+            'action': "None"
+        }
+
+        return JsonResponse(context, status=400)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

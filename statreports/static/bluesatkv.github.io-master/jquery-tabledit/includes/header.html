@@ -1,0 +1,71 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#home">jQuery-Tabledit by BluesatKV</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Examples <span class="caret"></span></a>
+          <ul class="dropdown-menu" aria-labelledby="themes">
+            <li><a href="#examples">Default</a></li>
+            <li class="divider"></li>
+            <li><a href="#examples1">Example #1 - Double click</a></li>
+            <li><a href="#examples2">Example #2 - Hide all buttons</a></li>
+            <li><a href="#examples3">Example #3 - Hide buttons</a></li>
+            <li><a href="#examples4">Example #4 - Hide Edit buttons</a></li>
+            <li><a href="#examples5">Example #5 - Language</a></li>
+            <li><a href="#examples6">Example #6 - Debug mode</a></li>
+            <li><a href="#examples7">Example #7 - Different element</a></li>
+            <li><a href="#examples8">Example #8 - Log all hooks</a></li>
+            <li><a href="#examples9-10">Example #9-#10 - Add new row</a></li>
+            <li><a href="#examples12">Example #12 - DateTime picker</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="documentation">Documentation <span class="caret"></span></a>
+          <ul class="dropdown-menu" aria-labelledby="documentation">
+            <li><a href="#documentation">Documentation v1.2.7</a></li>
+            <li><a href="#documentation_dev">Development version</a></li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown" id="theme-button">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">Theme &nbsp;<i class="fa fa-caret-down"></i></a>
+          <ul id="themes-select" class="dropdown-menu" role="menu">
+            <li><a href="#" data-href="css/skins/bootstrapv3/bootstrapv3-cosmo">Default</a></li>
+            <li><a href="#" data-href="css/skins/bootstrapv3/bootstrapv3-lumen">Lumen</a></li>
+            <li><a href="#" data-href="css/skins/bootstrapv3/bootstrapv3-sandstone">Sandstone</a></li>
+            <li><a href="#" data-href="css/skins/bootstrapv3/bootstrapv3-united">United</a></li>
+          </ul>
+        </li>
+        <li><a href="https://github.com/BluesatKV/jquery-tabledit" target="_blank"><i class="fa fa-github fa-lg"></i> &nbsp;</a></li>
+      </ul>
+    </div>
+
+  </div>
+</nav>
+
+<script>
+  $(document).ready(function () {
+    $('#themes-select a').click(function (event) {
+      // prevent the default anchor functionality
+      event.preventDefault();
+
+      $href = $(this).attr('data-href');
+
+      $('head link#theme-file').attr('href', $href + '.css');
+      $('head link#custom-theme-file').attr('href', $href + '-custom.css');
+
+    });
+
+  });
+</script>

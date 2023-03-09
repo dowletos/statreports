@@ -1,0 +1,1672 @@
+<!-- Content -->
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-8">
+
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="page-header p-b-10">
+            <h3>Documentation</h3>
+          </div>
+          <p>Basic version for jQuery-Tabledit by BluesatKV is v1.2.3 from
+            <a href="https://github.com/markcell/jQuery-Tabledit" target="_blank">markcell</a>.</p>
+          <div class="alert alert-info">
+            <i class="fa fa-info-circle fa-lg"></i>&nbsp;
+            The following code to the description of each option is the default value. <br>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="page-header p-b-10">
+            <h4>Options</h4>
+          </div>
+          <ul class="list-group">
+
+            <li class="list-group-item" id="columns">
+              <span class="badge">v1.0.0</span>
+              <h5 class="list-group-item-heading"><strong>columns</strong>
+                <span class="label label-danger">REQUIRED</span>
+                <span class="label label-warning">Updated in v1.2.6</span></h5>
+              <p class="list-group-item-text">Identifier column and editable columns</p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab21" data-toggle="tab">Html</a></li>
+                  <li><a href="#tab21_1" data-toggle="tab">JavaScript 1</a></li>
+                  <li><a href="#tab21_2" data-toggle="tab">JavaScript 2</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab21">
+             <pre class="prettyprint linenums mh300">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab21_1">
+              <pre class="prettyprint linenums mh300">
+$('#my-table').Tabledit({
+  // Example #1
+  columns: {
+    // Column used to identify table row.
+
+    // [column_index, input_name]
+    identifier: [0, 'id'],
+
+    // Columns to transform in editable cells.
+
+    // [[column_index, input_name], [column_index, input_name]]
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  }
+});
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab21_2">
+              <pre class="prettyprint linenums mh300">
+$('#my-table').Tabledit({
+  // Example #2
+  columns: {
+    // Column used to identify table row.
+
+    //  column_index - index of column in table 0, 1, 2, 3 etc...
+    //  input_name - name of column in your DB (MySQL)
+
+    // [column_index, input_name]
+    identifier: [0, 'id'],
+
+    // Columns to transform in editable cells -> supported type "input", "hidden", "number", "select", "textarea"
+
+    editable: [
+
+      // [[column_index, input_name, input_type_text]
+      [1, 'col1', 'input'],
+
+      // [[column_index, input_name, input_type_hidden]
+      [2, 'col1', 'hidden'],
+
+      // [[column_index, input_name, input_type_number]
+      [3, 'col3', 'number'],
+
+      // [[column_index, input_name, textarea_type, textarea_options] -> supported attributes "rows", "cols", "maxlength", "wrap"
+      [4, 'col4', , 'textarea', '{"rows": "3", "cols": "10", "maxlength": "200", "wrap": "hard"}'],
+
+      [column_index, input_name, select_type, select_options]]
+      [5, 'col5', 'select', '{"1": "Red", "2": "Green", "3": "Blue"}']
+    ]
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="ajaxurl">
+              <span class="badge">v1.0.0</span>
+              <h5 class="list-group-item-heading"><strong>url</strong></h5>
+              <p class="list-group-item-text">Link to server script <code>window.location.href</code></p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab1" data-toggle="tab">Html</a></li>
+                  <li><a href="#tab1_1" data-toggle="tab">JavaScript</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab1">
+             <pre class="prettyprint linenums mh200">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab1_1">
+              <pre class="prettyprint linenums mh200">
+$('#my-table').Tabledit({
+  url: 'ajax/example.php',
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="editmethod">
+              <span class="badge">v1.2.4</span>
+              <h5 class="list-group-item-heading"><strong>editmethod</strong></h5>
+              <p class="list-group-item-text">Server request method for action 'edit' <code>post</code> or
+                <code>get</code></p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab2" data-toggle="tab">Html</a></li>
+                  <li><a href="#tab2_1" data-toggle="tab">JavaScript</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab2">
+             <pre class="prettyprint linenums mh200">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab2_1">
+              <pre class="prettyprint linenums mh200">
+$('#my-table').Tabledit({
+  url: 'ajax/example.php',
+  editmethod: 'post',
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="deletemethod">
+              <span class="badge">v1.2.4</span>
+              <h5 class="list-group-item-heading"><strong>deletemethod</strong></h5>
+              <p class="list-group-item-text">Server request method for action 'delete' <code>post</code> or
+                <code>get</code></p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab3" data-toggle="tab">Html</a></li>
+                  <li><a href="#tab3_1" data-toggle="tab">JavaScript</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab3">
+             <pre class="prettyprint linenums mh200">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab3_1">
+              <pre class="prettyprint linenums mh200">
+$('#my-table').Tabledit({
+  url: 'ajax/example.php',
+  deletemethod: 'post',
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="ajaxsetup">
+              <span class="badge">v1.2.7</span>
+              <h5 class="list-group-item-heading"><strong>Ajax setup</strong></h5>
+              <p class="list-group-item-text">Automatically setting CSRFToken from cookie
+                <code>csrftoken</code> from sending method.</p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab24" data-toggle="tab">Jquery Code</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab24">
+                    <pre class="prettyprint linenums mh200">
+// AJAX SETUP CSRF TOKEN
+function getCookie(name) {
+  var cookieValue = null;
+  if (document.cookie && document.cookie != '') {
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = jQuery.trim(cookies[i]);
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) == (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+function csrfSafeMethod(method) {
+  // these HTTP methods do not require CSRF protection
+  return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+$.ajaxSetup({
+  beforeSend: function (xhr, s) {
+    // Setting the token on the AJAX request
+    if (!csrfSafeMethod(s.type) && !this.crossDomain) {
+      xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    }
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="toolbarHeaderClass">
+              <span class="badge">v1.2.7</span>
+              <h5 class="list-group-item-heading"><strong>toolbarHeaderClass</strong></h5>
+              <p class="list-group-item-text">Add Class for toolbar header column. <code>''</code> . <br>You can use for setting <code>no-sort</code> class in thead of DataTable plugin.</p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab26" data-toggle="tab">Html</a></li>
+                  <li><a href="#tab26_1" data-toggle="tab">JavaScript</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab26">
+             <pre class="prettyprint linenums mh200">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab26_1">
+              <pre class="prettyprint linenums mh200">
+$('#my-table').Tabledit({
+  toolbarHeaderClass: 'no-sort',
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="toolbarClass">
+              <span class="badge">v1.2.0</span>
+              <h5 class="list-group-item-heading"><strong>toolbarClass</strong></h5>
+              <p class="list-group-item-text">Class for buttons toolbar <code>'btn-toolbar'</code></p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab5" data-toggle="tab">Html</a></li>
+                  <li><a href="#tab5_1" data-toggle="tab">JavaScript</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab5">
+             <pre class="prettyprint linenums mh200">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab5_1">
+              <pre class="prettyprint linenums mh200">
+$('#my-table').Tabledit({
+  toolbarClass: 'btn-toolbar',
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="groupClass">
+              <span class="badge">v1.2.0</span>
+              <h5 class="list-group-item-heading"><strong>groupClass</strong></h5>
+              <p class="list-group-item-text">Class for buttons group <code>'btn-group btn-group-sm'</code></p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab6" data-toggle="tab">Html</a></li>
+                  <li><a href="#tab6_1" data-toggle="tab">JavaScript</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab6">
+             <pre class="prettyprint linenums mh200">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab6_1">
+              <pre class="prettyprint linenums mh200">
+$('#my-table').Tabledit({
+  groupClass: 'btn-group btn-group-sm',
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="inputClass">
+              <span class="badge">v1.1.0</span>
+              <h5 class="list-group-item-heading"><strong>inputClass</strong></h5>
+              <p class="list-group-item-text">Class for form inputs <code>'form-control input-sm'</code></p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab4" data-toggle="tab">Html</a></li>
+                  <li><a href="#tab4_1" data-toggle="tab">JavaScript</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab4">
+             <pre class="prettyprint linenums mh200">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab4_1">
+              <pre class="prettyprint linenums mh200">
+$('#my-table').Tabledit({
+  inputClass: 'form-control input-sm',
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="dangerClass">
+              <span class="badge">v1.1.0</span>
+              <h5 class="list-group-item-heading"><strong>dangerClass</strong></h5>
+              <p class="list-group-item-text">Class for row when ajax request fails <code>'danger'</code></p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab7" data-toggle="tab">Html</a></li>
+                  <li><a href="#tab7_1" data-toggle="tab">JavaScript</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab7">
+             <pre class="prettyprint linenums mh200">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab7_1">
+              <pre class="prettyprint linenums mh200">
+$('#my-table').Tabledit({
+  dangerClass: 'danger',
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="successClass">
+              <span class="badge">v1.2.7</span>
+              <h5 class="list-group-item-heading"><strong>successClass</strong></h5>
+              <p class="list-group-item-text">Class for row when save changes <code>'success</code></p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab25" data-toggle="tab">Html 1</a></li>
+                  <li><a href="#tab25_1" data-toggle="tab">JavaScript</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab25">
+                    <pre class="prettyprint linenums mh200">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab25_1">
+              <pre class="prettyprint linenums mh200">
+$('#my-table').Tabledit({
+  successClass: 'success',
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="mutedClass">
+              <span class="badge">v1.1.0</span>
+              <h5 class="list-group-item-heading"><strong>mutedClass</strong></h5>
+              <p class="list-group-item-text">Class for row when is deleted <code>'muted'</code></p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab9" data-toggle="tab">Html</a></li>
+                  <li><a href="#tab9_1" data-toggle="tab">JavaScript</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab9">
+             <pre class="prettyprint linenums mh200">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab9_1">
+              <pre class="prettyprint linenums mh200">
+$('#my-table').Tabledit({
+  mutedClass: 'text-muted',
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="noEditClass">
+              <span class="badge">v1.2.7</span>
+              <h5 class="list-group-item-heading"><strong>noEditClass</strong></h5>
+              <p class="list-group-item-text">Class for editing rows and cells <code>'noedit'</code></p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="##tab23" data-toggle="tab">Html 1</a></li>
+                  <li><a href="#tab23_1" data-toggle="tab">Html 2</a></li>
+                  <li><a href="#tab23_2" data-toggle="tab">JavaScript</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab23">
+                    <p>Setting a table cell edit ban</p>
+                    <pre class="prettyprint linenums mh200">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td class="noedit"&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab23_1">
+                    <p>Setting a table row edit ban</p>
+                    <pre class="prettyprint linenums mh200">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr class="noedit"&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab23_2">
+              <pre class="prettyprint linenums mh200">
+$('#my-table').Tabledit({
+  noEditClass: 'noedit',
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="eventType">
+              <span class="badge">v1.0.0</span>
+              <h5 class="list-group-item-heading"><strong>eventType</strong></h5>
+              <p class="list-group-item-text">If <code>editButton: false</code> , Trigger to change for edit mode
+                <code>'click'</code> or <code>'dblclick'</code> or <code>'mouseover'</code> or <code>'mouseout'</code>
+              </p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab10" data-toggle="tab">Html</a></li>
+                  <li><a href="#tab10_1" data-toggle="tab">JavaScript</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab10">
+             <pre class="prettyprint linenums mh200">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab10_1">
+              <pre class="prettyprint linenums mh200">
+$('#my-table').Tabledit({
+  editButton: false,
+  eventType: 'dblclick',
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="rowIdentifier">
+              <span class="badge">v1.2.2</span>
+              <h5 class="list-group-item-heading"><strong>rowIdentifier</strong></h5>
+              <p class="list-group-item-text">Change the name of attribute in td element for the row identifier
+                <code>'id'</code></p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab11" data-toggle="tab">Html</a></li>
+                  <li><a href="#tab11_1" data-toggle="tab">JavaScript</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab11">
+             <pre class="prettyprint linenums mh200">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab11_1">
+              <pre class="prettyprint linenums mh200">
+$('#my-table').Tabledit({
+  rowIdentifier: 'id',
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="hideIdentifier">
+              <span class="badge">v1.0.0</span>
+              <h5 class="list-group-item-heading"><strong>hideIdentifier</strong></h5>
+              <p class="list-group-item-text">Hide the column that has the identifier <code>false</code></p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab12" data-toggle="tab">Html</a></li>
+                  <li><a href="#tab12_1" data-toggle="tab">JavaScript</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab12">
+             <pre class="prettyprint linenums mh200">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab12_1">
+              <pre class="prettyprint linenums mh200">
+$('#my-table').Tabledit({
+  hideIdentifier: false,
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="autoFocus">
+              <span class="badge">v1.2.1</span>
+              <h5 class="list-group-item-heading"><strong>autoFocus</strong></h5>
+              <p class="list-group-item-text">Activate focus on first input of a row when click in save button
+                <code>true</code></p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab13" data-toggle="tab">Html</a></li>
+                  <li><a href="#tab13_1" data-toggle="tab">JavaScript</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab13">
+             <pre class="prettyprint linenums mh200">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab13_1">
+              <pre class="prettyprint linenums mh200">
+$('#my-table').Tabledit({
+  autoFocus: true,
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="lang">
+              <span class="badge">v1.2.4</span>
+              <h5 class="list-group-item-heading"><strong>lang</strong></h5>
+              <p class="list-group-item-text">Language localization <code>en</code> or <code>de</code> or
+                <code>fr</code> or <code>cz</code> . You can use LowerCase or UpperCase.</p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab18" data-toggle="tab">Html</a></li>
+                  <li><a href="#tab18_1" data-toggle="tab">JavaScript 1</a></li>
+                  <li><a href="#tab18_2" data-toggle="tab">JavaScript 2</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab18">
+             <pre class="prettyprint linenums mh200">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab18_1">
+              <pre class="prettyprint linenums mh200">
+$('#my-table').Tabledit({
+  lang: 'en',
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  }
+});
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab18_2">
+              <pre class="prettyprint linenums mh200">
+$('#my-table').Tabledit({
+  lang: 'EN',
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="debug">
+              <span class="badge">v1.2.6</span>
+              <h5 class="list-group-item-heading"><strong>debug</strong></h5>
+              <p class="list-group-item-text">Debug mode.</p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab22" data-toggle="tab">Html</a></li>
+                  <li><a href="#tab22_1" data-toggle="tab">JavaScript 1</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab22">
+             <pre class="prettyprint linenums mh200">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab22_1">
+              <pre class="prettyprint linenums mh200">
+$('#my-table').Tabledit({
+  debug: true,
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="escapehtml">
+              <span class="badge">v1.2.4</span>
+              <h5 class="list-group-item-heading"><strong>escapehtml</strong></h5>
+              <p class="list-group-item-text">Escape Html - convert hmtl character <code>true</code></p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab19" data-toggle="tab">Html</a></li>
+                  <li><a href="#tab19_1" data-toggle="tab">JavaScript</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab19">
+             <pre class="prettyprint linenums mh200">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab19_1">
+              <pre class="prettyprint linenums mh200">
+$('#my-table').Tabledit({
+  escapehtml: true,
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="editButton">
+              <span class="badge">v1.1.0</span>
+              <h5 class="list-group-item-heading"><strong>editButton</strong></h5>
+              <p class="list-group-item-text">Activate edit button instead of spreadsheet style <code>true</code></p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab14" data-toggle="tab">Html</a></li>
+                  <li><a href="#tab14_1" data-toggle="tab">JavaScript</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab14">
+             <pre class="prettyprint linenums mh200">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab14_1">
+              <pre class="prettyprint linenums mh200">
+$('#my-table').Tabledit({
+  editButton: true,
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="deleteButton">
+              <span class="badge">v1.2.0</span>
+              <h5 class="list-group-item-heading"><strong>deleteButton</strong></h5>
+              <p class="list-group-item-text">Activate delete button <code>true</code></p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab15" data-toggle="tab">Html</a></li>
+                  <li><a href="#tab15_1" data-toggle="tab">JavaScript</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab15">
+             <pre class="prettyprint linenums mh200">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab15_1">
+              <pre class="prettyprint linenums mh200">
+$('#my-table').Tabledit({
+  deleteButton: true,
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="saveButton">
+              <span class="badge">v1.2.0</span>
+              <h5 class="list-group-item-heading"><strong>saveButton</strong></h5>
+              <p class="list-group-item-text">Activate save button when click on edit button <code>true</code></p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab16" data-toggle="tab">Html</a></li>
+                  <li><a href="#tab16_1" data-toggle="tab">JavaScript</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab16">
+             <pre class="prettyprint linenums mh200">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab16_1">
+              <pre class="prettyprint linenums mh200">
+$('#my-table').Tabledit({
+  saveButton: true,
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="restoreButton">
+              <span class="badge">v1.2.0</span>
+              <h5 class="list-group-item-heading"><strong>restoreButton</strong></h5>
+              <p class="list-group-item-text">Activate restore button to undo delete action <code>true</code></p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab17" data-toggle="tab">Html</a></li>
+                  <li><a href="#tab17_1" data-toggle="tab">JavaScript</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab17">
+             <pre class="prettyprint linenums mh200">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab17_1">
+              <pre class="prettyprint linenums mh200">
+$('#my-table').Tabledit({
+  restoreButton: true,
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="buttons">
+              <span class="badge">v1.1.0</span>
+              <h5 class="list-group-item-heading"><strong>buttons</strong>
+                <span class="label label-warning">Updated in v1.2.4</span></h5>
+              <p class="list-group-item-text">Customize buttons created in the table. If
+                <code>html</code> of each button is blank, then will be use text by language localization. Default
+                <code>lang: 'en'</code></p>
+              <div class="m-t-20">
+                <ul class="nav nav-tabs">
+                  <li class="active"><a href="#tab20" data-toggle="tab">Html</a></li>
+                  <li><a href="#tab20_1" data-toggle="tab">JavaScript</a></li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane fade active in" id="tab20">
+             <pre class="prettyprint linenums">
+&lt;table class="table table-hover" id="my-table"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Id&lt;/th&gt;
+    &lt;th&gt;Column 1&lt;/th&gt;
+    &lt;th&gt;Column 2&lt;/th&gt;
+    &lt;th&gt;Column 3&lt;/th&gt;
+    &lt;th&gt;Column 4&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;Data 1&lt;/td&gt;
+    &lt;td&gt;Data 2&lt;/td&gt;
+    &lt;td&gt;Data 3&lt;/td&gt;
+    &lt;td&gt;Data 4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+              </pre>
+                  </div>
+                  <div class="tab-pane fade" id="tab20_1">
+              <pre class="prettyprint linenums">
+$('#my-table').Tabledit({
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'col1'], [2, 'col1'], [3, 'col3'], [4, 'col4']]
+  },
+  buttons: {
+      edit: {
+          class: 'btn btn-sm btn-default',
+          html: '&lt;span class="glyphicon glyphicon-pencil"&gt;&lt;/span&gt;',
+          action: 'edit'
+      },
+      delete: {
+          class: 'btn btn-sm btn-default',
+          html: '&lt;span class="glyphicon glyphicon-trash"&gt;&lt;/span&gt;',
+          action: 'delete'
+      },
+      save: {
+          class: 'btn btn-sm btn-success',
+          html: 'Save'
+      },
+      restore: {
+          class: 'btn btn-sm btn-warning',
+          html: 'Restore',
+          action: 'restore'
+      },
+      confirm: {
+          class: 'btn btn-sm btn-danger',
+          html: 'Confirm'
+      }
+  }
+});
+              </pre>
+                  </div>
+                </div>
+              </div>
+            </li>
+
+            <li class="list-group-item" id="confirmText">
+              <span class="badge">v1.1.0</span>
+              <h5 class="list-group-item-heading">
+                <span style="text-decoration: line-through;"><strong>confirmText</strong></span>
+                <span class="label label-danger">Deprecated</span></h5>
+              <p class="list-group-item-text">Text to append on remove button to confirm action <code>'Confirm'</code>
+              </p>
+            </li>
+
+            <li class="list-group-item" id="textSelection">
+              <span class="badge">v1.0.0</span>
+              <h5 class="list-group-item-heading">
+                <span style="text-decoration: line-through;"><strong>textSelection</strong></span>
+                <span class="label label-danger">Deprecated</span></h5>
+              <p class="list-group-item-text">Enable text selection on editable columns <code>true</code></p>
+            </li>
+
+            <li class="list-group-item" id="removeButton">
+              <span class="badge">v1.1.0</span>
+              <h5 class="list-group-item-heading">
+                <span style="text-decoration: line-through;"><strong>removeButton</strong></span>
+                <span class="label label-danger">Deprecated</span></h5>
+              <p class="list-group-item-text">Activate remove button <code>true</code></p>
+            </li>
+
+            <li class="list-group-item" id="warningClass">
+              <span class="badge">v1.1.0</span>
+              <h5 class="list-group-item-heading">
+                <span style="text-decoration: line-through;"><strong>warningClass</strong></span>
+                <span class="label label-danger">Deprecated</span></h5>
+              <p class="list-group-item-text">Class for row when save changes <code>'warning</code></p>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="page-header">
+            <h4>Hooks</h4>
+          </div>
+          <ul class="list-group">
+            <li class="list-group-item" id="onDraw">
+              <span class="badge">v1.0.0</span>
+              <h5 class="list-group-item-heading"><strong>onDraw()</strong></h5>
+              <p class="list-group-item-text">Executed after draw the structure</p>
+            </li>
+
+            <li class="list-group-item" id="onSuccess">
+              <span class="badge">v1.1.0</span>
+              <h5 class="list-group-item-heading"><strong>onSuccess(data, textStatus, jqXHR)</strong></h5>
+              <p class="list-group-item-text">Executed when the ajax request is completed</p>
+            </li>
+
+            <li class="list-group-item" id="onFail">
+              <span class="badge">v1.1.0</span>
+              <h5 class="list-group-item-heading"><strong>onFail(jqXHR, textStatus, errorThrown)</strong></h5>
+              <p class="list-group-item-text">Executed when occurred an error on ajax request</p>
+            </li>
+
+            <li class="list-group-item" id="onAlways">
+              <span class="badge">v1.1.0</span>
+              <h5 class="list-group-item-heading"><strong>onAlways()</strong></h5>
+              <p class="list-group-item-text">Executed whenever there is an ajax request</p>
+            </li>
+
+            <li class="list-group-item" id="onAjax">
+              <span class="badge">v1.2.1</span>
+              <h5 class="list-group-item-heading"><strong>onAjax(action, serialize)</strong></h5>
+              <p class="list-group-item-text">Executed before the ajax request
+                <span class="label label-info">If returns false, does not send the ajax request. (v1.2.2)</span></p>
+            </li>
+
+            <li class="list-group-item">
+              <span class="badge">v1.0.0</span>
+              <h5 class="list-group-item-heading">
+                <span style="text-decoration: line-through;"><strong>onError()</strong></span>
+                <span class="label label-danger">Deprecated</span></h5>
+              <p class="list-group-item-text">Executed when occurred an error on ajax request</p>
+            </li>
+
+            <li class="list-group-item">
+              <span class="badge">v1.0.0</span>
+              <h5 class="list-group-item-heading">
+                <span style="text-decoration: line-through;"><strong>onComplete(response)</strong></span>
+                <span class="label label-danger">Deprecated</span></h5>
+              <p class="list-group-item-text">Executed when the ajax request is completed</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-sm-4">
+
+      <nav class="s2-docs-sidebar hidden-xs hidden-sm">
+        <ul class="nav s2-docs-sidenav">
+          <li><h5 class="sidebar-header">Required Options</h5></li>
+          <li>
+            <a href="#columns">Columns</a>
+            <ul class="nav">
+              <li><a href="#columns">Columns</a></li>
+            </ul>
+          </li>
+
+          <li><h5 class="sidebar-header">Variable Options</h5></li>
+          <li>
+            <a href="#ajaxurl">Ajax settings</a>
+            <ul class="nav">
+              <li><a href="#ajaxurl">Url</a></li>
+              <li><a href="#editmethod">Editmethod</a></li>
+              <li><a href="#deletemethod">Deletemethod</a></li>
+              <li><a href="#ajaxsetup">Ajax CSRFToken</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#inputClass">Class</a>
+            <ul class="nav">
+              <li>
+                <a href="#toolbarHeaderClass">ToolbarHeaderClass</a>
+              </li>
+              <li>
+                <a href="#toolbarClass">ToolbarClass</a>
+              </li>
+              <li>
+                <a href="#groupClass">GroupClass</a>
+              </li>
+              <li>
+                <a href="#inputClass">InputClass</a>
+              </li>
+              <li>
+                <a href="#dangerClass">DangerClass</a>
+              </li>
+              <li>
+                <a href="#successClass">SuccessClass</a>
+              </li>
+              <li>
+                <a href="#mutedClass">MutedClass</a>
+              </li>
+              <li>
+                <a href="#noEditClass">noEditClass</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#eventType">Event</a>
+            <ul class="nav">
+              <li><a href="#eventType">EventType</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#rowIdentifier">Identifier</a>
+            <ul class="nav">
+              <li><a href="#rowIdentifier">rowIdentifier</a></li>
+              <li><a href="#hideIdentifier">hideIdentifier</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#autoFocus">Focus</a>
+            <ul class="nav">
+              <li><a href="#autoFocus">AutoFocus</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#lang">Lang</a>
+            <ul class="nav">
+              <li><a href="#lang">Lang</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#debug">Debug</a>
+            <ul class="nav">
+              <li><a href="#debug">Debug</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#escapehtml">Special character</a>
+            <ul class="nav">
+              <li><a href="#escapehtml">Escapehtml</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="#editButton">Button</a>
+            <ul class="nav">
+              <li><a href="#editButton">EditButton</a></li>
+              <li><a href="#deleteButton">DeleteButton</a></li>
+              <li><a href="#saveButton">SaveButton</a></li>
+              <li><a href="#restoreButton">RestoreButton</a></li>
+              <li><a href="#buttons">Buttons</a></li>
+            </ul>
+          </li>
+
+          <li><h5 class="sidebar-header">Deprecated Options</h5></li>
+          <li>
+            <a href="#confirmText">Deprecated Options</a>
+            <ul class="nav">
+              <li><a href="#confirmText">ConfirmText</a></li>
+              <li><a href="#textSelection">TextSelection</a></li>
+              <li><a href="#removeButton">RemoveButton</a></li>
+              <li><a href="#warningClass">WarningClass</a></li>
+            </ul>
+          </li>
+
+          <li><h5 class="sidebar-header">Hooks</h5></li>
+          <li>
+            <a href="#onDraw">Hooks</a>
+            <ul class="nav">
+              <li><a href="#onDraw">onDraw()</a></li>
+              <li><a href="#onSuccess">onSuccess()</a></li>
+              <li><a href="#onFail">onFail()</a></li>
+              <li><a href="#onAlways">onAlways()</a></li>
+              <li><a href="#onAjax">onAjax()</a></li>
+            </ul>
+          </li>
+
+        </ul>
+        <a class="back-to-top" href="#top">
+          Back to top
+        </a>
+      </nav>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  $(document).ready(function () {
+    prettyPrint();
+  });
+</script>
+
+<script>
+  (function ($) {
+    'use strict';
+
+    var $window = $(window);
+    var $body = $(document.body);
+    var $sidebar = $('.s2-docs-sidebar');
+
+    $body.scrollspy({
+      target: '.s2-docs-sidebar',
+      offset: 100
+    });
+
+    $window.on('load', function () {
+      $body.scrollspy('refresh');
+    });
+
+    // Add smooth scrolling on all links inside the navbar
+    $(".s2-docs-sidenav li a").on('click', function (event) {
+
+      // Make sure this.hash has a value before overriding default behavior
+      if (this.hash !== "") {
+
+        // Prevent default anchor click behavior
+        event.preventDefault();
+
+        // Store hash
+        var hash = this.hash;
+
+        // Using jQuery's animate() method to add smooth page scroll
+        // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+        $('html, body').animate({
+          scrollTop: $(hash).offset().top - 80
+        }, 800, function () {
+
+          // Add hash (#) to URL when done scrolling (default click behavior)
+          // window.location.hash = hash;
+        });
+
+      } // End if
+
+    });
+
+    $sidebar.affix({
+      offset: {
+        top: function () {
+          var offsetTop = $sidebar.offset().top;
+          var navOuterHeight = 60;
+
+          return (this.top = offsetTop - navOuterHeight);
+        },
+        bottom: function () {
+          return (this.bottom = $('footer').outerHeight(true));
+        }
+      }
+    });
+
+  })(jQuery);
+
+  (function () {
+    'use strict';
+
+    anchors.options.placement = 'left';
+    anchors.add('.s2-docs-container h1, .s2-docs-container h2, .s2-docs-container h3, .s2-docs-container h4, .s2-docs-container h5');
+  })();
+</script>

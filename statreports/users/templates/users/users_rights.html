@@ -2,76 +2,200 @@
 {% load static %}
 {% block content %}
 
+
+
+
+
+
+
         <script src="{% static 'js/jquery.tabledit.js' %}"></script>
         <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
-		<script src="{% static 'js/dataTables.bootstrap.min.js' %}"></script>
-		<script src="{% static 'js/tabledit.min.js' %}"></script>
 
-		<link rel="stylesheet" src="{% static 'css/dataTables.bootstrap.min.css' %}" />
 
-<style>
-		    /* Remove the navbar's default margin-bottom and rounded borders */
-		    .navbar {
-		      margin-bottom: 0;
-		      border-radius: 0;
-		    }
 
-		    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-		    .row.content {height: 450px}
+		<link rel="stylesheet" href="{% static 'css/dataTables.bootstrap4.min.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" />
 
-		    /* Set gray background color and 100% height */
-		    .sidenav {
-		      padding-top: 20px;
-		      background-color: #f1f1f1;
-		      height: 100%;
-		    }
-
-		    /* Set black background color, white text and some padding */
-		    footer {
-		      background-color: #555;
-		      color: white;
-		      padding: 15px;
-		    }
-
-		    /* On small screens, set height to 'auto' for sidenav and grid */
-		    @media screen and (max-width: 767px) {
-		      .sidenav {
-		        height: auto;
-		        padding: 15px;
-		      }
-		      .row.content {height:auto;}
-		    }
-	  	</style>
+        <script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
+        <script src="{% static 'js/jquery.tabledit.min.js' %}"></script>
 
 
 
 
         <div class="bd-example-snippet bd-code-snippet"><div class="bd-example">
-                <nav>
-                      <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
-                            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Права пользователей</button>
-                            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Справочник профилей</button>
-                            <!--<button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Справочник Каталогов</button> -->
-                            <button class="nav-link" id="nav-element-tab" data-bs-toggle="tab" data-bs-target="#nav-element" type="button" role="tab" aria-controls="nav-element" aria-selected="false">Справочник Элементов</button>
-                      </div>
-                </nav>
+                        <nav>
+                              <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
+                                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Права пользователей</button>
+                                    <button class="nav-link" id="nav-references-tab" data-bs-toggle="tab" data-bs-target="#nav-references" type="button" role="tab" aria-controls="nav-references" aria-selected="false">Справочники</button>
+                                    <button class="nav-link" id="nav-catagories-tab" data-bs-toggle="tab" data-bs-target="#nav-catagories" type="button" role="tab" aria-controls="nav-catagories" aria-selected="false">Справочник категорий</button>
+                                    <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Справочник профилей</button>
+                                    <button class="nav-link" id="nav-element-tab" data-bs-toggle="tab" data-bs-target="#nav-element" type="button" role="tab" aria-controls="nav-element" aria-selected="false">Справочник элементов</button>
+                              </div>
+                        </nav>
+
+
+
 
 
 
                 <div class="tab-content" id="nav-tabContent">
 
 
-                    <!-- Begin of Tab panel button 1 -->
+                    <!-- Begin of Tab panel button 0 -->
                     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                          <div class="flex-shrink-0 p-3 bg-white" style="width: 100%;text-align:justify">
                              <div >
                                 <div class="bd-example-snippet bd-code-snippet">
                                     <div class="bd-example">
+                                         <!-- Content of the panel 0 -->
+
+
+
+
+
+
+                                        <!-- End of the panel button 0 -->
+                                    </div>
+                                </div>
+                             </div>
+                         </div>
+                    </div>
+                    <!-- End of Tab panel button 0 -->
+
+
+                       <!-- Begin of Tab panel button 1 -->
+                    <div class="tab-pane fade" id="nav-catagories" role="tabpanel" aria-labelledby="nav-catagories-tab">
+                         <div class="flex-shrink-0 p-3 bg-white" style="width: 100%;text-align:justify">
+                            <div >
+                               <div class="bd-example-snippet bd-code-snippet">
+                                   <div class="bd-example">
                                          <!-- Content of the panel 1 -->
 
 
 
 
+
+                                                        <h2 class="text-center">Редактирование категорий</h2>
+                                                                <div id="message_box_categories">
+
+                                                                </div>
+                                                                    <div class="row">
+                                                                      <div class="col-md-12 m-b-20">
+                                                                        <input type="button" value="&nbsp;&nbsp;&nbsp;Добавить&nbsp;&nbsp;&nbsp;" id="addRowcategories" class="btn btn-secondary pull-right" style="width:11.5%;hover:red"><br><br>
+                                                                      </div>
+                                                                    </div>
+
+                                                                   <div class="panel-body">
+                                                                       <div class="table-responsive">
+                                                                            <table id="categories_table_edit" class="table table-hover table-bordered table-striped" style="width:100%; border:1px solid black">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th>№</th>
+                                                                                        <th>Наименование профиля</th>
+                                                                                                                                                                        </tr>
+                                                                                </thead>
+                                                                                <tbody></tbody>
+                                                                            </table>
+                                                                       </div>
+                                                                   </div>
+
+
+                                                                            <script type="text/javascript" language="javascript" >
+                                                                                                   $(document).ready(function(){
+
+                                                                                                   var dataTable = $('#categories_table_edit').DataTable({
+                                                                                                                                                "processing" : true,
+                                                                                                                                                "serverSide" : true,
+                                                                                                                                                "order" : [],
+                                                                                                                                                "ajax" : {
+                                                                                                                                                    url:"users_rights_categories",
+                                                                                                                                                    type:"POST",
+                                                                                                                                                        data: {
+                                                                                                                                                                FORMSELECTOR: 'SELECTOR',
+                                                                                                                                                                csrfmiddlewaretoken: "{{ csrf_token }}"
+                                                                                                                                                                },
+                                                                                                                                                          }
+                                                                                                                 });
+
+
+
+                                                                                                  $('#categories_table_edit').on('draw.dt', function(){
+
+                                                                                                                        $('#categories_table_edit').Tabledit({
+                                                                                                                            url: 'users_rights_categories',
+                                                                                                                            type:"POST",
+                                                                                                                            dataType:'json',
+                                                                                                                                    columns:{
+                                                                                                                                        identifier : [0, 'id'],
+                                                                                                                                        editable:[[1, 'categoryTitle']]
+                                                                                                                                    },
+                                                                                                                                    restoreButton:false,
+                                                                                                                                    onSuccess:function(data, textStatus, jqXHR)
+                                                                                                                                    {
+                                                                                                                                                if(data.action == 'delete')
+                                                                                                                                                {
+                                                                                                                                                   $('#' + data.id).remove();
+                                                                                                                                                   $('#categories_table_edit').DataTable().ajax.reload();
+                                                                                                                                                   if ($('#id_message_categories_delete_item_span').length!=0) {
+
+                                                                                                                                                         $('#id_message_categories_delete_item').remove();
+
+                                                                                                                                                   }
+                                                                                                                                                   $('#message_box_categories').append("<div class='alert alert-success alert-dismissible fade show' role='alert' id='id_message_categories_delete_item' hidden>"+
+                                                                                                                                                                                      "<span id='id_message_categories_delete_item_span'></span>"+
+                                                                                                                                                                                      "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"+
+                                                                                                                                                                                      "</div>");
+                                                                                                                                                   $('#id_message_categories_delete_item').removeAttr('hidden');
+                                                                                                                                                   $('#id_message_categories_delete_item_span').empty()
+                                                                                                                                                   $('#id_message_categories_delete_item_span').append(data.message);
+                                                                                                                                                }
+                                                                                                                                    },
+                                                                                                                                    onFail:function(jqXHR, textStatus, errorThrown)
+                                                                                                                                    {
+                                                                                                                                                   $('#categories_table_edit').DataTable().ajax.reload();
+                                                                                                                                                   if ($('#id_message_categories_delete_item_span').length!=0) {
+                                                                                                                                                         $('#id_message_categories_delete_item').remove();
+                                                                                                                                                   }
+                                                                                                                                                   $('#message_box_categories').append("<div class='alert alert-danger alert-dismissible fade show' role='alert' id='id_message_categories_delete_item' hidden>"+
+                                                                                                                                                                                      "<span id='id_message_categories_delete_item_span'></span>"+
+                                                                                                                                                                                      "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"+
+                                                                                                                                                                                      "</div>");
+                                                                                                                                                   $('#id_message_categories_delete_item').removeAttr('hidden');
+                                                                                                                                                   $('#id_message_categories_delete_item_span').empty()
+                                                                                                                                                   $('#id_message_categories_delete_item_span').append('Произошла ошибка! Повторите попытку!');
+                                                                                                                                    }
+                                                                                                                        });
+                                                                                                  });
+
+
+                                                                                                 $("#addRowcategories").on('click', function () {
+                                                                                                                      $.ajax({
+                                                                                                                                type: "POST",
+                                                                                                                                url: "users_rights_categories",
+                                                                                                                                datatype: 'json',
+                                                                                                                                data:
+                                                                                                                                    {
+                                                                                                                                      action: 'new',
+                                                                                                                                      csrfmiddlewaretoken: "{{ csrf_token }}"
+                                                                                                                                    },
+                                                                                                                                        success: function (data)
+                                                                                                                                        {
+                                                                                                                                            $('#categories_table_edit').DataTable().ajax.reload();
+                                                                                                                                          // Add 'html' data to table
+                                                                                                                                          //$('#categories_table_edit tbody').html(data);
+
+                                                                                                                                          // Update Tabledit plugin
+                                                                                                                                         // $('#categories_table_edit').Tabledit('update');
+                                                                                                                                        },
+                                                                                                                                            error: function () {
+
+                                                                                                                                            }
+                                                                                                                             })
+                                                                                                                    });
+
+                                                                                                 });
+
+                                                                            </script>
 
 
 
@@ -98,6 +222,130 @@
 
 
 
+                                                        <h2 class="text-center">Редактирование профилей</h2>
+                                                                <div id="message_box_profiles">
+
+                                                                </div>
+                                                                    <div class="row">
+                                                                      <div class="col-md-12 m-b-20">
+                                                                        <input type="button" value="&nbsp;&nbsp;&nbsp;Добавить&nbsp;&nbsp;&nbsp;" id="addRowProfiles" class="btn btn-secondary pull-right" style="width:11.5%;hover:red"><br><br>
+                                                                      </div>
+                                                                    </div>
+
+                                                                   <div class="panel-body">
+                                                                       <div class="table-responsive">
+                                                                            <table id="profiles_table_edit" class="table table-hover table-bordered table-striped" style="width:100%; border:1px solid black">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th>№</th>
+                                                                                        <th>Наименование профиля</th>
+                                                                                                                                                                        </tr>
+                                                                                </thead>
+                                                                                <tbody></tbody>
+                                                                            </table>
+                                                                       </div>
+                                                                   </div>
+
+
+                                                                            <script type="text/javascript" language="javascript" >
+                                                                                                   $(document).ready(function(){
+
+                                                                                                   var dataTable = $('#profiles_table_edit').DataTable({
+                                                                                                                                                "processing" : true,
+                                                                                                                                                "serverSide" : true,
+                                                                                                                                                "order" : [],
+                                                                                                                                                "ajax" : {
+                                                                                                                                                    url:"users_rights_profiles",
+                                                                                                                                                    type:"POST",
+                                                                                                                                                        data: {
+                                                                                                                                                                FORMSELECTOR: 'SELECTOR',
+                                                                                                                                                                csrfmiddlewaretoken: "{{ csrf_token }}"
+                                                                                                                                                                },
+                                                                                                                                                          }
+                                                                                                                 });
+
+
+
+                                                                                                  $('#profiles_table_edit').on('draw.dt', function(){
+
+                                                                                                                        $('#profiles_table_edit').Tabledit({
+                                                                                                                            url: 'users_rights_profiles',
+                                                                                                                            type:"POST",
+                                                                                                                            dataType:'json',
+                                                                                                                                    columns:{
+                                                                                                                                        identifier : [0, 'id'],
+                                                                                                                                        editable:[[1, 'profileIndexTitle']]
+                                                                                                                                    },
+                                                                                                                                    restoreButton:false,
+                                                                                                                                    onSuccess:function(data, textStatus, jqXHR)
+                                                                                                                                    {
+                                                                                                                                                if(data.action == 'delete')
+                                                                                                                                                {
+                                                                                                                                                   $('#' + data.id).remove();
+                                                                                                                                                   $('#profiles_table_edit').DataTable().ajax.reload();
+                                                                                                                                                   if ($('#id_message_profiles_delete_item_span').length!=0) {
+
+                                                                                                                                                         $('#id_message_profiles_delete_item').remove();
+
+                                                                                                                                                   }
+                                                                                                                                                   $('#message_box_profiles').append("<div class='alert alert-success alert-dismissible fade show' role='alert' id='id_message_profiles_delete_item' hidden>"+
+                                                                                                                                                                                      "<span id='id_message_profiles_delete_item_span'></span>"+
+                                                                                                                                                                                      "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"+
+                                                                                                                                                                                      "</div>");
+                                                                                                                                                   $('#id_message_profiles_delete_item').removeAttr('hidden');
+                                                                                                                                                   $('#id_message_profiles_delete_item_span').empty()
+                                                                                                                                                   $('#id_message_profiles_delete_item_span').append(data.message);
+                                                                                                                                                }
+                                                                                                                                    },
+                                                                                                                                    onFail:function(jqXHR, textStatus, errorThrown)
+                                                                                                                                    {
+                                                                                                                                                   $('#profiles_table_edit').DataTable().ajax.reload();
+                                                                                                                                                   if ($('#id_message_profiles_delete_item_span').length!=0) {
+                                                                                                                                                         $('#id_message_profiles_delete_item').remove();
+                                                                                                                                                   }
+                                                                                                                                                   $('#message_box_profiles').append("<div class='alert alert-danger alert-dismissible fade show' role='alert' id='id_message_profiles_delete_item' hidden>"+
+                                                                                                                                                                                      "<span id='id_message_profiles_delete_item_span'></span>"+
+                                                                                                                                                                                      "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"+
+                                                                                                                                                                                      "</div>");
+                                                                                                                                                   $('#id_message_profiles_delete_item').removeAttr('hidden');
+                                                                                                                                                   $('#id_message_profiles_delete_item_span').empty()
+                                                                                                                                                   $('#id_message_profiles_delete_item_span').append('Произошла ошибка! Повторите попытку!');
+                                                                                                                                    }
+                                                                                                                        });
+                                                                                                  });
+
+
+                                                                                                 $("#addRowProfiles").on('click', function () {
+                                                                                                                      $.ajax({
+                                                                                                                                type: "POST",
+                                                                                                                                url: "users_rights_profiles",
+                                                                                                                                datatype: 'json',
+                                                                                                                                data:
+                                                                                                                                    {
+                                                                                                                                      action: 'new',
+                                                                                                                                      csrfmiddlewaretoken: "{{ csrf_token }}"
+                                                                                                                                    },
+                                                                                                                                        success: function (data)
+                                                                                                                                        {
+                                                                                                                                            $('#profiles_table_edit').DataTable().ajax.reload();
+                                                                                                                                          // Add 'html' data to table
+                                                                                                                                          //$('#profiles_table_edit tbody').html(data);
+
+                                                                                                                                          // Update Tabledit plugin
+                                                                                                                                         // $('#profiles_table_edit').Tabledit('update');
+                                                                                                                                        },
+                                                                                                                                            error: function () {
+
+                                                                                                                                            }
+                                                                                                                             })
+                                                                                                                    });
+
+                                                                                                 });
+
+                                                                            </script>
+
+
+
 
                                         <!-- End of the panel button 2 -->
                                     </div>
@@ -109,80 +357,142 @@
 
 
 
-                    <!-- Begin of Tab panel button 3 -->
 
 
 
-
-
-
-
+                      <!-- Begin of Tab panel button 3 -->
                     <div class="tab-pane fade" id="nav-element" role="tabpanel" aria-labelledby="nav-element-tab">
                           <div class="flex-shrink-0 p-3 bg-white" style="width: 100%;text-align:justify">
                              <div >
                                 <div class="bd-example-snippet bd-code-snippet">
                                     <div class="bd-example">
-                                        <!-- Content of the panel 3 -->
+                                         <!-- Content of the panel 3 -->
 
 
-                                                                                   <div class="col-sm-8 text-left">
+                                           <h2 class="text-center">Редактирование элементов</h2>
+                                                <div id="message_box_elements">
 
-                                                        <div class="panel panel-default">
-                                                            <div class="panel-heading">Sample Data</div>
-                                                            <div class="panel-body">
-                                                                <div class="table-responsive">
-                                                                    <table id="sample_data" class="table table-bordered table-striped">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th>ID</th>
-                                                                                <th>First Name</th>
-                                                                                <th>Last Name</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody></tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                </div>
+                                                    <div class="row">
+                                                      <div class="col-md-12 m-b-20">
+                                                        <input type="button" value="&nbsp;&nbsp;&nbsp;Добавить&nbsp;&nbsp;&nbsp;" id="addRowElements" class="btn btn-secondary pull-right" style="width:11.5%;hover:red"><br><br>
+                                                      </div>
                                                     </div>
 
+                                                   <div class="panel-body">
+                                                       <div class="table-responsive">
+                                                            <table id="elements_table_edit" class="table table-hover table-bordered table-striped" style="width:100%; border:1px solid black">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>№</th>
+                                                                        <th>Наименование элемента</th>
+                                                                        <th>Ссылка</th>
+                                                                        <th>Порядковый номер в сортировке</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody></tbody>
+                                                            </table>
+                                                       </div>
+                                                   </div>
+
+                                                            <script type="text/javascript" language="javascript" >
+                                                                                   $(document).ready(function(){
+
+                                                                                   var dataTable = $('#elements_table_edit').DataTable({
+                                                                                                            "processing" : true,
+                                                                                                                                "serverSide" : true,
+                                                                                                                                "order" : [],
+                                                                                                                                "ajax" : {
+                                                                                                                                    url:"users_rights_elements_update",
+                                                                                                                                    type:"POST",
+                                                                                                                                        data: {
+                                                                                                                                                FORMSELECTOR: 'SELECTOR',
+                                                                                                                                                csrfmiddlewaretoken: "{{ csrf_token }}"
+                                                                                                                                                },
+                                                                                                                                          }
+                                                                                                 });
 
 
-                                                                                            <script type="text/javascript" language="javascript" >
-                                                    $(document).ready(function(){
 
-                                                        var dataTable = $('#sample_data').DataTable({
-                                                            "processing" : true,
-                                                            "serverSide" : true,
-                                                            "order" : [],
-                                                            "ajax" : {
-                                                                url:"fetch.php",
-                                                                type:"POST"
-                                                            }
-                                                        });
+                                                                                  $('#elements_table_edit').on('draw.dt', function(){
 
-                                                        $('#sample_data').on('draw.dt', function(){
-                                                            $('#sample_data').Tabledit({
-                                                                url:'action.php',
-                                                                dataType:'json',
-                                                                columns:{
-                                                                    identifier : [0, 'id'],
-                                                                    editable:[[1, 'first_name'], [2, 'last_name']]
-                                                                },
-                                                                restoreButton:false,
-                                                                onSuccess:function(data, textStatus, jqXHR)
-                                                                {
-                                                                    if(data.action == 'delete')
-                                                                    {
-                                                                        $('#' + data.id).remove();
-                                                                        $('#sample_data').DataTable().ajax.reload();
-                                                                    }
-                                                                }
-                                                            });
-                                                        });
+                                                                                                        $('#elements_table_edit').Tabledit({
+                                                                                                            url: 'users_rights_elements_update',
+                                                                                                            type:"POST",
+                                                                                                            dataType:'json',
+                                                                                                                    columns:{
+                                                                                                                        identifier : [0, 'id'],
+                                                                                                                        editable:[[1, 'subCategoryTitle'], [2, 'subCategoryLink'], [3, 'subCategorySort','number']]
+                                                                                                                    },
+                                                                                                                    restoreButton:false,
+                                                                                                                    onSuccess:function(data, textStatus, jqXHR)
+                                                                                                                    {
+                                                                                                                                if(data.action == 'delete')
+                                                                                                                                {
+                                                                                                                                   $('#' + data.id).remove();
+                                                                                                                                   $('#elements_table_edit').DataTable().ajax.reload();
+                                                                                                                                   if ($('#id_message_elements_delete_item_span').length!=0) {
 
-                                                    });
-                                                    </script>
+                                                                                                                                         $('#id_message_elements_delete_item').remove();
+
+                                                                                                                                   }
+                                                                                                                                   $('#message_box_elements').append("<div class='alert alert-success alert-dismissible fade show' role='alert' id='id_message_elements_delete_item' hidden>"+
+                                                                                                                                                                      "<span id='id_message_elements_delete_item_span'></span>"+
+                                                                                                                                                                      "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"+
+                                                                                                                                                                      "</div>");
+                                                                                                                                   $('#id_message_elements_delete_item').removeAttr('hidden');
+                                                                                                                                   $('#id_message_elements_delete_item_span').empty()
+                                                                                                                                   $('#id_message_elements_delete_item_span').append(data.message);
+                                                                                                                                }
+                                                                                                                    },
+                                                                                                                    onFail:function(jqXHR, textStatus, errorThrown)
+                                                                                                                    {
+                                                                                                                                   $('#elements_table_edit').DataTable().ajax.reload();
+                                                                                                                                   if ($('#id_message_elements_delete_item_span').length!=0) {
+                                                                                                                                         $('#id_message_elements_delete_item').remove();
+                                                                                                                                   }
+                                                                                                                                   $('#message_box_elements').append("<div class='alert alert-danger alert-dismissible fade show' role='alert' id='id_message_elements_delete_item' hidden>"+
+                                                                                                                                                                      "<span id='id_message_elements_delete_item_span'></span>"+
+                                                                                                                                                                      "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"+
+                                                                                                                                                                      "</div>");
+                                                                                                                                   $('#id_message_elements_delete_item').removeAttr('hidden');
+                                                                                                                                   $('#id_message_elements_delete_item_span').empty()
+                                                                                                                                   $('#id_message_elements_delete_item_span').append('Произошла ошибка! Повторите попытку!');
+                                                                                                                    }
+                                                                                                        });
+                                                                                  });
+
+
+                                                                                 $("#addRowElements").on('click', function () {
+                                                                                                      $.ajax({
+                                                                                                                type: "POST",
+                                                                                                                url: "users_rights_elements_update",
+                                                                                                                datatype: 'json',
+                                                                                                                data:
+                                                                                                                    {
+                                                                                                                      action: 'new',
+                                                                                                                      csrfmiddlewaretoken: "{{ csrf_token }}"
+                                                                                                                    },
+                                                                                                                        success: function (data)
+                                                                                                                        {
+                                                                                                                            $('#elements_table_edit').DataTable().ajax.reload();
+                                                                                                                          // Add 'html' data to table
+                                                                                                                          //$('#elements_table_edit tbody').html(data);
+
+                                                                                                                          // Update Tabledit plugin
+                                                                                                                         // $('#elements_table_edit').Tabledit('update');
+                                                                                                                        },
+                                                                                                                            error: function () {
+
+                                                                                                                            }
+                                                                                                             })
+                                                                                                    });
+
+                                                                                 });
+
+                                                            </script>
+
+
                                         <!-- End of the panel button 3 -->
                                     </div>
                                 </div>

@@ -1,0 +1,189 @@
+<!-- Content -->
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="page-header">
+        <h3>Examples</h3>
+      </div>
+      <div class="alert alert-warning">
+        <i class="fa fa-warning fa-lg"></i>&nbsp;
+        The file <strong>example.php</strong> does not exist, so sending the ajax request will fail.
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="page-header">
+        <h4>Example #6</h4>
+      </div>
+      <p class="help-block">Run Debug mode -> Log to console.</p>
+
+      <div class="m-t-20">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs">
+          <li class="active"><a href="#tab" data-toggle="tab">Table</a></li>
+          <li><a href="#tab1" data-toggle="tab">Html</a></li>
+          <li><a href="#tab2" data-toggle="tab">JavaScript</a></li>
+          <li><a href="#tab3" data-toggle="tab">PHP</a></li>
+          <li><a href="#tab4" data-toggle="tab">JSFIDDLE</a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div class="tab-pane fade in active" id="tab">
+            <div class="table-responsive">
+              <table class="table table-striped table-bordered" id="example6">
+                <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nickname</th>
+                  <th>Firstname</th>
+                  <th>Lastname</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>markcell</td>
+                  <td>Celso</td>
+                  <td>Marques</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>dotz</td>
+                  <td>Márcio</td>
+                  <td>Quental</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>zikospeed</td>
+                  <td>António</td>
+                  <td>Figueiredo</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="tab1">
+<pre class="prettyprint linenums">
+&lt;table class="table table-striped table-bordered" id="example6"&gt;
+  &lt;thead&gt;
+  &lt;tr&gt;
+    &lt;th&gt;#&lt;/th&gt;
+    &lt;th&gt;Nickname&lt;/th&gt;
+    &lt;th&gt;Firstname&lt;/th&gt;
+    &lt;th&gt;Lastname&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+  &lt;tr&gt;
+    &lt;td&gt;1&lt;/td&gt;
+    &lt;td&gt;markcell&lt;/td&gt;
+    &lt;td&gt;Celso&lt;/td&gt;
+    &lt;td&gt;Marques&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;2&lt;/td&gt;
+    &lt;td&gt;dotz&lt;/td&gt;
+    &lt;td&gt;Márcio&lt;/td&gt;
+    &lt;td&gt;Quental&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;3&lt;/td&gt;
+    &lt;td&gt;zikospeed&lt;/td&gt;
+    &lt;td&gt;António&lt;/td&gt;
+    &lt;td&gt;Figueiredo&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+</pre>
+          </div>
+          <div class="tab-pane fade" id="tab2">
+<pre class="prettyprint linenums">
+$('#example6').Tabledit({
+  url: 'ajax/example.php',
+  debug: true,
+  columns: {
+    identifier: [0, 'id'],
+    editable: [[1, 'nickname'], [2, 'firstname'], [3, 'lastname']]
+  }
+});
+</pre>
+          </div>
+          <div class="tab-pane fade" id="tab3">
+<pre class="prettyprint linenums">
+&lt;?php
+
+// Basic example of PHP script to handle with jQuery-Tabledit plug-in.
+// Note that is just an example. Should take precautions such as filtering the input data.
+
+header('Content-Type: application/json');
+
+// CHECK REQUEST METHOD
+if ($_SERVER['REQUEST_METHOD']=='POST') {
+  $input = filter_input_array(INPUT_POST);
+} else {
+  $input = filter_input_array(INPUT_GET);
+}
+
+// PHP QUESTION TO MYSQL DB
+
+// Connect to DB
+
+  /*  Your code for new connection to DB*/
+
+
+// Php question
+if ($input['action'] === 'edit') {
+
+  // PHP code for edit action
+
+} else if ($input['action'] === 'delete') {
+
+  // PHP code for edit delete
+
+} else if ($input['action'] === 'restore') {
+
+  // PHP code for edit restore
+
+}
+
+// Close connection to DB
+
+/*  Your code for close connection to DB*/
+
+// RETURN OUTPUT
+echo json_encode($input);
+
+?&gt;
+</pre>
+          </div>
+          <div class="tab-pane fade" id="tab4">
+            <h5>Live test on JSFIDDLE only with /echo/json without php functions</h5>
+            <iframe width="100%" height="300" src="https://jsfiddle.net/BluesatKV/b5La9t3b/embedded/result,html,js,css/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="js/jquery.tabledit.min.js?=v1.2.7"></script>
+<script>
+  $(document).ready(function () {
+    // Example #6
+    $('#example6').Tabledit({
+      url: 'ajax/example.php',
+      debug: true,
+      columns: {
+        identifier: [0, 'id'],
+        editable: [[1, 'nickname'], [2, 'firstname'], [3, 'lastname']]
+      }
+    });
+
+    prettyPrint();
+
+  });
+</script>

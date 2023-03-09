@@ -73,3 +73,19 @@ class UsernameSelectForm(forms.ModelForm):
         model = get_user_model()
         fields = ('username',)
 
+
+class SubCategoryForm(forms.ModelForm):
+    class Meta:
+        model = subCategory
+        fields = '__all__'
+
+class profilesIndexForm(forms.ModelForm):
+    class Meta:
+        model = profilesIndex
+        fields = '__all__'
+
+class categoryForm(forms.ModelForm):
+    class Meta:
+        model = category
+        fields = '__all__'
+
