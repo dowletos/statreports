@@ -22,7 +22,7 @@ class News(models.Model):
 
 class subCategory(models.Model):
     subCategoryID = models.BigAutoField(primary_key=True, verbose_name='ID')
-    subCategoryTitle = models.CharField(max_length=250, db_index=True, verbose_name='Наименование элемента')
+    subCategoryTitle = models.CharField(max_length=250, unique=True,db_index=True, verbose_name='Наименование элемента')
     subCategoryLink = models.TextField(verbose_name='Наименование элемента')
     subCategorySort = models.IntegerField(null=False, verbose_name='Порядковый номер в сортировке')
 
@@ -37,7 +37,7 @@ class subCategory(models.Model):
 
 class category(models.Model):
     categoryID = models.BigAutoField(primary_key=True, verbose_name='ID')
-    categoryTitle = models.CharField(max_length=250, db_index=True, verbose_name='Категория')
+    categoryTitle = models.CharField(max_length=250, unique=True, db_index=True, verbose_name='Категория')
 
     def __str__(self):
         return self.categoryTitle
@@ -50,12 +50,13 @@ class category(models.Model):
 
 class profilesIndex(models.Model):
     profileIndex_PK = models.BigAutoField(primary_key=True, verbose_name='ID')
-    profileIndexTitle = models.CharField(max_length=250, db_index=True, verbose_name='Наименование Профиля')
+    profileIndexTitle = models.CharField(max_length=250,unique=True,db_index=True, verbose_name='Наименование Профиля')
 
     def __str__(self):
         return self.profileIndexTitle
 
     class Meta:
+
         verbose_name = 'Профиль'
         verbose_name_plural = 'Справочник профилей'
         ordering = ['profileIndex_PK']
@@ -64,10 +65,10 @@ class profilesIndex(models.Model):
 class profiles(models.Model):
     profileID = models.BigAutoField(primary_key=True, verbose_name='ID')
     profileIndex_FK = models.ForeignKey('profilesIndex', db_column='profileIndex_FK', to_field='profileIndex_PK',
-                                        on_delete=models.PROTECT, verbose_name='Профиль')
+                                        on_delete=models.PROTECT,db_constraint=True, verbose_name='Профиль')
     categoryID_FK = models.ForeignKey('category', db_column='categoryID_FK', to_field='categoryID',
-                                      on_delete=models.PROTECT, verbose_name='Категория')
-    subCategoryID_FK = models.ForeignKey('subCategory', db_column='subCategoryID_FK', on_delete=models.PROTECT,
+                                      on_delete=models.PROTECT,db_constraint=True, verbose_name='Категория')
+    subCategoryID_FK = models.ForeignKey('subCategory', db_column='subCategoryID_FK', on_delete=models.PROTECT, db_constraint=True,
                                          verbose_name='Элемент категории')
 
     class Meta:

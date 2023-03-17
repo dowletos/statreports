@@ -4,8 +4,8 @@
     <div class="bd-example-snippet bd-code-snippet"><div class="bd-example">
         <nav>
           <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
-            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Создание пользователя</button>
-            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Редактирование данных пользователей</button>
+            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Создание нового пользователя</button>
+            <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Редактирование данных пользователя</button>
 
           </div>
         </nav>
@@ -31,7 +31,7 @@
          <div class="center">
 	  <form method="POST" novaldiate enctype="multipart/form-data" action="{% url 'users_edit' %}"  >
 	  	{% csrf_token %}
-	    <h2 class="text-center">Персональные данные</h2>
+          <center><p class="display-6">Регистрация нового пользователя</p></center>
 		{% for field in form %}
           {% if field.name == 'is_active' %}
           <div class="col-12"><br>
@@ -106,7 +106,7 @@
         {% endif %}
          <div class="center">
 
-	    <h2 class="text-center">Редактирование данных пользователей</h2>
+             <center><p class="display-6">Редактирование данных пользователя</p></center>
           <div class="col-12"><br>
 
           <select name="username" class="form-select is-valid" required="" id="upd_username">

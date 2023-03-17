@@ -23,11 +23,12 @@
 
 
 
+
  <div class="bd-example-snippet bd-code-snippet"><div class="bd-example">
                         <nav>
                               <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
                                     <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Права пользователей</button>
-                                    <button class="nav-link" id="nav-userprofile-tab" data-bs-toggle="tab" data-bs-target="#nav-userprofile" type="button" role="tab" aria-controls="nav-userprofile" aria-selected="false">Профили пользователей</button>
+                                    <button class="nav-link" id="nav-userprofile-tab" data-bs-toggle="tab" data-bs-target="#nav-userprofile" type="button" role="tab" aria-controls="nav-userprofile" aria-selected="false">Управление профилями</button>
 
                                     <li class="dropdown nav-item ">
                                             <button class="dropdown nav-link" id="nav-catagories-tab2" data-bs-toggle="tab" data-bs-target="" type="button" role="tab" aria-controls="" aria-selected="false">Справочники<span class="caret"></span></button>
@@ -61,7 +62,7 @@
                                          <!-- Content of the panel 0 -->
 
 
-            1
+
 
 
 
@@ -83,8 +84,162 @@
                                          <!-- Content of the panel 000 -->
 
 
-            2
 
+
+
+                                        <center><p class="display-6">Управление профилями</p></center>
+                                                <div id="message_box_profileset">
+
+                                                </div>
+                                                    <div class="row">
+                                                      <div class="col-md-12 m-b-20">
+                                                        <input type="button" value="&nbsp;&nbsp;&nbsp;Добавить&nbsp;&nbsp;&nbsp;" id="addRowprofileset" class="btn btn-secondary pull-right" style="width:11.5%;hover:red"><br><br>
+                                                      </div>
+                                                    </div>
+
+                                                   <div class="panel-body">
+                                                       <div class="table-responsive">
+                                                            <table id="profileset_table_edit" class="table table-hover table-bordered table-striped" style="width:100%; border:1px solid black">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>№</th>
+                                                                        <th>Профиль</th>
+                                                                        <th>Категория</th>
+                                                                        <th>Элемент категории</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody></tbody>
+                                                            </table>
+                                                       </div>
+                                                   </div>
+
+
+                                                            <script type="text/javascript" language="javascript" >
+                                                                                   $(document).ready(function(){
+
+                                                                                   var dataTable = $('#profileset_table_edit').DataTable({
+                                                                                                            "processing" : true,
+                                                                                                                                "serverSide" : true,
+                                                                                                                                "order" : [],
+                                                                                                                                "ajax" : {
+                                                                                                                                    url:"users_rights_profileset_update",
+                                                                                                                                    type:"POST",
+                                                                                                                                     columns: {
+                                                                                                                                identifier: [0, 'id'],
+                                                                                                                                editable: [
+
+                                                                                                                                  [1, 'profileIndex_FK', 'select', '{ {% for i,v in profile_form %}"{{ i }}" : "{{ v }}"{% if not forloop.last %},{% endif %}{% endfor %}}'],
+                                                                                                                                  [2, 'categoryID_FK', 'select', '{ {% for i,v in category_form %}"{{ i }}" : "{{ v }}"{% if not forloop.last %},{% endif %}{% endfor %}}'],
+                                                                                                                                  [3, 'subCategoryID_FK', 'select', '{ {% for i,v in subCategory_form %}"{{ i }}" : "{{ v }}"{% if not forloop.last %},{% endif %}{% endfor %}}']
+                                                                                                                                ]
+                                                                                                                              },
+                                                                                                                                        data: {
+                                                                                                                                                FORMSELECTOR: 'SELECTOR',
+                                                                                                                                                csrfmiddlewaretoken: "{{ csrf_token }}"
+                                                                                                                                                },
+                                                                                                                                          }
+                                                                                                 });
+
+
+
+                                                                                  $('#profileset_table_edit').on('draw.dt', function(){
+
+                                                                                                        $('#profileset_table_edit').Tabledit({
+                                                                                                            url: 'users_rights_profileset_update',
+                                                                                                            type:"POST",
+                                                                                                            dataType:'json',
+                                                                                                                     columns: {
+                                                    identifier: [0, 'id'],
+                                                    editable: [
+
+                                                      [1, 'profileIndex_FK', 'select', '{ {% for i,v in profile_form %}"{{ i }}" : "{{ v }}"{% if not forloop.last %},{% endif %}{% endfor %}}'],
+                                                      [2, 'categoryID_FK', 'select', '{ {% for i,v in category_form %}"{{ i }}" : "{{ v }}"{% if not forloop.last %},{% endif %}{% endfor %}}'],
+                                                      [3, 'subCategoryID_FK', 'select', '{ {% for i,v in subCategory_form %}"{{ i }}" : "{{ v }}"{% if not forloop.last %},{% endif %}{% endfor %}}']
+                                                    ]
+                                                  },
+                                                                                                                    restoreButton:false,
+                                                                                                                    onSuccess:function(data, textStatus, jqXHR)
+                                                                                                                    {
+
+                                                                                                                                   $('#' + data.id).remove();
+                                                                                                                                   $('#profileset_table_edit').DataTable().ajax.reload();
+                                                                                                                                   if ($('#id_message_profileset_delete_item_span').length!=0) {
+
+                                                                                                                                         $('#id_message_profileset_delete_item').remove();
+
+                                                                                                                                   }
+                                                                                                                                   $('#message_box_profileset').append("<div class='alert alert-success alert-dismissible fade show' role='alert' id='id_message_profileset_delete_item' hidden>"+
+                                                                                                                                                                      "<span id='id_message_profileset_delete_item_span'></span>"+
+                                                                                                                                                                      "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"+
+                                                                                                                                                                      "</div>");
+                                                                                                                                   $('#id_message_profileset_delete_item').removeAttr('hidden');
+                                                                                                                                   $('#id_message_profileset_delete_item_span').empty()
+                                                                                                                                   $('#id_message_profileset_delete_item_span').append(data.message);
+
+                                                                                                                    },
+
+                                                                                                                    onFail:function(jqXHR, textStatus, errorThrown)
+                                                                                                                    {
+                                                                                                                                   $('#profileset_table_edit').DataTable().ajax.reload();
+                                                                                                                                   if ($('#id_message_profileset_delete_item_span').length!=0) {
+                                                                                                                                         $('#id_message_profileset_delete_item').remove();
+                                                                                                                                   }
+                                                                                                                                   $('#message_box_profileset').append("<div class='alert alert-danger alert-dismissible fade show' role='alert' id='id_message_profileset_delete_item' hidden>"+
+                                                                                                                                                                      "<span id='id_message_profileset_delete_item_span'></span>"+
+                                                                                                                                                                      "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"+
+                                                                                                                                                                      "</div>");
+                                                                                                                                   $('#id_message_profileset_delete_item').removeAttr('hidden');
+                                                                                                                                   $('#id_message_profileset_delete_item_span').empty()
+                                                                                                                                   $.each(jqXHR.responseJSON, function (key, data) {
+
+                                                                                                                                   if(key=='message') {
+                                                                                                                                   $('#id_message_profileset_delete_item_span').append('Ошибка : ' +data);
+                                                                                                                                                       }
+                                                                                                                                    });
+                                                                                                                    }
+                                                                                                        });
+                                                                                  });
+$("#addRowprofileset").click(function() {
+
+	var tableditTableName1 = '#profileset_table_edit';  // Identifier of table
+	var newID = 'new';
+	var clone = $(tableditTableName1 + " tr:last").clone();
+	$(".tabledit-span", clone).text("");
+	$(".tabledit-input", clone).val("");
+	clone.prependTo(tableditTableName1);
+	$(tableditTableName1 + " tbody tr:first td .tabledit-span.tabledit-identifier").text(newID);
+	$(tableditTableName1 + " tbody tr:first td .tabledit-input.tabledit-identifier").val(newID);
+	$(tableditTableName1 + " tbody tr:first td:last .tabledit-edit-button").trigger("click");
+});
+
+                                                                                 $("#addRowprofileset1").on('click', function () {
+                                                                                                      $.ajax({
+                                                                                                                type: "POST",
+                                                                                                                url: "users_rights_profileset_update",
+                                                                                                                datatype: 'json',
+                                                                                                                data:
+                                                                                                                    {
+                                                                                                                      action: 'new',
+                                                                                                                      csrfmiddlewaretoken: "{{ csrf_token }}"
+                                                                                                                    },
+                                                                                                                        success: function (data)
+                                                                                                                        {
+                                                                                                                            $('#profileset_table_edit').DataTable().ajax.reload();
+                                                                                                                          // Add 'html' data to table
+                                                                                                                          //$('#profileset_table_edit tbody').html(data);
+
+                                                                                                                          // Update Tabledit plugin
+                                                                                                                         // $('#profileset_table_edit').Tabledit('update');
+                                                                                                                        },
+                                                                                                                            error: function () {
+
+                                                                                                                            }
+                                                                                                             })
+                                                                                                    });
+
+                                                                                 });
+
+                                                            </script>
 
 
                                         <!-- End of the panel button 000 -->
@@ -108,7 +263,8 @@
 
 
 
-                                                        <h2 class="text-center">Редактирование справочника категорий</h2>
+
+                                                        <center><p class="display-6">Редактирование справочника категорий</p></center>
                                                                 <div id="message_box_categories">
 
                                                                 </div>
@@ -165,7 +321,7 @@
                                                                                                                                     restoreButton:false,
                                                                                                                                     onSuccess:function(data, textStatus, jqXHR)
                                                                                                                                     {
-                                                                                                                                                if(data.action == 'delete')
+                                                                                                                                                if(data.action == 'new' || data.action == 'edit' || data.action == 'delete')
                                                                                                                                                 {
                                                                                                                                                    $('#' + data.id).remove();
                                                                                                                                                    $('#categories_table_edit').DataTable().ajax.reload();
@@ -195,13 +351,30 @@
                                                                                                                                                                                       "</div>");
                                                                                                                                                    $('#id_message_categories_delete_item').removeAttr('hidden');
                                                                                                                                                    $('#id_message_categories_delete_item_span').empty()
-                                                                                                                                                   $('#id_message_categories_delete_item_span').append('Произошла ошибка! Повторите попытку!');
+                                                                                                                                                   $.each(jqXHR.responseJSON, function (key, data) {
+
+                                                                                                                                                   if(key=='message') {
+                                                                                                                                                   $('#id_message_categories_delete_item_span').append('Ошибка : ' +data);
+                                                                                                                                                                       }
+                                                                                                                                                    });
                                                                                                                                     }
                                                                                                                         });
                                                                                                   });
 
+$("#addRowcategories").click(function() {
 
-                                                                                                 $("#addRowcategories").on('click', function () {
+	var tableditTableName1 = '#categories_table_edit';  // Identifier of table
+	var newID = 'new';
+	var clone = $(tableditTableName1 + " tr:last").clone();
+	$(".tabledit-span", clone).text("");
+	$(".tabledit-input", clone).val("");
+	clone.prependTo(tableditTableName1);
+	$(tableditTableName1 + " tbody tr:first td .tabledit-span.tabledit-identifier").text(newID);
+	$(tableditTableName1 + " tbody tr:first td .tabledit-input.tabledit-identifier").val(newID);
+	$(tableditTableName1 + " tbody tr:first td:last .tabledit-edit-button").trigger("click");
+
+});
+                                                                                                 $("#addRowcategories1").on('click', function () {
                                                                                                                       $.ajax({
                                                                                                                                 type: "POST",
                                                                                                                                 url: "users_rights_categories",
@@ -255,7 +428,7 @@
 
 
 
-                                                        <h2 class="text-center">Редактирование справочника профилей</h2>
+                                        <center><p class="display-6">Редактирование справочника профилей</p></center>
                                                                 <div id="message_box_profiles">
 
                                                                 </div>
@@ -312,7 +485,7 @@
                                                                                                                                     restoreButton:false,
                                                                                                                                     onSuccess:function(data, textStatus, jqXHR)
                                                                                                                                     {
-                                                                                                                                                if(data.action == 'delete')
+                                                                                                                                                 if(data.action == 'new' || data.action == 'edit' || data.action == 'delete')
                                                                                                                                                 {
                                                                                                                                                    $('#' + data.id).remove();
                                                                                                                                                    $('#profiles_table_edit').DataTable().ajax.reload();
@@ -342,13 +515,31 @@
                                                                                                                                                                                       "</div>");
                                                                                                                                                    $('#id_message_profiles_delete_item').removeAttr('hidden');
                                                                                                                                                    $('#id_message_profiles_delete_item_span').empty()
-                                                                                                                                                   $('#id_message_profiles_delete_item_span').append('Произошла ошибка! Повторите попытку!');
+                                                                                                                                                   $.each(jqXHR.responseJSON, function (key, data) {
+
+                                                                                                                                                   if(key=='message') {
+                                                                                                                                                   $('#id_message_profiles_delete_item_span').append('Ошибка : ' +data);
+                                                                                                                                                                       }
+                                                                                                                                                    });
                                                                                                                                     }
                                                                                                                         });
                                                                                                   });
 
+$("#addRowProfiles").click(function() {
 
-                                                                                                 $("#addRowProfiles").on('click', function () {
+	var tableditTableName1 = '#profiles_table_edit';  // Identifier of table
+	var newID = 'new';
+	var clone = $(tableditTableName1 + " tr:last").clone();
+	$(".tabledit-span", clone).text("");
+	$(".tabledit-input", clone).val("");
+	clone.prependTo(tableditTableName1);
+	$(tableditTableName1 + " tbody tr:first td .tabledit-span.tabledit-identifier").text(newID);
+	$(tableditTableName1 + " tbody tr:first td .tabledit-input.tabledit-identifier").val(newID);
+	$(tableditTableName1 + " tbody tr:first td:last .tabledit-edit-button").trigger("click");
+
+});
+
+                                                                                                 $("#addRowProfiles2").on('click', function () {
                                                                                                                       $.ajax({
                                                                                                                                 type: "POST",
                                                                                                                                 url: "users_rights_profiles",
@@ -402,7 +593,7 @@
                                          <!-- Content of the panel 3 -->
 
 
-                                           <h2 class="text-center">Редактирование справочника элементов</h2>
+                                        <center><p class="display-6">Редактирование справочника элементов</p></center>
                                                 <div id="message_box_elements">
 
                                                 </div>
@@ -460,7 +651,7 @@
                                                                                                                     restoreButton:false,
                                                                                                                     onSuccess:function(data, textStatus, jqXHR)
                                                                                                                     {
-                                                                                                                                if(data.action == 'delete')
+                                                                                                                                if(data.action == 'new' || data.action == 'edit' || data.action == 'delete')
                                                                                                                                 {
                                                                                                                                    $('#' + data.id).remove();
                                                                                                                                    $('#elements_table_edit').DataTable().ajax.reload();
@@ -490,13 +681,30 @@
                                                                                                                                                                       "</div>");
                                                                                                                                    $('#id_message_elements_delete_item').removeAttr('hidden');
                                                                                                                                    $('#id_message_elements_delete_item_span').empty()
-                                                                                                                                   $('#id_message_elements_delete_item_span').append('Произошла ошибка! Повторите попытку!');
+                                                                                                                                   $.each(jqXHR.responseJSON, function (key, data) {
+                                                                                                                                   if(key=='message') {
+                                                                                                                                   $('#id_message_elements_delete_item_span').append('Ошибка : ' +data);
+                                                                                                                                                       }
+                                                                                                                                   });
                                                                                                                     }
                                                                                                         });
                                                                                   });
 
+$("#addRowElements").click(function() {
 
-                                                                                 $("#addRowElements").on('click', function () {
+	var tableditTableName1 = '#elements_table_edit';  // Identifier of table
+	var newID = 'new';
+	var clone = $(tableditTableName1 + " tr:last").clone();
+	$(".tabledit-span", clone).text("");
+	$(".tabledit-input", clone).val("");
+	clone.prependTo(tableditTableName1);
+	$(tableditTableName1 + " tbody tr:first td .tabledit-span.tabledit-identifier").text(newID);
+	$(tableditTableName1 + " tbody tr:first td .tabledit-input.tabledit-identifier").val(newID);
+	$(tableditTableName1 + " tbody tr:first td:last .tabledit-edit-button").trigger("click");
+
+});
+
+                                                                                 $("#addRowElements2222").on('click', function () {
                                                                                                       $.ajax({
                                                                                                                 type: "POST",
                                                                                                                 url: "users_rights_elements_update",

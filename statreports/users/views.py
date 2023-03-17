@@ -19,6 +19,8 @@ from django.http import JsonResponse
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.http.request import QueryDict
+from .utils import *
+
 
 '''
 USER ACCESS RIGHTS CHECKING CLASS
@@ -180,8 +182,14 @@ class CreateUserRights(FormView):
         RF = RegisterForm()
         UF = tuple((z1, f'{z2} {z3}') for z1, z2, z3 in get_user_model().objects.values_list('id', 'first_name', 'last_name'))
         CF = update_user_form(auto_id='id_upd_%s')
+
+        category_list_db = category.objects.all().values_list('categoryID', 'categoryTitle')
+        profile_list_db = profilesIndex.objects.all().values_list('profileIndex_PK','profileIndexTitle')
+        subCategory_list_db = subCategory.objects.all().values_list('subCategoryID', 'subCategoryTitle')
+
+
         return render(self.request, 'users/users_rights.html',
-                      {'title': 'Добро пожаловать', 'UserSet': UserSet, 'form': RF, 'UF': UF, 'CF': CF})
+                      {'title': 'Добро пожаловать', 'UserSet': UserSet, 'form': RF, 'UF': UF, 'CF': CF,'category_form': category_list_db,'profile_form':profile_list_db, 'subCategory_form':subCategory_list_db})
 
     def post(self,request):
         UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
@@ -220,7 +228,7 @@ class CreateUserRights(FormView):
         4. PAGINATION OF RECORDS
 '''
 
-class ElementsManagementController(FormView):
+class ElementsManagementController2222(FormView):
 
     def post(self, request):
         UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
@@ -409,14 +417,16 @@ class ElementsManagementController(FormView):
 
 
 '''
-    'ELEMENTS' REFERENCE TABLE EDITTING CONTROLLER CLASS
+    'PROFILEINDEÜ' REFERENCE TABLE EDITTING CONTROLLER CLASS
         1. EDIT/DELETE/ADD NEW ELEMENTS
         2. SORTING DATA
         3. FILTERING DATA
         4. PAGINATION OF RECORDS
 '''
 
-class ProfileIndexManagementController(FormView):
+
+
+class ProfileIndexManagementControllerxxx(FormView):
 
     def post(self, request):
         UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
@@ -598,20 +608,335 @@ class ProfileIndexManagementController(FormView):
 
 
 
+class CRUDController(FormView):
+
+    CurrentMixin=None
+    def __init__(self,Mixin_selector):
+
+       self.CurrentMixin=Mixin_selector
+       CRUDController.__bases__ = (FormView, Mixin_selector)
+
+
+
+
+    def post(self, request):
+
+        print(self.CurrentMixin)
+        CRUDController.__bases__ = (FormView, self.CurrentMixin)
+
+        print(self.CurrentMixin.initial_order)
+        self.__dict__.update()
+        for z in self.__dict__:
+            print(z)
+
+        UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
+        if not CheckUserRights.check_user_permissions(self,UserSet, 'users_rights'):
+            return redirect(reverse('logout'))
+
+        datax = self.CurrentMixin().objectModel.objects.all().values_list(*self.CurrentMixin().get_query_value_list()).order_by(self.CurrentMixin().get_initial_order())
+        datax_count = datax.count()
+        if 'FORMSELECTOR' in self.request.POST:
+                                            try:
+                                                if 'search[value]' not in self.request.POST:
+                                                    searchF = 0
+                                                else:
+                                                    searchF = self.request.POST.get('search[value]')
+
+                                                if 'length' not in self.request.POST:
+                                                    showNumber = -1
+                                                else:
+                                                    showNumber = int(self.request.POST.get('length'))
+
+                                                if 'order[0][column]' not in self.request.POST:
+                                                    orderColumn=-1
+                                                else:
+                                                    orderColumn = int(self.request.POST.get('order[0][column]'))
+
+                                                if 'order[0][dir]' not in self.request.POST:
+                                                    orderType = 'asc'
+                                                else:
+                                                    orderType = self.request.POST.get('order[0][dir]')
+
+                                                if 'start' not in self.request.POST:
+                                                    pageStart = 0
+                                                else:
+                                                    pageStart = int(self.request.POST.get('start'))
+
+                                            except Exception as err:
+                                                print(f'ERROR: {err}')
+
+                                            z = [i for i in (datax._fields)]
+
+                                            if (len(searchF) > 0):
+
+                                                datax = datax.filter(*(self.CurrentMixin().get_search_parameters(searchF),)).values_list(*self.CurrentMixin().get_search_parameters_results_order())
+
+                                            if (orderColumn != -1) and (orderColumn<=len(z)-1):
+                                                    if orderType=='asc':
+                                                        datax=datax.order_by(z[orderColumn])
+                                                    else:
+                                                        datax = datax.order_by(z[orderColumn]).reverse()
+
+                                            if (showNumber != -1):
+                                                if pageStart>=0:
+                                                    datax = datax[pageStart:pageStart+showNumber]
+                                                else:
+                                                    datax = datax[0:showNumber]
+
+                                            context = {
+                                                'draw': self.request.POST.get('draw'),
+                                                'recordsTotal': datax_count,
+                                                'recordsFiltered': datax_count,
+                                                'data': tuple(datax)
+                                            }
+
+                                            return JsonResponse(context, status=200)
+
+
+        if ('action' in self.request.POST):
+
+            if self.request.POST.get('action')=='delete':
+
+                if 'id' in self.request.POST:
+
+                    try:
+
+                        item_id = 0
+                        item_id=int(self.request.POST.get('id'))
+                        if item_id>0:
+                            print(self.get_delete_ID(item_id))
+                            Status=self.CurrentMixin().objectModel.objects.filter(**(self.CurrentMixin().get_delete_ID(item_id))).delete()
+                            MessageTXT=f'Запись № {item_id} успешно удалена!'
+
+                        else:
+
+                            MessageTXT = f'Попытка взлома или ошибка удаления записи № {item_id}!'
+                            context = {
+                                'id': item_id,
+                                'action': "delete",
+                                'message': MessageTXT
+                            }
+                            return JsonResponse(context, status=400)
+
+                    except Exception as err:
+                        print(f'ERROR: {err}')
+                        MessageTXT=f'Ошибка удаления записи № {item_id}!'
+                        context = {
+                            'id': item_id,
+                            'action': "delete",
+                            'message': MessageTXT
+                        }
+                        if self.request.POST.get('id')=='new':
+                            MessageTXT = f'Пустая записать удалена!'
+                            context = {
+                                'id': item_id,
+                                'action': "delete",
+                                'message': MessageTXT
+                            }
+                            return JsonResponse(context, status=200)
+                        return JsonResponse(context, status=400)
+
+                    context = {
+                        'id': item_id,
+                        'action': "delete",
+                        'message': MessageTXT
+                    }
+
+                return JsonResponse(context, status=200)
+
+        if (self.request.POST.get('action') == 'edit') and ('id' in self.request.POST):
+                    if (self.request.POST.get('id')=='new'):
+
+                        try:
+
+                            item_id = 9999999
+
+
+                            SF = self.CurrentMixin().objectForm(self.request.POST)
+
+                            if (len(dict(SF.errors)) > 0):
+                                MessageTXT = list(SF.errors.values())[0]
+                            else:
+                                MessageTXT = SF.errors
+
+
+                            print(MessageTXT)
+                            if SF.is_valid():
+                               SF.save()
+                               MessageTXT = f'Новая запись успешно добавлена!'
+                            else:
+                                context = {
+                                    'id': item_id,
+                                    'action': "new",
+                                    'message': MessageTXT
+                                }
+                                return JsonResponse(context, status=400)
+
+
+                        except Exception as err:
+                            print(f'ERROR: {err}')
+                            MessageTXT = f'Ошибка добавления записи № {item_id}!'
+
+                            context = {
+                                'id': item_id,
+                                'action': "new",
+                                'message': MessageTXT
+                            }
+                            return JsonResponse(context, status=400)
+
+                        context = {
+                            'id': item_id,
+                            'action': "new",
+                            'message': MessageTXT
+                        }
+
+
+                        return JsonResponse(context, status=200)
+
+        if (self.request.POST.get('action')=='edit'):
+
+                        if 'id' in self.request.POST:
+
+                            if (self.request.POST.get('id') != 'new'):
+
+                                try:
+
+                                    item_id = int(self.request.POST.get('id'))
+
+                                    if item_id > 0:
+                                        kwargs_upd = {'data': self.request.POST}
+
+                                        kwargs_upd['instance'] = self.CurrentMixin().objectModel.objects.get(**self.CurrentMixin().get_pk_ID(item_id))
+
+                                        SF = self.CurrentMixin().objectForm(**kwargs_upd)
+                                        print(SF.errors)
+                                        if (len(dict(SF.errors))>0):
+                                            MessageTXT =list(SF.errors.values())[0]
+                                        else:
+                                            MessageTXT=SF.errors
+
+                                        print(MessageTXT)
+                                        if SF.is_valid():
+                                           SF.save()
+                                           MessageTXT= f'Запись № {item_id} успешно обновлена!'
+
+
+                                        else:
+                                            context = {
+                                                'id': item_id,
+                                                'action': "edit",
+                                                'message': MessageTXT
+                                            }
+                                            return JsonResponse(context, status=400)
+
+
+                                except Exception as err:
+                                    print(f'ERROR: {err}')
+                                    MessageTXT = f'Ошибка обновления записи № {item_id}!'
+
+                                    context = {
+                                            'id': item_id,
+                                            'action': "edit",
+                                            'message': MessageTXT
+                                    }
+
+                                    return JsonResponse(context, status=400)
+
+                            context = {
+                                'id': item_id,
+                                'action': "edit",
+                                'message': MessageTXT
+                            }
+
+                            return JsonResponse(context, status=200)
+
+
+
+
+        context = {
+            'id': "-1",
+            'action': "None"
+        }
+
+        return JsonResponse(context, status=400)
+
+
+
+
+'''
+    'Users_categories' REFERENCE TABLE EDITTING CONTROLLER CLASS
+        1. EDIT/DELETE/ADD NEW 
+        2. SORTING DATA
+        3. FILTERING DATA
+        4. PAGINATION OF RECORDS
+'''
+class CategoriesManagementController(CRUDController):
+    def __init__(self):
+        kwargs = {}
+        kwargs['Mixin_Selector'] = MyMixin_Categories
+        super().__init__(MyMixin_Categories)
+
+
+
+'''
+    'Users_Profiles' TABLE EDITTING CONTROLLER CLASS
+        1. EDIT/DELETE/ADD NEW 
+        2. SORTING DATA
+        3. FILTERING DATA
+        4. PAGINATION OF RECORDS
+'''
+class ProfilesManagementController(CRUDController):
+    def __init__(self):
+        kwargs={}
+        kwargs['Mixin_Selector']=MyMixin_Profiles
+        super().__init__(MyMixin_Profiles)
+
+'''
+    'ProfilesIndex' REFERENCE TABLE EDITTING CONTROLLER CLASS
+        1. EDIT/DELETE/ADD NEW 
+        2. SORTING DATA
+        3. FILTERING DATA
+        4. PAGINATION OF RECORDS
+'''
+class ProfileIndexManagementController(CRUDController):
+    def __init__(self):
+        kwargs={}
+        kwargs['Mixin_Selector']=MyMixin_ProfileIndex
+        super().__init__(MyMixin_ProfileIndex)
+
+
+
+'''
+    'Elements' REFERENCE TABLE EDITTING CONTROLLER CLASS
+        1. EDIT/DELETE/ADD NEW 
+        2. SORTING DATA
+        3. FILTERING DATA
+        4. PAGINATION OF RECORDS
+'''
+class ElementsManagementController(CRUDController):
+    def __init__(self):
+        kwargs={}
+        kwargs['Mixin_Selector']=MyMixin_Elements
+        super().__init__(MyMixin_Elements)
+
+
+
+
+
 
 
 
 
 
 '''
-    'ELEMENTS' REFERENCE TABLE EDITTING CONTROLLER CLASS
-        1. EDIT/DELETE/ADD NEW ELEMENTS
+    'CATEGORIES' REFERENCE TABLE EDITTING CONTROLLER CLASS
+        1. EDIT/DELETE/ADD NEW CATEGORIES
         2. SORTING DATA
         3. FILTERING DATA
         4. PAGINATION OF RECORDS
 '''
 
-class CategoriesManagementController(FormView):
+class CategoriesManagementController_to_delete(FormView):
 
     def post(self, request):
         UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
@@ -653,7 +978,7 @@ class CategoriesManagementController(FormView):
 
                                             if (len(searchF) > 0):
                                                 datax = datax.filter(
-                                                    Q(categoryID_PK__icontains=searchF) | Q(categoryTitle__icontains=searchF)).values_list('categoryID','categoryTitle')
+                                                    Q(categoryID__icontains=searchF) | Q(categoryTitle__icontains=searchF)).values_list('categoryID','categoryTitle')
 
                                             if (orderColumn != -1) and (orderColumn<=len(z)-1):
                                                     if orderType=='asc':
@@ -684,20 +1009,35 @@ class CategoriesManagementController(FormView):
                 if 'id' in self.request.POST:
 
                     try:
+                        item_id = 0
                         item_id=int(self.request.POST.get('id'))
                         if item_id>0:
                             Status=category.objects.filter(categoryID=item_id).delete()
                             deleteMessage=f'Запись № {item_id} успешно удалена!'
                         else:
-                            return JsonResponse("", status=400)
+                            MessageTXT = f'Попытка взлома или ошибка удаления записи № {item_id}!'
+                            context = {
+                                'id': item_id,
+                                'action': "delete",
+                                'message': MessageTXT
+                            }
+                            return JsonResponse(context, status=400)
                     except Exception as err:
                         print(f'ERROR: {err}')
-                        deleteMessage=f'Ошибка удаления записи № {item_id}!'
+                        MessageTXT = f'Ошибка удаления записи № {item_id}!'
                         context = {
                             'id': item_id,
                             'action': "delete",
-                            'message': deleteMessage
+                            'message': MessageTXT
                         }
+                        if self.request.POST.get('id') == 'new':
+                            MessageTXT = f'Пустая записать удалена!'
+                            context = {
+                                'id': item_id,
+                                'action': "delete",
+                                'message': MessageTXT
+                            }
+                            return JsonResponse(context, status=200)
                         return JsonResponse(context, status=400)
 
                     context = {
@@ -708,78 +1048,105 @@ class CategoriesManagementController(FormView):
 
                 return JsonResponse(context, status=200)
 
-            elif (self.request.POST.get('action')=='edit'):
+            if (self.request.POST.get('action') == 'edit'):
 
                 if 'id' in self.request.POST:
 
-                    try:
+                    if (self.request.POST.get('id') != 'new'):
 
-                        item_id = int(self.request.POST.get('id'))
-                        if item_id > 0:
-                            kwargs_upd = {'data': self.request.POST}
+                        try:
 
-                            kwargs_upd['instance'] = category.objects.get(categoryID=item_id)
+                            item_id = int(self.request.POST.get('id'))
+                            if item_id > 0:
+                                kwargs_upd = {'data': self.request.POST}
 
-                            SF = categoryForm(**kwargs_upd)
-                            print(SF.errors)
-                            if SF.is_valid():
-                               SF.save()
-                               deleteMessage = f'Запись № {item_id} успешно обновлена!'
+                                kwargs_upd['instance'] = category.objects.get(categoryID=item_id)
+
+                                SF = categoryForm(**kwargs_upd)
+
+                                if (len(dict(SF.errors)) > 0):
+                                    MessageTXT = list(SF.errors.values())[0]
+                                else:
+                                    MessageTXT = SF.errors
+
+                                print(MessageTXT)
+                                if SF.is_valid():
+                                   SF.save()
+                                   MessageTXT = f'Запись № {item_id} успешно обновлена!'
 
 
-                               context = {
+                                   context = {
+                                        'id': item_id,
+                                        'action': "edit",
+                                        'message': MessageTXT
+                                   }
+                                   return JsonResponse(context, status=200)
+                                else:
+                                    context = {
+                                        'id': item_id,
+                                        'action': "edit",
+                                        'message': MessageTXT
+                                    }
+                                    return JsonResponse(context, status=400)
+
+                        except Exception as err:
+                            print(f'ERROR: {err}')
+                            MessageTXT = f'Ошибка удаления записи № {item_id}!'
+
+                            context = {
                                     'id': item_id,
-                                    'action': "delete",
-                                    'message': deleteMessage
-                               }
-                               return JsonResponse(context, status=200)
+                                    'action': "edit",
+                                    'message': MessageTXT
+                            }
 
-                    except Exception as err:
-                        print(f'ERROR: {err}')
-                    deleteMessage = f'Ошибка удаления записи № {item_id}!'
-
-                    context = {
+                            return JsonResponse(context, status=400)
+                        context = {
                             'id': item_id,
-                            'action': "delete",
-                            'message': deleteMessage
-                    }
+                            'action': "edit",
+                            'message': MessageTXT
+                        }
+                        return JsonResponse(context, status=200)
 
-                    return JsonResponse(context, status=400)
+            if (self.request.POST.get('action') == 'edit') and ('id' in self.request.POST):
 
-            elif (self.request.POST.get('action')=='new'):
+                if (self.request.POST.get('id') == 'new'):
 
                     try:
-
                         item_id = 9999999
-                        draft_request_data=self.request.POST.copy()
-                        draft_request_data['categoryTitle'] = "_____NEW____"
-
-
-                        self.request.POST= draft_request_data
                         SF = categoryForm(self.request.POST)
+
+                        if (len(dict(SF.errors)) > 0):
+                            MessageTXT = list(SF.errors.values())[0]
+                        else:
+                            MessageTXT = SF.errors
+
                         print(SF.errors)
                         if SF.is_valid():
 
                            SF.save()
-                           deleteMessage = f'Запись № {item_id} успешно добавлена!'
+                           MessageTXT = f'Новая запись успешно добавлена!'
+                        else:
+                           context = {
+                               'id': item_id,
+                               'action': "new",
+                               'message': MessageTXT
+                           }
+                           return JsonResponse(context, status=400)
                     except Exception as err:
                         print(f'ERROR: {err}')
-                        deleteMessage = f'Ошибка удаления записи № {item_id}!'
+                        MessageTXT = f'Ошибка добавления новой записи !'
 
                         context = {
                             'id': item_id,
-                            'action': "delete",
-                            'message': deleteMessage
+                            'action': "new",
+                            'message': MessageTXT
                         }
                         return JsonResponse(context, status=400)
 
-                    datax_count = datax.count()
-
-
                     context = {
-                        'id':item_id,
-                        'categoryTitle': draft_request_data['categoryTitle']
-
+                        'id': item_id,
+                        'action': "new",
+                        'message': MessageTXT
                     }
 
 
@@ -794,6 +1161,242 @@ class CategoriesManagementController(FormView):
         return JsonResponse(context, status=400)
 
 
+
+'''
+need to delete
+'''
+class ProfilesManagementController_to_delete(FormView):
+
+    def post(self, request):
+        UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
+        if not CheckUserRights.check_user_permissions(self,UserSet, 'users_rights'):
+            return redirect(reverse('logout'))
+        datax = profiles.objects.all().values_list('profileID','profileIndex_FK__profileIndexTitle','categoryID_FK__categoryTitle','subCategoryID_FK__subCategoryTitle', 'profileIndex_FK', 'categoryID_FK','subCategoryID_FK').order_by('-profileID')
+
+        datax_count = datax.count()
+        if 'FORMSELECTOR' in self.request.POST:
+                                            try:
+                                                if 'search[value]' not in self.request.POST:
+                                                    searchF = 0
+                                                else:
+                                                    searchF = self.request.POST.get('search[value]')
+
+                                                if 'length' not in self.request.POST:
+                                                    showNumber = -1
+                                                else:
+                                                    showNumber = int(self.request.POST.get('length'))
+
+                                                if 'order[0][column]' not in self.request.POST:
+                                                    orderColumn=-1
+                                                else:
+                                                    orderColumn = int(self.request.POST.get('order[0][column]'))
+
+                                                if 'order[0][dir]' not in self.request.POST:
+                                                    orderType = 'asc'
+                                                else:
+                                                    orderType = self.request.POST.get('order[0][dir]')
+
+                                                if 'start' not in self.request.POST:
+                                                    pageStart = 0
+                                                else:
+                                                    pageStart = int(self.request.POST.get('start'))
+
+                                            except Exception as err:
+                                                print(f'ERROR: {err}')
+
+                                            z = [i for i in (datax._fields)]
+
+                                            if (len(searchF) > 0):
+                                                datax = datax.filter(
+                                                    Q(profileID__icontains=searchF) | Q(profileIndex_FK__profileIndexTitle__icontains=searchF) | Q(
+                                                        categoryID_FK__categoryTitle__icontains=searchF) | Q(subCategoryID_FK__subCategoryTitle__icontains=searchF)).values_list('profileID','profileIndex_FK__profileIndexTitle','categoryID_FK__categoryTitle','subCategoryID_FK__subCategoryTitle', 'profileIndex_FK', 'categoryID_FK','subCategoryID_FK')
+
+                                            if (orderColumn != -1) and (orderColumn<=len(z)-1):
+                                                    if orderType=='asc':
+                                                        datax=datax.order_by(z[orderColumn])
+                                                    else:
+                                                        datax = datax.order_by(z[orderColumn]).reverse()
+
+                                            if (showNumber != -1):
+                                                if pageStart>=0:
+                                                    datax = datax[pageStart:pageStart+showNumber]
+                                                else:
+                                                    datax = datax[0:showNumber]
+
+                                            context = {
+                                                'draw': self.request.POST.get('draw'),
+                                                'recordsTotal': datax_count,
+                                                'recordsFiltered': datax_count,
+                                                'data': tuple(datax)
+                                            }
+
+                                            return JsonResponse(context, status=200)
+
+
+        if ('action' in self.request.POST):
+
+            if self.request.POST.get('action')=='delete':
+
+                if 'id' in self.request.POST:
+
+                    try:
+
+                        item_id = 0
+                        item_id=int(self.request.POST.get('id'))
+                        if item_id>0:
+                            Status=profiles.objects.filter(profileID=item_id).delete()
+                            MessageTXT=f'Запись № {item_id} успешно удалена!'
+
+                        else:
+
+                            MessageTXT = f'Попытка взлома или ошибка удаления записи № {item_id}!'
+                            context = {
+                                'id': item_id,
+                                'action': "delete",
+                                'message': MessageTXT
+                            }
+                            return JsonResponse(context, status=400)
+                    except Exception as err:
+                        print(f'ERROR: {err}')
+                        MessageTXT=f'Ошибка удаления записи № {item_id}!'
+                        context = {
+                            'id': item_id,
+                            'action': "delete",
+                            'message': MessageTXT
+                        }
+                        if self.request.POST.get('id')=='new':
+                            MessageTXT = f'Пустая записать удалена!'
+                            context = {
+                                'id': item_id,
+                                'action': "delete",
+                                'message': MessageTXT
+                            }
+                            return JsonResponse(context, status=200)
+                        return JsonResponse(context, status=400)
+
+                    context = {
+                        'id': item_id,
+                        'action': "delete",
+                        'message': MessageTXT
+                    }
+
+                return JsonResponse(context, status=200)
+
+        if (self.request.POST.get('action') == 'edit') and ('id' in self.request.POST):
+                    if (self.request.POST.get('id')=='new'):
+
+                        try:
+
+                            item_id = 9999999
+
+
+                            SF = profilesForm(self.request.POST)
+
+                            if (len(dict(SF.errors)) > 0):
+                                MessageTXT = list(SF.errors.values())[0]
+                            else:
+                                MessageTXT = SF.errors
+
+
+                            print(MessageTXT)
+                            if SF.is_valid():
+                               SF.save()
+                               MessageTXT = f'Новая запись успешно добавлена!'
+                            else:
+                                context = {
+                                    'id': item_id,
+                                    'action': "new",
+                                    'message': MessageTXT
+                                }
+                                return JsonResponse(context, status=400)
+
+
+                        except Exception as err:
+                            print(f'ERROR: {err}')
+                            MessageTXT = f'Ошибка добавления записи № {item_id}!'
+
+                            context = {
+                                'id': item_id,
+                                'action': "new",
+                                'message': MessageTXT
+                            }
+                            return JsonResponse(context, status=400)
+
+                        context = {
+                            'id': item_id,
+                            'action': "new",
+                            'message': MessageTXT
+                        }
+
+
+                        return JsonResponse(context, status=200)
+
+        if (self.request.POST.get('action')=='edit'):
+
+                        if 'id' in self.request.POST:
+
+                            if (self.request.POST.get('id') != 'new'):
+
+                                try:
+
+                                    item_id = int(self.request.POST.get('id'))
+
+                                    if item_id > 0:
+                                        kwargs_upd = {'data': self.request.POST}
+
+                                        kwargs_upd['instance'] = profiles.objects.get(profileID=item_id)
+
+                                        SF = profilesForm(**kwargs_upd)
+                                        print(SF.errors)
+                                        if (len(dict(SF.errors))>0):
+                                            MessageTXT =list(SF.errors.values())[0]
+                                        else:
+                                            MessageTXT=SF.errors
+
+                                        print(MessageTXT)
+                                        if SF.is_valid():
+                                           SF.save()
+                                           MessageTXT= f'Запись № {item_id} успешно обновлена!'
+
+
+                                        else:
+                                            context = {
+                                                'id': item_id,
+                                                'action': "edit",
+                                                'message': MessageTXT
+                                            }
+                                            return JsonResponse(context, status=400)
+
+
+                                except Exception as err:
+                                    print(f'ERROR: {err}')
+                                    MessageTXT = f'Ошибка обновления записи № {item_id}!'
+
+                                    context = {
+                                            'id': item_id,
+                                            'action': "edit",
+                                            'message': MessageTXT
+                                    }
+
+                                    return JsonResponse(context, status=400)
+
+                            context = {
+                                'id': item_id,
+                                'action': "edit",
+                                'message': MessageTXT
+                            }
+
+                            return JsonResponse(context, status=200)
+
+
+
+
+        context = {
+            'id': "-1",
+            'action': "None"
+        }
+
+        return JsonResponse(context, status=400)
 
 
 
