@@ -95,4 +95,7 @@ class profilesForm(forms.ModelForm):
         fields = '__all__'
 
 
-
+class userRightsForm(forms.ModelForm):
+    class Meta:
+        model = userRights
+        fields = '__all__'

@@ -37,6 +37,7 @@ urlpatterns = [
     path('users_rights_profiles', ProfileIndexManagementController.as_view(), name='users_rights_profiles'),
     path('users_rights_categories', CategoriesManagementController.as_view(), name='users_rights_categories'),
     path('users_rights_profileset_update', ProfilesManagementController.as_view(), name='users_rights_profileset_update'),
+    path('users_rights_userrights_update', UserRightsManagementController.as_view(), name='users_rights_userrights_update'),
 
 
 ]

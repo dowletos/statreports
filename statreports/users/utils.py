@@ -142,5 +142,34 @@ class MyMixin_Elements(Mixins):
 
 
 
+class MyMixin_UserRights(Mixins):
+
+    objectModel = userRights
+    query_value_list = ['rightID','userID__username','profilesIndex_FK__profileIndexTitle','profilesIndex_FK','userID']
+    initial_order = '-rightID'
+    search_parameters_results_order = ['rightID','userID__username','profilesIndex_FK__profileIndexTitle','profilesIndex_FK','userID']
+    objectForm=userRightsForm
+
+    def get_search_parameters(self, searchF):
+
+        Q1 = Q(rightID__icontains=searchF)
+        Q2 = Q(profilesIndex_FK__profileIndexTitle__icontains=searchF)
+        Q3 = Q(userID__username__icontains=searchF)
+
+
+        args_list = [Q1, Q2,Q3]
+        args = Q()
+        for each_args in args_list:
+            args = args | each_args
+        return args
+
+    def get_delete_ID(self,item_id):
+        filter ={'rightID': item_id}
+        return filter
+
+    def get_pk_ID(self,item_id):
+        filter ={'rightID': item_id}
+        return filter
+
 
 

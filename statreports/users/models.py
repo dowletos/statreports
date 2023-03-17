@@ -80,9 +80,9 @@ class profiles(models.Model):
 
 class userRights(models.Model):
     rightID = models.BigAutoField(primary_key=True, verbose_name='ID')
-    userID = models.ForeignKey(User, db_column='userID', to_field='id', on_delete=models.CASCADE,
-                               verbose_name='Пользователь')
-    profilesIndex_FK = models.ForeignKey('profilesIndex', db_column='profilesIndex_FK', to_field='profileIndex_PK',
+    userID = models.ForeignKey(User, db_column='userID', unique=True,to_field='id', on_delete=models.CASCADE,
+                               verbose_name='Пользователь/Пользователем')
+    profilesIndex_FK = models.ForeignKey('profilesIndex',  db_column='profilesIndex_FK', to_field='profileIndex_PK',
                                          on_delete=models.PROTECT, verbose_name='Прикрепленный профиль')
 
     class Meta:

@@ -432,7 +432,7 @@ if (typeof jQuery === 'undefined') {
                     // Check if exists the third parameter of editable array.
                     if (typeof settings.columns.editable[i][3] !== 'undefined') {
                       // Create select element.
-                      input = '<select class="tabledit-input ' + settings.inputClass + '" name="' + settings.columns.editable[i][1] + '" style="display: none;" disabled>';
+                      input = '<select class="tabledit-input ' + settings.inputClass + ' selectpicker" name="' + settings.columns.editable[i][1] + '" style="display: none;" disabled>';
 
                       // Create options for select element.
                       $.each($.parseJSON(settings.columns.editable[i][3]), function (index, value) {

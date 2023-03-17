@@ -186,10 +186,11 @@ class CreateUserRights(FormView):
         category_list_db = category.objects.all().values_list('categoryID', 'categoryTitle')
         profile_list_db = profilesIndex.objects.all().values_list('profileIndex_PK','profileIndexTitle')
         subCategory_list_db = subCategory.objects.all().values_list('subCategoryID', 'subCategoryTitle')
+        users_list_db = get_user_model().objects.all().values_list('id', 'username')
 
 
         return render(self.request, 'users/users_rights.html',
-                      {'title': 'Добро пожаловать', 'UserSet': UserSet, 'form': RF, 'UF': UF, 'CF': CF,'category_form': category_list_db,'profile_form':profile_list_db, 'subCategory_form':subCategory_list_db})
+                      {'title': 'Добро пожаловать', 'UserSet': UserSet, 'form': RF, 'UF': UF, 'CF': CF,'category_form': category_list_db,'profile_form':profile_list_db, 'subCategory_form':subCategory_list_db, 'users_form':users_list_db})
 
     def post(self,request):
         UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
@@ -753,7 +754,7 @@ class CRUDController(FormView):
 
 
                             SF = self.CurrentMixin().objectForm(self.request.POST)
-
+                            print(SF.errors)
                             if (len(dict(SF.errors)) > 0):
                                 MessageTXT = list(SF.errors.values())[0]
                             else:
@@ -920,6 +921,20 @@ class ElementsManagementController(CRUDController):
         super().__init__(MyMixin_Elements)
 
 
+
+
+'''
+    'Elements' REFERENCE TABLE EDITTING CONTROLLER CLASS
+        1. EDIT/DELETE/ADD NEW 
+        2. SORTING DATA
+        3. FILTERING DATA
+        4. PAGINATION OF RECORDS
+'''
+class UserRightsManagementController(CRUDController):
+    def __init__(self):
+        kwargs={}
+        kwargs['Mixin_Selector']=MyMixin_UserRights
+        super().__init__(MyMixin_UserRights)
 
 
 
