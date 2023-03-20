@@ -3,12 +3,7 @@
 {% block content %}
 
 
-
-
-
-
-
-        <script src="{% static 'js/jquery.tabledit.js' %}"></script>
+<script src="{% static 'js/jquery.tabledit.js' %}" xmlns="http://www.w3.org/1999/html"></script>
         <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
 
 
@@ -67,32 +62,115 @@
 
 
 
+                                                                <div class="modal fade" id="staticBackdropLive" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLiveLabel" aria-hidden="true">
+                                                                  <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                      <div class="modal-header">
+                                                                        <h1 class="modal-title fs-5" id="staticBackdropLiveLabel">Прикрепление профиля пользователю</h1>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                      </div>
+
+                                                                         <table style="width:100%"
+                                                                                  <tr>
+                                                                                       <td style="width:*%">
+                                                                                          &nbsp
+                                                                                       </td>
+
+                                                                                       <td style="width:95%"><div id="message_box_userrights_save">
 
 
-							<div class="" id="item_table">
-								<tr>
+                                                                                    </div></td>
 
-								</tr>
-							</div>
+                                                                                       <td style="width:*%">
+                                                                                          &nbsp
+                                                                                       </td>
 
-
-
-
-
+                                                                                 </tr>
+                                                                          </table>
 
 
 
+                                                                      <div class="modal-body" style="">
+                                                                           <table style="width:100%"
+                                                                                  <tr>
+                                                                                       <td style="width:*%">
+                                                                                           <label for="item_users" class="form-label">Выбор пользователя:</label>
+                                                                                           <div class="" id="item_users"></div>
+                                                                                       </td>
+
+                                                                                       <td style="width:10px">&nbsp</td>
+
+                                                                                       <td style="width:*%">
+                                                                                            <label for="item_profiles" class="form-label">Выбор профиля:</label>
+                                                                                            <div class="" id="item_profiles"> </div>
+                                                                                       </td>
+
+                                                                                 </tr>
+                                                                          </table>
+
+                                                                      </div>
+                                                                      <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                                                        <button type="button" class="btn btn-primary" id="addRowuserrights_save" name="addRowuserrights_save">Сохранить</button>
+                                                                      </div>
+                                                                    </div>
+                                                                  </div>
+                                                                </div>
+
+
+
+                                                                    <script>
+                                                                    $(document).ready(function(){
+                                                                        var count = 0;
+                                                                        function add_input_user_field(count)
+                                                                        {
+                                                                            var html = '';
+
+                                                                            html += '<select class="selectpicker form-control" id="items_users_value" data-live-search="true" title="Выберите пользователя" data-hide-disabled="true"><option value="">Выберите пользователя</option>';
+                                                                            html += '{% for i,v in users_form %}<option value="{{ i }}">{{ v }}</option>{% endfor %}';
+                                                                            html+='</select></td>';
+                                                                            return html;
+                                                                        }
+
+                                                                        function add_input_profile_field(count)
+                                                                        {
+                                                                            var html = '';
+
+                                                                            html += '<select class="selectpicker form-control" id="items_profiles_value" data-live-search="true" title="Выберите профиль" data-hide-disabled="true"><option value="">Выберите профиль</option>';
+                                                                            html += '{% for i,v in profile_form %}<option value="{{ i }}">{{ v }}</option>{% endfor %}';
+                                                                            html+='</select></td>';
+                                                                            return html;
+                                                                        }
+
+                                                                        $('#item_users').append(add_input_user_field(0));
+                                                                        $('#item_profiles').append(add_input_profile_field(0));
+
+                                                                         $('.selectpicker').selectpicker('refresh');
+                                                                    });
+
+                                                                    </script>
 
 
 
 
 
-                             <div id="message_box_userrights">
 
-                                                </div>
+
+
+
+
+
+
+                             <center><p class="display-6">Управление правами пользователей</p></center>
+
+                                        <div id="message_box_userrights">
+
+
+                                        </div>
+
                                                     <div class="row">
                                                       <div class="col-md-12 m-b-20">
-                                                        <input type="button" value="&nbsp;&nbsp;&nbsp;Добавить&nbsp;&nbsp;&nbsp;" id="addRowuserrights" class="btn btn-secondary pull-right" style="width:11.5%;hover:red"><br><br>
+                                                        <input type="button" value="&nbsp;&nbsp;&nbsp;Добавить&nbsp;&nbsp;&nbsp;"  type="button"  data-bs-toggle="modal" data-bs-target="#staticBackdropLive" class="btn btn-secondary pull-right" style="width:11.5%;hover:red"><br><br>
                                                       </div>
                                                     </div>
 
@@ -201,41 +279,129 @@
                                                                                                                     }
                                                                                                         });
                                                                                   });
-$("#addRowuserrights").click(function() {
 
-	var tableditTableName1 = '#userrights_table_edit';  // Identifier of table
-	var newID = 'new';
-	var clone = $(tableditTableName1 + " tr:last").clone();
-	$(".tabledit-span", clone).text("");
-	$(".tabledit-input", clone).val("");
-	clone.prependTo(tableditTableName1);
-	$(tableditTableName1 + " tbody tr:first td .tabledit-span.tabledit-identifier").text(newID);
-	$(tableditTableName1 + " tbody tr:first td .tabledit-input.tabledit-identifier").val(newID);
-	$(tableditTableName1 + " tbody tr:first td:last .tabledit-edit-button").trigger("click");
-});
 
-                                                                                 $("#addRowuserrights1").on('click', function () {
+
+
+                                                                                 $("#addRowuserrights_save").on('click', function () {
+
+                                                                                             if ($('#items_users_value').children("option:selected").val()>0 && $('#items_profiles_value').children("option:selected").val()>0)  {
+
+                                                                                                }
+                                                                                                else
+                                                                                                {
+                                                                                                                                  if ($('#id_message_userrights_save_delete_item_span').length!=0) {
+                                                                                                                                         $('#id_message_userrights_save_delete_item').remove();
+                                                                                                                                   }
+                                                                                                                                   $('#message_box_userrights_save').append("<div class='alert alert-danger alert-dismissible fade show' role='alert' id='id_message_userrights_save_delete_item' hidden>"+
+                                                                                                                                                                      "<span id='id_message_userrights_save_delete_item_span'></span>"+
+                                                                                                                                                                      "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"+
+                                                                                                                                                                      "</div>");
+
+                                                                                                                                   $('#id_message_userrights_save_delete_item').removeAttr('hidden');
+                                                                                                                                   $('#id_message_userrights_save_delete_item_span').empty()
+
+
+                                                                                                                                   $('#id_message_userrights_save_delete_item_span').append('Ошибка : Пожалуйста выберите значения двух нижепредставленных списков!');
+
+
+
+
+
+                                                                                                return event.preventDefault();
+
+                                                                                                }
+
+                                                                                                    $('#staticBackdropLive').on('hidden.bs.modal', function (e) {
+                                                                                                      if ($('#id_message_userrights_save_delete_item_span').length!=0) {
+
+                                                                                                                                         $('#id_message_userrights_save_delete_item').remove();
+
+                                                                                                                                                                        }
+
+                                                                                                      $('#id_message_userrights_save_delete_item_span').empty()
+
+
+                                                                                                    $('#items_users_value option').prop("selected", false).trigger('change');
+
+                                                                                                    $('#items_profiles_value option').prop("selected", false).trigger('change');
+
+                                                                                                    $('items_users_value').selectpicker('refresh');
+
+
+
+                                                                                                    });
+
                                                                                                       $.ajax({
                                                                                                                 type: "POST",
                                                                                                                 url: "users_rights_userrights_update",
                                                                                                                 datatype: 'json',
                                                                                                                 data:
                                                                                                                     {
-                                                                                                                      action: 'new',
-                                                                                                                      csrfmiddlewaretoken: "{{ csrf_token }}"
-                                                                                                                    },
-                                                                                                                        success: function (data)
-                                                                                                                        {
-                                                                                                                            $('#userrights_table_edit').DataTable().ajax.reload();
-                                                                                                                          // Add 'html' data to table
-                                                                                                                          //$('#userrights_table_edit tbody').html(data);
+                                                                                                                      action: 'edit',
+                                                                                                                      id: 'new',
+                                                                                                                      csrfmiddlewaretoken: "{{ csrf_token }}",
+                                                                                                                      'userID': $('#items_users_value').children("option:selected").val(),
+                                                                                                                      'profilesIndex_FK': $('#items_profiles_value').children("option:selected").val(),
 
-                                                                                                                          // Update Tabledit plugin
-                                                                                                                         // $('#userrights_table_edit').Tabledit('update');
-                                                                                                                        },
-                                                                                                                            error: function () {
+
+                                                                                                                    },
+                                                                                                                       success:function(data)
+                                                                                                                    {
+
+
+                                                                                                                                   $('#userrights_table_edit').DataTable().ajax.reload();
+                                                                                                                                   if ($('#id_message_userrights_save_delete_item_span').length!=0) {
+
+                                                                                                                                         $('#id_message_userrights_save_delete_item').remove();
+
+                                                                                                                                   }
+                                                                                                                                   $('#message_box_userrights_save').append("<div class='alert alert-success alert-dismissible fade show' role='alert' id='id_message_userrights_save_delete_item' hidden>"+
+                                                                                                                                                                      "<span id='id_message_userrights_save_delete_item_span'></span>"+
+                                                                                                                                                                      "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"+
+                                                                                                                                                                      "</div>");
+                                                                                                                                   $('#id_message_userrights_save_delete_item').removeAttr('hidden');
+                                                                                                                                   $('#id_message_userrights_save_delete_item_span').empty()
+                                                                                                                                   $('#id_message_userrights_save_delete_item_span').append(data.message);
+
+
+                                                                                                                                    setTimeout(function () {
+                                                                                                                                                $('#staticBackdropLive').modal('hide');
+
+                                                                                                                                            }, 600);
+
+
+
+
+
+                                                                                                                    },
+                                                                                                                    error:function (jqXHR, textStatus) {
+
+
+                                                                                                                                   if ($('#id_message_userrights_save_delete_item_span').length!=0) {
+                                                                                                                                         $('#id_message_userrights_save_delete_item').remove();
+                                                                                                                                   }
+                                                                                                                                   $('#message_box_userrights_save').append("<div class='alert alert-danger alert-dismissible fade show' role='alert' id='id_message_userrights_save_delete_item' hidden>"+
+                                                                                                                                                                      "<span id='id_message_userrights_save_delete_item_span'></span>"+
+                                                                                                                                                                      "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>"+
+                                                                                                                                                                      "</div>");
+
+                                                                                                                                   $('#id_message_userrights_save_delete_item').removeAttr('hidden');
+                                                                                                                                   $('#id_message_userrights_save_delete_item_span').empty()
+                                                                                                                                   $.each(jqXHR.responseJSON, function (key, data) {
+
+                                                                                                                                   if(key=='message') {
+
+                                                                                                                                        $('#id_message_userrights_save_delete_item_span').append('Ошибка : ' +data);
+
+                                                                                                                                                      }
+                                                                                                                                    });
+
+
 
                                                                                                                             }
+
+
                                                                                                              })
                                                                                                     });
 
@@ -942,57 +1108,5 @@ $("#addRowElements").click(function() {
 
 
 
-  <script>
-
-$(document).ready(function(){
-
-	var count = 0;
-
-	function add_input_field(count)
-	{
-
-		var html = '';
-
-
-
-
-
-		html += '<select class="selectpicker form-control"  data-live-search="true" title="Select a number" data-hide-disabled="true"><option value="">Select Unit</option>';
-
-		html += '{% for i,v in users_form %}<option value="{{ i }}">{{ v }}</option>{% endfor %}';
-		html+='</select></td>';
-
-
-
-
-
-
-		return html;
-
-	}
-
-	$('#item_table').append(add_input_field(0));
-
-	$('.selectpicker').selectpicker('refresh');
-
-	$('select').selectpicker();
-
-
-});
-
-
-
-
-</script>
- <script>
-
-           $(document).ready(function () {
-
-                $('select').selectpicker();
-                $('.selectpicker').selectpicker('refresh');
-
-        });
-
- </script>
 
 {% endblock content%}

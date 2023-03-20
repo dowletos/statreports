@@ -749,7 +749,7 @@ class CRUDController(FormView):
                     if (self.request.POST.get('id')=='new'):
 
                         try:
-
+                            print('okkkkkkkkkkkkkk')
                             item_id = 9999999
 
 
@@ -761,7 +761,7 @@ class CRUDController(FormView):
                                 MessageTXT = SF.errors
 
 
-                            print(MessageTXT)
+                            print('zzzzzzzzzzzzz',MessageTXT)
                             if SF.is_valid():
                                SF.save()
                                MessageTXT = f'Новая запись успешно добавлена!'
