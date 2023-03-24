@@ -18,10 +18,10 @@ class RegisterForm(UserCreationForm):
     password2 = forms.CharField( label='Повторите пароль',required=True, widget=forms.PasswordInput(attrs={"class":"form-control"}))
     is_active = forms.BooleanField(label='Активирован ',required=False, initial=False, widget=forms.CheckboxInput(attrs={"class":"form-control"}) )
     bankid_FK = forms.ModelChoiceField(label='Введите банковский идентификационный номер (БИН)',queryset=bankbase.objects.all(),widget=forms.Select(attrs={"class": "form-control"}))
-    # avatar = forms.FileField(label='Фото профиля', widget=forms.FileInput(attrs={"class": "form-control"}))
+    avatar = forms.FileField(label='Фото профиля', widget=forms.FileInput(attrs={"class": "form-control"}))
     class Meta:
         model = User
-        fields = ('id','username', 'first_name', 'last_name', 'bankid_FK',  'email', 'password1', 'password2',)
+        fields = ('id','username', 'first_name', 'last_name', 'bankid_FK',  'email', 'password1', 'password2','avatar')
 
 
 class register_new_user_form(forms.ModelForm):
@@ -56,10 +56,30 @@ class update_user_form(forms.ModelForm):
         fields = ['id','username', 'first_name', 'last_name',  'bankid_FK', 'email', 'password1', 'password2','is_active']
 
 
+
+
+class get_users_data_form(forms.ModelForm):
+    last_name = forms.CharField(max_length=250, label='Фамилия', widget=forms.TextInput(attrs={"class":"form-control","readonly":"true","disabled":"true"}))
+    first_name = forms.CharField(max_length=250, label='Имя',required=True, widget=forms.TextInput(attrs={"class":"form-control","readonly":"true","disabled":"true"}))
+    username = forms.CharField(max_length=250,  label='Login',  widget=forms.TextInput(attrs={"class": "form-control","readonly":"true","disabled":"true"}))
+    email = forms.EmailField(max_length=250, label='Email', required=True, widget=forms.EmailInput(attrs={"class": "form-control","readonly":"true","disabled":"true"}))
+    old_password = forms.CharField(label='Старый пароль', required=True,
+                                widget=forms.PasswordInput(attrs={"class": "form-control"}))
+    new_password1 = forms.CharField(label='Новый пароль',required=True, widget=forms.PasswordInput(attrs={"class":"form-control"}))
+    new_password2 = forms.CharField( label='Повторите новый пароль',required=True, widget=forms.PasswordInput(attrs={"class":"form-control"}))
+    is_active = forms.BooleanField(label='Активирован ',required=False, initial=False, widget=forms.CheckboxInput(attrs={"class":"form-check-input","readonly":"true" }) )
+    bankid_FK = forms.ModelChoiceField(label='Банковский идентификационный номер (БИН)',queryset=bankbase.objects.all(),widget=forms.Select(attrs={"class": "form-control", "disabled":"disabled" }))
+    #avatar = forms.FileField(label='Фото профиля', widget=forms.FileInput(attrs={"class": "form-control"}))
+    id=forms.CharField(label='',widget=forms.HiddenInput(attrs={"class":"form-control","readonly":"true"}))
+    class Meta:
+        model = User
+        fields = ['id','username', 'first_name', 'last_name',  'bankid_FK', 'email','old_password', 'new_password1', 'new_password2','is_active']
+
+
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['bankid_FK',]
+        fields = ['bankid_FK','avatar']
 
 class EditProfileForm(UserCreationForm):
     class Meta:
@@ -99,3 +119,6 @@ class userRightsForm(forms.ModelForm):
     class Meta:
         model = userRights
         fields = '__all__'
+
+
+

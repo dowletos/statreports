@@ -38,10 +38,13 @@ urlpatterns = [
     path('users_rights_categories', CategoriesManagementController.as_view(), name='users_rights_categories'),
     path('users_rights_profileset_update', ProfilesManagementController.as_view(), name='users_rights_profileset_update'),
     path('users_rights_userrights_update', UserRightsManagementController.as_view(), name='users_rights_userrights_update'),
+    path('users_session_settings', UsersSessionSettings.as_view(),        name='users_session_settings'),
+    path('change_users_password', UserRightsManagementController.as_view(), name='change_users_password'),
 
 
 ]
 
 if settings.DEBUG:
     urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+
 

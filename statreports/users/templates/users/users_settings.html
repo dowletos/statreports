@@ -1,0 +1,170 @@
+{% extends "modules.html" %}
+{% load static %}
+{% block content %}
+
+
+
+ <div class="bd-example-snippet bd-code-snippet"><div class="bd-example">
+                        <nav>
+                              <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
+                                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Профиль пользователя</button>
+
+                              </div>
+                        </nav>
+
+
+
+
+
+
+
+
+                <div class="tab-content" id="nav-tabContent">
+
+
+                    <!-- Begin of Tab panel button 0 -->
+                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                         <div class="flex-shrink-0 p-3 bg-white" style="width: 100%;text-align:justify">
+                             <div >
+                                <div class="bd-example-snippet bd-code-snippet">
+                                    <div class="bd-example">
+                                         <!-- Content of the panel 0 -->
+
+
+
+                                                                     <center><p class="display-6">Профиль пользователя</p></center>
+
+
+
+                                                                                    <div class="bd-example-snippet bd-code-snippet"><div class="bd-example">
+                                                                                    {% if messages %}
+                                                                                            {% for message in messages %}
+
+
+                                                                                                  <div class="alert alert-{% if 'error' in message.tags %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                                                                                              {{ message }}
+                                                                                              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                                            </div>
+
+                                                                                            {% endfor %}
+                                                                                            {% endif %}
+
+
+                                                                                     <div class="center">
+                                                                                    <form method="POST" novaldiate enctype="multipart/form-data" action="{% url 'users_session_settings' %}"  >
+                                                                                      {% csrf_token %}
+
+                                                                                    {% for field in CF %}
+                                                                                      {% if field.name == 'is_active' %}
+                                                                                      <div class="col-12"><br>
+                                                                                      <div class="mb-3 form-check form-switch">
+                                                                                          <label class="form-check-label" for="{{ field.name }}">{{ field.label }}</label>
+                                                                                        <input class="form-check-input" type="checkbox" name="{{ field.name }}" role="switch" id="{{ field.id_for_label }}" disabled >
+                                                                                      </div>
+
+                                                                                        </div>
+                                                                                      {% else %}
+                                                                                            {{ field.label_tag }}
+                                                                                            {{ field }}
+
+                                                                                      {% endif %}
+                                                                                    {% endfor %}
+
+                                                                                       <div class="col-md-12">
+                                                                                        <button class="form-group btn btn-primary" type="submit" style="width:100%">Обновить пароль</button>
+                                                                                      </div>
+                                                                                    </form>
+                                                                                </div>
+                                                                                    </div>
+
+                                                                    <script>
+                                                                      $(document).ready(function(){
+                                                                        // создаем AJAX-вызов
+                                                                        $.ajax({
+                                                                            data: $(this).serialize(), // получаяем данные формы
+                                                                            url: "{% url 'users_session_settings' %}",
+                                                                            data: {
+                                                                                   'userid':  {{ request.user.id }},
+                                                                                   },
+                                                                            // если успешно, то
+                                                                            success: function (response) {
+
+                                                                                if (response.is_checked == 1) {
+
+
+                                                                                   $('#id_upd_id').val(response.id)
+                                                                                   $('#id_upd_username').val(response.username)
+                                                                                   $('#id_upd_first_name').val(response.first_name)
+                                                                                   $('#id_upd_last_name').val(response.last_name)
+                                                                                   $('#id_upd_email').val(response.email)
+
+                                                                                   if (response.is_active==true) {
+                                                                                        $('#id_upd_is_active').attr('checked','')
+                                                                                   }
+                                                                                   else
+                                                                                   {
+                                                                                        $('#id_upd_is_active').removeAttr('checked')
+                                                                                   }
+                                                                                   $('#id_upd_bankid_FK').val(response.bankid_FK)
+                                                                                   $('#id_upd_user_errorform').empty()
+
+                                                                                  }
+                                                                                else {
+                                                                                    $('#upd_username').removeClass('is-valid').addClass('is-invalid')
+                                                                                    $('#id_upd_user_errorform').empty()
+                                                                                    $('#id_upd_user_errorform').append('Данный пользователь не существует!')
+
+                                                                                }
+
+
+                                                                            },
+                                                                            // если ошибка, то
+                                                                            error: function (response) {
+                                                                                // предупредим об ошибке
+                                                                                console.log(response.responseJSON.errors)
+                                                                            }
+                                                                        });
+                                                                        return false;
+                                                                    });
+                                                                      </script>
+
+
+
+
+
+                                        <!-- End of the panel button 0 -->
+                                    </div>
+                                </div>
+                             </div>
+                         </div>
+                    </div>
+                    <!-- End of Tab panel button 0 -->
+
+
+                     <!-- Begin of Tab panel button 1 -->
+                    <div class="tab-pane fade" id="nav-userprofile" role="tabpanel" aria-labelledby="nav-userprofile-tab">
+                         <div class="flex-shrink-0 p-3 bg-white" style="width: 100%;text-align:justify">
+                             <div >
+                                <div class="bd-example-snippet bd-code-snippet">
+                                    <div class="bd-example">
+                                         <!-- Content of the panel 1 -->
+
+
+
+
+                                        <!-- End of the panel button 1 -->
+                                    </div>
+                                </div>
+                             </div>
+                         </div>
+                    </div>
+                    <!-- End of Tab panel button 1 -->
+
+
+                </div>
+        </div>
+
+
+
+
+{% endblock content%}

@@ -143,8 +143,7 @@
            {{ user.first_name }} {{ user.last_name}}   </strong>&nbsp;&nbsp
           </a>
           <ul class="dropdown-menu text-small shadow">
-            <li><a class="dropdown-item" href="#">Настройки</a></li>
-            <li><a class="dropdown-item" href="{% url 'logout' %}">Профиль</a></li>
+            <li><a class="dropdown-item" href="{% url 'users_session_settings' %}">Профиль / Замена пароля</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="{% url 'logout' %}">Выход</a></li>
           </ul>
@@ -165,8 +164,9 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item active">Главная</li>
-            <li class="breadcrumb-item active" >Настройки</li>
             <li class="breadcrumb-item active" aria-current="page">Профиль</li>
+            <li class="breadcrumb-item active" >Настройки</li>
+
           </ol>
         </nav>
             </div>

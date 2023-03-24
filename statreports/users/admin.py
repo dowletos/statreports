@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import Profile
 
-from .models import News,category,subCategory,profiles,profilesIndex,userRights
+from .models import category,subCategory,profiles,profilesIndex,userRights
 
 
 

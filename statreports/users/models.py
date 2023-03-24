@@ -3,23 +3,6 @@ from django.contrib.auth.models import User
 from PIL import Image
 
 
-class News(models.Model):
-    title = models.CharField(max_length=250, blank=False, verbose_name='Заголовок')
-    content = models.TextField(blank=True, verbose_name='Содержание')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
-    updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата редактирования')
-    photo = models.ImageField(upload_to='uploads/%Y/%m/%d/', verbose_name='Фотография', blank=True)
-    is_published = models.BooleanField(default=False, verbose_name='Опубликовано')
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        verbose_name = 'Новость'
-        verbose_name_plural = '1. НОВОСТИ'
-        ordering = ['id']
-
-
 class subCategory(models.Model):
     subCategoryID = models.BigAutoField(primary_key=True, verbose_name='ID')
     subCategoryTitle = models.CharField(max_length=250, unique=True,db_index=True, verbose_name='Наименование элемента')
@@ -134,28 +117,11 @@ class View_UserSet(models.Model):
         ordering = ['subCategorySort']
 
 
-class UpdateUsersDataModel(models.Model):
-    username = models.TextField(max_length=250, blank=False, verbose_name='Элемент')
-    last_name = models.TextField(max_length=250, blank=False, verbose_name='Элемент')
-    first_name = models.TextField(max_length=250, blank=False, verbose_name='Элемент')
-
-    email = models.EmailField(max_length=250, blank=False, verbose_name='Элемент')
-    password1 = models.TextField(max_length=250, blank=False, verbose_name='Элемент')
-    password2 = models.TextField(max_length=250, blank=False, verbose_name='Элемент')
-    is_active = models.BooleanField(max_length=250, blank=False, verbose_name='Элемент')
-
-    def __str__(self):
-        return f'{self.username}'
-
-    class Meta:
-        verbose_name = 'Справочник пользователей'
-        verbose_name_plural = 'Справочник пользователей'
-        ordering = ['id']
 
 
 class Profile(models.Model):
     bankid_FK = models.TextField(max_length=90, blank=True)
-    # avatar = models.TextField(max_length=90, blank=True)
+    avatar = models.ImageField(upload_to='uploads',default=f'%d %m %y/profile.png')
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
@@ -178,3 +144,7 @@ class Profile(models.Model):
     #     img.thumbnail(output_size)
     # overwrite the larger image
     #     img.save(self.avatar.path)
+
+
+
+
