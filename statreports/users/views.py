@@ -20,7 +20,8 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.http.request import QueryDict
 from .utils import *
-
+from django.conf import settings
+from django.urls import get_resolver
 
 '''
 USER ACCESS RIGHTS CHECKING CLASS
@@ -36,6 +37,14 @@ class CheckUserRights:
         return False
 
 
+class CurrentBar:
+    def ShowCurrentPathBar(request,UserSet):
+        X1 = tuple((z3, z1, z2) for z1, z2, z3 in UserSet.values_list('categoryTitle', 'subCategoryTitle', 'subCategoryLink'))
+        for zz in X1:
+            if (zz[0] == request.path[1:]):
+                return f'{zz[1]} / {zz[2]}'
+            else:
+                request.session['USER_current_path']= ''
 
 
 '''
@@ -47,18 +56,46 @@ USER REGISTRATION CLASS
 class RegisterView(FormView):
     template_name = 'users/users_edit.html'
     form_class = RegisterForm
-    success_url = '/'
+
     def get(self, request):
         UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
+        request.session['USER_current_path']=CurrentBar.ShowCurrentPathBar(request,UserSet)
+
+
+
+
         if not CheckUserRights.check_user_permissions(self,UserSet, 'users_edit'):
             return redirect(reverse('logout'))
         RF = RegisterForm()
-        UF = tuple((z1, f'{z2} {z3}') for z1, z2, z3 in get_user_model().objects.values_list('id', 'first_name', 'last_name'))
+        UF = tuple((z1, f'{z2} {z3} ({z4})') for z1, z2, z3,z4 in get_user_model().objects.values_list('id', 'first_name', 'last_name','username'))
         CF = update_user_form(auto_id='id_upd_%s')
+        BF = tuple((z1, f'{z1} - {z2}') for z1, z2 in bankbase.objects.all().values_list('CODE', 'LONGNAME'))
+
         return render(self.request, 'users/users_edit.html',
-                      {'title': 'Добро пожаловать', 'UserSet': UserSet, 'form': RF, 'UF': UF, 'CF': CF})
-    def form_valid(self, form):
+                      {'title': 'Добро пожаловать', 'UserSet': UserSet, 'form': RF, 'UF': UF, 'CF': CF, 'BF': BF})
+
+    def form_invalid(self, form):
         UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
+        request.session['USER_current_path']=CurrentBar.ShowCurrentPathBar(request,UserSet)
+        if not CheckUserRights.check_user_permissions(self, UserSet, 'users_edit'):
+            return redirect(reverse('logout'))
+        NF = RegisterForm(self.request.POST, instance=self.request.user)
+
+        PF = ProfileForm(self.request.POST, self.request.FILES, instance=self.request.user.profile)
+
+        UF = tuple(
+            (z1, f'{z2} {z3}') for z1, z2, z3 in get_user_model().objects.values_list('id', 'first_name', 'last_name'))
+        CF = update_user_form(auto_id='id_upd_%s')
+        BF = tuple((z1, f'{z1} - {z2}') for z1, z2 in bankbase.objects.all().values_list('CODE', 'LONGNAME'))
+        print(NF.errors)
+        print(PF.errors)
+        return render(self.request, 'users/users_edit.html',
+                      {'PF': PF, 'form': form, 'UF': UF, 'CF': CF, 'BF' : BF, 'title': 'Добро пожаловать', 'UserSet': UserSet})
+    def form_valid(self, form):
+        print("z__")
+        UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
+        request.session['USER_current_path'] = CurrentBar.ShowCurrentPathBar( request, UserSet)
+
         if not CheckUserRights.check_user_permissions(self,UserSet, 'users_edit'):
             return redirect(reverse('logout'))
         user_copy=self.request.user
@@ -70,20 +107,27 @@ class RegisterView(FormView):
         if self.request.POST.get("is_active")==None:
             self.request.user.is_active = False
         if self.request.method == 'POST':
-            NF = register_new_user_form(self.request.POST, instance=self.request.user)
+            NF = RegisterForm(self.request.POST, instance=self.request.user)
             PF = ProfileForm(self.request.POST, self.request.FILES, instance=self.request.user.profile)
             if NF.is_valid() and PF.is_valid():
                 NF.save()
+                print(PF.cleaned_data)
                 PF.save()
+                messages.success(self.request, f'Пользователь "{self.request.user}" успешно зарегистрирован.',extra_tags='users_register')
+            else:
+                messages.error(self.request, f'{NF.errors}{PF.errors}', extra_tags='users_register')
+            UF = tuple((z1, f'{z2} {z3}') for z1, z2, z3 in get_user_model().objects.values_list('id', 'first_name', 'last_name'))
+            BF = tuple((z1, f'{z1} - {z2}') for z1, z2 in bankbase.objects.all().values_list('CODE', 'LONGNAME'))
 
+            CF = update_user_form(auto_id='id_upd_%s')
 
-                cur_level=messages.set_level(self.request,2)
-                messages.add_message(self.request, 2, f'Пользователь "{self.request.user}" успешно зарегистрирован', extra_tags='users_edit')
-                return redirect(reverse('users_edit'))
+            return render(self.request, 'users/users_edit.html', { 'PF': PF, 'form': NF,'UF': UF, 'CF': CF, 'BF': BF,'title': 'Добро пожаловать', 'UserSet': UserSet})
         else:
             NF = register_new_user_form()
             PF = ProfileForm(self.request.POST)
-        return render(self.request, 'users/users_edit.html', { 'PF': PF, 'title': 'Добро пожаловать', 'UserSet': UserSet})
+            print("okkkk")
+        return render(self.request, 'users/users_edit.html', { 'PF': PF, 'form': NF, 'title': 'Добро пожаловать', 'UserSet': UserSet})
+
 
 
 
@@ -100,6 +144,7 @@ class GetUsersData(FormView):
     success_url = '/'
     def get(self, request):
         UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
+
         if not CheckUserRights.check_user_permissions(self,UserSet, 'users_edit'):
             return redirect(reverse('logout'))
 
@@ -108,7 +153,7 @@ class GetUsersData(FormView):
         user_id=request.GET.get('userid')
         if User.objects.filter(id__iexact=user_id).exists():
             datax=tuple(get_user_model().objects.filter(id__iexact=user_id).values('id','username', 'first_name', 'last_name','email','is_active'))[0]
-            datax_profile=tuple(Profile.objects.filter(user_id=user_id).values('user_id','bankid_FK'))[0]
+            datax_profile=tuple(Profile.objects.filter(user_id=user_id).values('user_id','bankid_FK','avatar'))[0]
             context = {
                 'is_checked' : 1,
                 'id' : datax["id"],
@@ -117,7 +162,8 @@ class GetUsersData(FormView):
                 'last_name': datax["last_name"],
                 'email': datax["email"],
                 'is_active':datax["is_active"],
-                'bankid_FK': datax_profile["bankid_FK"]
+                'bankid_FK': datax_profile["bankid_FK"],
+                'avatar':datax_profile["avatar"]
             }
         else:
             context = {
@@ -139,26 +185,44 @@ only  to update user settings
 class UpdateUser(RegisterView):
     def post(self,request):
         UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
+        request.session['USER_current_path'] = CurrentBar.ShowCurrentPathBar(request, UserSet)
+
         if not CheckUserRights.check_user_permissions(self,UserSet, 'users_edit'):
             return redirect(reverse('logout'))
         if request.method == "POST" and User.objects.filter(id__iexact=request.POST.get('id')).exists():
             kwargs = {'data': request.POST}
-            bank_upd = {'data': request.POST}
-            kwargs['instance'] = User.objects.get(username=request.POST.get('username'))
+            bank_upd = {'data': request.POST, 'files': request.FILES}
+            usernamex=request.POST.get('username')
+            kwargs['instance'] = User.objects.get(username=usernamex)
             bank_upd['instance'] = Profile.objects.get(user_id=request.POST.get('id'))
-            NF = EditProfileForm(**kwargs)
+            if request.POST.get('password1') not in (" ", ""):
+                NF = EditProfileForm(**kwargs)
+            else:
+                NF=EditProfileFormWithoutPasswords(**kwargs)
             PF = ProfileForm(**bank_upd)
             if NF.is_valid() and PF.is_valid():
+                NF.save(commit=True)
+
+
+
+                print(NF.cleaned_data)
                 NF.save()
                 PF.save()
-                cur_level = messages.set_level(self.request, 3)
-                messages.add_message(self.request, 3, f'Данные пользователя "{self.request.user}" успешно обновлены.',extra_tags='users_update')
+                messages.success(self.request, f'Данные пользователя "{usernamex}" успешно обновлены!', extra_tags='users_update_tag')
+            else:
+
+                messages.error(self.request, NF.errors, extra_tags='users_update_tag')
+            print(NF.errors)
+            print(PF.errors)
             return redirect(reverse('users_update'))
         else:
                 NF = register_new_user_form()
                 PF = ProfileForm(self.request.POST)
+                BF = tuple((z1, f'{z1} - {z2}') for z1, z2 in bankbase.objects.all().values_list('CODE', 'LONGNAME'))
+                cur_level = messages.set_level(self.request, 3)
+                messages.error(self.request, NF.errors, extra_tags='error')
         return render(self.request, 'users/users_edit.html',
-                          {'PF': PF, 'title': 'Добро пожаловать', 'UserSet': UserSet})
+                          {'PF': PF, 'BF': BF, 'title': 'Добро пожаловать', 'UserSet': UserSet})
 
 
 '''
@@ -172,6 +236,8 @@ class CreateUserRights(FormView):
     success_url = '/'
     def get(self, request):
         UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
+        request.session['USER_current_path'] = CurrentBar.ShowCurrentPathBar(request, UserSet)
+
         if not CheckUserRights.check_user_permissions(self,UserSet, 'users_edit'):
             return redirect(reverse('logout'))
         RF = RegisterForm()
@@ -189,6 +255,8 @@ class CreateUserRights(FormView):
 
     def post(self,request):
         UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
+        request.session['USER_current_path'] = CurrentBar.ShowCurrentPathBar(request, UserSet)
+
         if not CheckUserRights.check_user_permissions(self,UserSet, 'users_rights'):
             return redirect(reverse('logout'))
 
@@ -219,6 +287,9 @@ class UsersSessionSettings(FormView):
 
      def get(self, request):
          UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
+         request.session['USER_current_path'] = CurrentBar.ShowCurrentPathBar(request, UserSet)
+
+
          UF = tuple((z1, f'{z2} {z3}') for z1, z2, z3 in get_user_model().objects.values_list('id', 'first_name', 'last_name'))
          CF = get_users_data_form(auto_id='id_upd_%s')
          try:
@@ -264,6 +335,8 @@ class UsersSessionSettings(FormView):
 
      def post(self, request):
         UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
+        request.session['USER_current_path'] = CurrentBar.ShowCurrentPathBar(request, UserSet)
+
         kwargs_upd={}
         kwargs_upd["data"] = {'old_password': self.request.POST.get('old_password'), 'new_password1': self.request.POST.get('new_password1'), 'new_password2': self.request.POST.get('new_password2'),'id': self.request.user.id}
         form = PasswordChangeForm(request.user, **kwargs_upd)
@@ -272,7 +345,8 @@ class UsersSessionSettings(FormView):
                 if form.is_valid():
                     user = form.save()
                     update_session_auth_hash(self.request, user)
-                    messages.success(request,'Пароль успешно обновлен!',extra_tags='success')
+                    messages.success(self.request,'Пароль успешно обновлен!',extra_tags='success')
+
                     return redirect(reverse('users_session_settings'))
 
                 else:
@@ -284,6 +358,96 @@ class UsersSessionSettings(FormView):
             messages.error(self.request,form.errors,extra_tags='error')
             return render(self.request, 'users/users_settings.html',
                           {'title': 'Добро пожаловать', 'UserSet': UserSet, 'CF': form})
+
+
+
+
+class UsersMessagess(FormView):
+     template_name = 'users/users_messagess.html'
+     form_class = RegisterForm
+     success_url = '/'
+
+     def get(self, request):
+         UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
+         request.session['USER_current_path'] = CurrentBar.ShowCurrentPathBar(request, UserSet)
+
+
+         UF = tuple((z1, f'{z2} {z3}') for z1, z2, z3 in get_user_model().objects.values_list('id', 'first_name', 'last_name'))
+         CF = get_users_data_form(auto_id='id_upd_%s')
+         try:
+               user_id=str(request.GET.get('userid',None))
+               if (user_id != 'None'):
+                    if get_user_model().objects.filter(id__iexact=user_id).exists():
+                           datax = tuple(get_user_model().objects.filter(id__iexact=user_id).values('id', 'username', 'first_name',
+                                                                                                    'last_name', 'email',
+                                                                                                    'is_active'))[0]
+                           datax_profile = tuple(Profile.objects.filter(user_id=user_id).values('user_id', 'bankid_FK'))[0]
+                           context = {
+                               'is_checked': 1,
+                               'id': datax["id"],
+                               'username': datax["username"],
+                               'first_name': datax["first_name"],
+                               'last_name': datax["last_name"],
+                               'email': datax["email"],
+                               'is_active': datax["is_active"],
+                               'bankid_FK': datax_profile["bankid_FK"],
+                           }
+                           return JsonResponse(context, status=200)
+                    else:
+                           context = {
+                               'is_checked': 0,
+                               'message': 'Sorry buddy :), try to hack me next time'
+                           }
+                           return JsonResponse(context, status=400)
+
+               else:
+                    return render(self.request, 'users/users_messagess.html',
+                             {'title': 'Добро пожаловать', 'UserSet': UserSet, 'CF': CF})
+
+         except Exception as err:
+                print(f'ERROR: {err}')
+                context = {
+                    'is_checked': 0,
+                    'message': 'Sorry buddy :), try to hack me next time'
+                }
+                return render(self.request, 'users/users_messagess.html',
+                      {'title': 'Добро пожаловать', 'context': context, 'UserSet': UserSet, 'CF': CF})
+
+
+
+     def post(self, request):
+        UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
+        request.session['USER_current_path'] = CurrentBar.ShowCurrentPathBar(request, UserSet)
+
+        kwargs_upd={}
+        kwargs_upd["data"] = {'old_password': self.request.POST.get('old_password'), 'new_password1': self.request.POST.get('new_password1'), 'new_password2': self.request.POST.get('new_password2'),'id': self.request.user.id}
+        form = PasswordChangeForm(request.user, **kwargs_upd)
+        print(form.errors)
+        if request.method == 'POST':
+                if form.is_valid():
+                    user = form.save()
+                    update_session_auth_hash(self.request, user)
+                    messages.success(self.request,'Пароль успешно обновлен!',extra_tags='success')
+
+                    return redirect(reverse('users_session_settings'))
+
+                else:
+                    CF = PasswordChangeForm(self.request.user)
+                    messages.error(self.request,form.errors,extra_tags='error')
+                    return redirect(reverse('users_session_settings'))
+        else:
+            CF = PasswordChangeForm(self.request.user)
+            messages.error(self.request,form.errors,extra_tags='error')
+            return render(self.request, 'users/users_settings.html',
+                          {'title': 'Добро пожаловать', 'UserSet': UserSet, 'CF': form})
+
+
+
+
+
+
+
+
 
 
 '''
@@ -313,6 +477,8 @@ class CRUDController(FormView):
             print(z)
 
         UserSet = View_UserSet.objects.filter(username__exact=self.request.user)
+        request.session['USER_current_path'] = CurrentBar.ShowCurrentPathBar(request, UserSet)
+
         if not CheckUserRights.check_user_permissions(self,UserSet, 'users_rights'):
             return redirect(reverse('logout'))
 
@@ -624,6 +790,8 @@ def user_login(request):
         user = authenticate(request, username=username1, password=password)
         if user is not None and user.is_active:
             login(request, user)
+            request.session['USER_name']=request.user.get_full_name()
+            request.session['USER_avatar'] = f"{settings.MEDIA_URL}/{Profile.objects.filter(user__exact=str(request.user.id)).values('avatar')[0]['avatar'] or None}"
             return redirect('/')
         else:
             messages.error(request,'Неправильно введен логин или пароль. Повторите попытку!')
@@ -650,6 +818,7 @@ Main page
 def mainpage(request):
 
     UserSet=View_UserSet.objects.filter(username__exact=request.user)
+    request.session['USER_current_path'] = CurrentBar.ShowCurrentPathBar(request, UserSet)
 
     return render(request, 'login.html', { 'title': 'Добро пожаловать','UserSet':UserSet})
 

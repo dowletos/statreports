@@ -15,58 +15,6 @@
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 
 
-<style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-
-      .b-example-divider {
-        height: 3rem;
-        background-color: rgba(0, 0, 0, .1);
-        border: solid rgba(0, 0, 0, .15);
-        border-width: 1px 0;
-        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-      }
-
-      .b-example-vr {
-        flex-shrink: 0;
-        width: 1.5rem;
-        height: 100vh;
-      }
-
-      .bi {
-        vertical-align: -.125em;
-        fill: currentColor;
-      }
-
-      .nav-scroller {
-        position: relative;
-        z-index: 2;
-        height: 2.75rem;
-        overflow-y: hidden;
-      }
-
-      .nav-scroller .nav {
-        display: flex;
-        flex-wrap: nowrap;
-        padding-bottom: 1rem;
-        margin-top: -1px;
-        overflow-x: auto;
-        text-align: center;
-        white-space: nowrap;
-        -webkit-overflow-scrolling: touch;
-      }
-    </style>
 
 
     <!-- Custom styles for this template -->
@@ -101,7 +49,7 @@
 <main>
 
 
-
+<body>
 
 
   <header class="py-3 mb-3 border-bottom">
@@ -138,16 +86,18 @@
 
         <div class="dropdown" style="windth:10%">
 
-         <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            <img  src="{% static 'images/profile.png' %}" alt="mdo" width="32" height="32" class="rounded-circle">&nbsp;&nbsp<strong>
-           {{ user.first_name }} {{ user.last_name}}   </strong>&nbsp;&nbsp
+         <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="true">
+            <img  src="{{ request.session.USER_avatar }}" alt="mdo" width="32" height="32" class="rounded-circle">&nbsp;&nbsp<strong>
+           {{ request.session.USER_name }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>&nbsp;&nbsp
           </a>
           <ul class="dropdown-menu text-small shadow">
-            <li><a class="dropdown-item" href="{% url 'users_session_settings' %}">Профиль / Замена пароля</a></li>
+            <li><a class="dropdown-item" href="{% url 'users_session_settings' %}">Профиль</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="{% url 'logout' %}">Выход</a></li>
           </ul>
         </div>
+
+
       </div>
     </div>
   </nav>
@@ -158,14 +108,13 @@
     </div>
   </header>
 
-  <div class="container-fluid pb-3">
+  <div class="container-fluid pb-3" >
 
         <div class="bd-example" style="border:0px solid red; height:30px; margin-left:5px;margin-top:-10px">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item active">Главная</li>
-            <li class="breadcrumb-item active" aria-current="page">Профиль</li>
-            <li class="breadcrumb-item active" >Настройки</li>
+            <li class="breadcrumb-item active">{{ request.session.USER_current_path }}</li>
+
 
           </ol>
         </nav>
@@ -190,12 +139,12 @@
 
           {% ifchanged val.categoryTitle %}
             {% if not forloop.first %} </ul></div></li> {% endif %}
-        {% if val.categoryTitle == "Настройки :" %}<li class="border-top my-3"></li> {% endif %}
+        {% if val.categoryTitle == "Настройки" %}<li class="border-top my-3"></li> {% endif %}
       <li class="mb-1">
               <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#{{ val.rowidn }}-collapse" aria-expanded="true">
               {{ val.categoryTitle }}
               </button>
-                   <div class='collapse {% if val.categoryTitle == "Настройки :" %} show {% endif %}' id="{{ val.rowidn }}-collapse">
+                   <div class='collapse {% if val.categoryTitle == "Настройки" %} show {% endif %}' id="{{ val.rowidn }}-collapse">
                       <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                           <li><a href="{{ val.subCategoryLink }}" class="link-dark d-inline-flex text-decoration-none rounded">{{ val.subCategoryTitle }}</a></li>
           {% else %}

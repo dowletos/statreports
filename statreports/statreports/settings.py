@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import datetime
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -75,6 +76,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media'
             ],
         },
     },
@@ -135,8 +137,11 @@ STATICFILES_DIRS=[
 os.path.join(BASE_DIR,'statreports/static')
 ]
 
+
+
+
 MEDIA_URL='/uploads/'
-MEDIA_ROOT=os.path.join(BASE_DIR,'uploads/')
+MEDIA_ROOT=os.path.join(BASE_DIR,f'uploads/')
 
 
 # Default primary key field type

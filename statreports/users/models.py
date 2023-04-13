@@ -1,7 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User
+import os
+import uuid
+from datetime import *
+import hashlib
+import random
+import string
 from PIL import Image
+from django.contrib.auth.models import User
 
+
+User._meta.get_field('email')._unique = True
 
 class subCategory(models.Model):
     subCategoryID = models.BigAutoField(primary_key=True, verbose_name='ID')
@@ -116,12 +125,29 @@ class View_UserSet(models.Model):
         db_table = "navigation_menu"
         ordering = ['subCategorySort']
 
+def get_random_string(length):
+    # With combination of lower and upper case
+    return ''.join(random.choice(string.ascii_letters+string.digits) for i in range(length))
+    # print random string
 
 
+
+def unique_file_path(instance, filename):
+    # Save original file name in model
+    instance.original_file_name = filename
+    today = date.today()
+    dt = datetime.now()
+
+    tmp_fname=hashlib.md5(f'{datetime.timestamp(dt)}{get_random_string(25)}'.encode())
+
+    # Get new file name/upload path
+    base, ext = os.path.splitext(filename)
+    newname = "%s_%s_%s%s" % (today.strftime("%Y_%m_%d_"),get_random_string(5),tmp_fname.hexdigest(), ext)
+    return os.path.join(today.strftime("%Y/%m/%d"), newname)
 
 class Profile(models.Model):
     bankid_FK = models.TextField(max_length=90, blank=True)
-    avatar = models.ImageField(upload_to='uploads',default=f'%d %m %y/profile.png')
+    avatar = models.ImageField(upload_to=unique_file_path,default='avatar.png')
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 

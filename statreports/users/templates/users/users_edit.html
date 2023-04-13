@@ -1,7 +1,24 @@
 {% extends "modules.html" %}
 {% load static %}
 {% block content %}
-    <div class="bd-example-snippet bd-code-snippet"><div class="bd-example">
+
+       <link rel="stylesheet" href="{% static 'css/bootstrap-select.css' %}" />
+        <script src="{% static 'js/bootstrap-select.js' %}"></script>
+
+        <style>
+        div.dropdown-menu.open{
+          max-height: 314px !important;
+          overflow: hidden;
+        }
+        ul.dropdown-menu.inner{
+          max-height: 260px !important;
+          overflow-y: auto;
+        }
+        </style>
+
+
+
+    <div class="bd-example-snippet bd-code-snippet" ><div class="bd-example" >
         <nav>
           <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
             <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Создание нового пользователя</button>
@@ -19,25 +36,43 @@
 
         <div class="bd-example-snippet bd-code-snippet"><div class="bd-example">
         {% if messages %}
-        {% for message in messages %}
-            {% if message.tags in 'users_edit' %}
-              <div class="alert alert-success alert-dismissible fade show" role="alert">
-          {{ message }}
+              {% for message in messages %}
+              {% if 'users_register' in message.tags %}
+
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {% endif %}
+                {{ message }}
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-            {% endif %}
-        {% endfor %}
+
+
+              {% endif %}
+              {% endfor %}
         {% endif %}
-         <div class="center">
+         <div class="center ">
 	  <form method="POST" novaldiate enctype="multipart/form-data" action="{% url 'users_edit' %}"  >
 	  	{% csrf_token %}
-          <center><p class="display-6">Регистрация нового пользователя</p></center>
+          <center><p class="display-6" style="margin:0px">Регистрация нового пользователя</p></center>
 		{% for field in form %}
           {% if field.name == 'is_active' %}
           <div class="col-12"><br>
           <div class="mb-3 form-check form-switch">
               <label class="form-check-label" for="{{ field.name }}">{{ field.label }}</label>
             <input class="form-check-input" type="checkbox" name="{{ field.name }}" role="switch" id="{{ field.name }}" >
+          </div>
+
+              {% if field.errors %}
+	        		<small class="error" style="color:red;font-size:15pt">{{ field.errors|striptags  }}</small><br>
+	        	{% endif %}
+            </div>
+          {% elif field.name == 'bankid_FK' %}
+          <div class="col-12">
+          <div class="">
+               <label class="form-check-label" for="{{ field.name }}">{{ field.label }}</label>
+              <div class="form-select" id="id_for_bankid_FK" name="name_for_bankid_FK" style="margin:0px"></div>
           </div>
 
               {% if field.errors %}
@@ -86,40 +121,36 @@
       <div >
 
         <div class="bd-example-snippet bd-code-snippet"><div class="bd-example">
-        {% if messages %}
-        {% for message in messages %}
 
-            {% if message.tags in 'users_update' %}
+              {% if messages %}
+              {% for message in messages %}
+              {% if 'users_update_tag' in message.tags %}
 
-             <script>
-                $(document).ready(function() {
-                $('#nav-profile-tab').click();
-                });
-             </script>
+                                                                                                 <script>
+                                                                                                    $(document).ready(function() {
+                                                                                                    $('#nav-profile-tab').click();
+                                                                                                    });
+                                                                                                 </script>
 
-              <div class="alert alert-success alert-dismissible fade show" role="alert">
-            Данные пользователя успешно обновлены!
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-            {% endif %}
-        {% endfor %}
-        {% endif %}
+                                                                                                  {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                                                                                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                                                                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                                                                                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                                                                    {% endif %}
+                                                                                              {{ message }}
+                                                                                              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                                                            </div>
+                                                                                            {% endif %}
+                                                                                            {% endfor %}
+                                                                                            {% endif %}
+
+
          <div class="center">
 
-             <center><p class="display-6">Редактирование данных пользователя</p></center>
-          <div class="col-12"><br>
-
-          <select name="username" class="form-select is-valid" required="" id="upd_username">
-          <option value="" selected="">---------</option>
-
-		  {% for f1,f2 in UF %}
-          <option value="{{ f1 }}">{{ f2}}</option>
+         <table width="100%" style="margin-bottom:5pt"><td align="right" style="width:50%;"><p class="display-6" >Профиль пользователя</p></td><td style="width:10%">&nbsp</td></td><td align="left"><a href="{{ MEDIA_URL }}/avatar.png"><img src="{{ MEDIA_URL }}/avatar.png" align=left class="rounded" alt="Cinque Terre" width="100" height="100" id="user_profile_photo" name="user_profile_photo"></a></td></table>
+           <div class="" id="upd_username_div"></div>
 
 
-
-
-		  {% endfor %}
-          </select>
               <small class="error" style="color:red;font-size:13pt" id="id_upd_user_errorform"></small>
               <br>
 
@@ -141,6 +172,17 @@
               <label class="form-check-label" for="{{ field.name }}">{{ field.label }}</label>
             <input class="form-check-input" type="checkbox" name="{{ field.name }}" role="switch" id="{{ field.id_for_label }}" >
           </div>
+              {% if field.errors %}
+	        		<small class="error" style="color:red;font-size:15pt">{{ field.errors|striptags  }}</small><br>
+	        	{% endif %}
+            </div>
+          {% elif field.name == 'bankid_FK' %}
+          <div class="col-12">
+          <div class="">
+               <label class="form-check-label" for="{{ field.name }}">{{ field.label }}</label>
+              <div class="form-select" id="id_upd_for_bankid_FK" name="name_upd_for_bankid_FK" style="margin:0px"></div>
+          </div>
+
               {% if field.errors %}
 	        		<small class="error" style="color:red;font-size:15pt">{{ field.errors|striptags  }}</small><br>
 	        	{% endif %}
@@ -169,15 +211,74 @@
 
              {% block javascript %}
   <script>
-  $('#upd_username').change(function () {
-    // создаем AJAX-вызов
+
+
+
+                                                                    $(document).ready(function(){
+                                                                        var count = 0;
+                                                                        function add_input_user_field(count)
+                                                                        {
+                                                                            var html = '';
+
+                                                                            html += '<select class="selectpicker form-control is-valid" id="upd_username" name="username" data-live-search="true" title="Выберите пользователя" data-hide-disabled="true" required="" ><option value="">Выберите пользователя</option>';
+                                                                            html += '{% for i,v in UF %}<option value="{{ i }}">{{ v }}</option>{% endfor %}';
+                                                                            html+='</select></td>';
+                                                                            return html;
+                                                                        }
+
+                                                                        function add_bankid_FK_field(count)
+                                                                        {
+                                                                            var html = '';
+
+                                                                            html += '<select class="selectpicker form-control" id="id_bankid_FK" name="bankid_FK" data-live-search="true" title="Выберите банк" data-hide-disabled="true" required="" ><option value="">Выберите банк</option>';
+                                                                            html += '{% for i,v in BF %}<option value="{{ i }}">{{ v }}</option>{% endfor %}';
+                                                                            html+='</select></td>';
+                                                                            return html;
+                                                                        }
+
+                                                                         function add_upd_bankid_FK_field(count)
+                                                                        {
+                                                                            var html = '';
+
+                                                                            html += '<select class="selectpicker form-control" id="id_upd_bankid_FK" name="bankid_FK" data-live-search="true" title="Выберите банк" data-hide-disabled="true" required="" ><option value="">Выберите банк</option>';
+                                                                            html += '{% for i,v in BF %}<option value="{{ i }}">{{ v }}</option>{% endfor %}';
+                                                                            html+='</select></td>';
+                                                                            return html;
+                                                                        }
+
+                                                                        $('#upd_username_div').append(add_input_user_field(0));
+                                                                        $('#id_for_bankid_FK').append(add_bankid_FK_field(0));
+                                                                        $('#id_upd_for_bankid_FK').append(add_upd_bankid_FK_field(0));
+                                                                        $('.selectpicker').selectpicker('refresh');
+
+                                                                    });
+
+
+
+
+
+  $('#upd_username_div').change(function () {
+    if ($('#upd_username').children("option:selected").val()=="") {
+               $('#id_upd_id').val('')
+               $('#id_upd_username').val('')
+               $('#id_upd_first_name').val('')
+               $('#id_upd_last_name').val('')
+               $('#id_upd_email').val('')
+               $('#user_profile_photo').attr('src', {{ MEDIA_URL }}+'/avatar.png')
+               $('#id_upd_bankid_FK').selectpicker('val','')
+               $('#id_upd_password1').val('')
+               $('#id_upd_password2').val('')
+               $('#id_upd_is_active').removeAttr('checked')
+
+    return false;
+    }
+
     $.ajax({
         data: $(this).serialize(), // получаяем данные формы
         url: "{% url 'check_usersinfo' %}",
         data: {
                'userid':  $('#upd_username').children("option:selected").val()
                },
-        // если успешно, то
         success: function (response) {
 
             if (response.is_checked == 1) {
@@ -196,8 +297,12 @@
                {
                     $('#id_upd_is_active').removeAttr('checked')
                }
-               $('#id_upd_bankid_FK').val(response.bankid_FK)
+               $('#user_profile_photo').attr('src', {{ MEDIA_URL }}+'/'+response.avatar)
+
+               $('#id_upd_bankid_FK').selectpicker('val',response.bankid_FK);
+
                $('#id_upd_user_errorform').empty()
+
 
               }
             else {

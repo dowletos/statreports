@@ -32,7 +32,7 @@
 
 
 
-                                                                     <center><p class="display-6">Профиль пользователя</p></center>
+                                        <table width="100%" ><td align="right" style="width:50%;"><p class="display-6" >Профиль пользователя</p></td><td style="width:10%">&nbsp</td></td><td align="left"><a href="{{ request.session.USER_avatar }}"><img src="{{ request.session.USER_avatar }}" align=left class="rounded-circle" alt="Cinque Terre" width="100" height="100"></a></td></table>
 
 
 
@@ -41,7 +41,7 @@
                                                                                             {% for message in messages %}
 
 
-                                                                                                  <div class="alert alert-{% if 'error' in message.tags %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                                                                                                  <div class="alert alert-{% if 'users_register_error' in message.tags %}danger{% else %}success{% endif %} alert-dismissible fade show" role="alert">
                                                                                               {{ message }}
                                                                                               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                                                                             </div>
@@ -51,6 +51,8 @@
 
 
                                                                                      <div class="center">
+
+
                                                                                     <form method="POST" novaldiate enctype="multipart/form-data" action="{% url 'users_session_settings' %}"  >
                                                                                       {% csrf_token %}
 
