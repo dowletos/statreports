@@ -14,6 +14,8 @@
           max-height: 260px !important;
           overflow-y: auto;
         }
+
+
         </style>
 
 
@@ -52,7 +54,7 @@
               {% endif %}
               {% endfor %}
         {% endif %}
-         <div class="center ">
+         <div class="center">
 	  <form method="POST" novaldiate enctype="multipart/form-data" action="{% url 'users_edit' %}"  >
 	  	{% csrf_token %}
           <center><p class="display-6" style="margin:0px">Регистрация нового пользователя</p></center>

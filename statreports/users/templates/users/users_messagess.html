@@ -3,7 +3,8 @@
 {% block content %}
 
 
-
+ <link rel="stylesheet" href="{% static 'css/bootstrap-select.css' %}" />
+        <script src="{% static 'js/bootstrap-select.js' %}"></script>
 
 
   <link rel="stylesheet" href="{% static 'css/sidebars.css' %}" />
@@ -12,7 +13,7 @@
  <div class="bd-example-snippet bd-code-snippet"><div class="bd-example">
                         <nav>
                               <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
-                                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Профиль пользователя</button>
+                                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Входящие сообщения</button>
 
                               </div>
                         </nav>
@@ -102,10 +103,9 @@
 
 
   <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
-    <a href="/" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
 
-      <span class="fs-5 fw-semibold">Фильтр писем:</span>
-    </a>
+       <div class="" id="div_filter_message_picker" style="width:100%;margin:0px"></div><hr>
+
     <div class="list-group list-group-flush border-bottom scrollarea">
       <a href="#" class="list-group-item list-group-item-action active py-3 lh-sm" aria-current="true">
         <div class="d-flex w-100 align-items-center justify-content-between">
@@ -157,45 +157,11 @@
         </div>
         <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
       </a>
-      <a href="#" class="list-group-item list-group-item-action py-3 lh-sm">
-        <div class="d-flex w-100 align-items-center justify-content-between">
-          <strong class="mb-1">List group item heading</strong>
-          <small class="text-muted">Tues</small>
-        </div>
-        <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-      </a>
-      <a href="#" class="list-group-item list-group-item-action py-3 lh-sm">
-        <div class="d-flex w-100 align-items-center justify-content-between">
-          <strong class="mb-1">List group item heading</strong>
-          <small class="text-muted">Mon</small>
-        </div>
-        <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-      </a>
-      <a href="#" class="list-group-item list-group-item-action py-3 lh-sm" aria-current="true">
-        <div class="d-flex w-100 align-items-center justify-content-between">
-          <strong class="mb-1">List group item heading</strong>
-          <small class="text-muted">Wed</small>
-        </div>
-        <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-      </a>
-      <a href="#" class="list-group-item list-group-item-action py-3 lh-sm">
-        <div class="d-flex w-100 align-items-center justify-content-between">
-          <strong class="mb-1">List group item heading</strong>
-          <small class="text-muted">Tues</small>
-        </div>
-        <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-      </a>
-      <a href="#" class="list-group-item list-group-item-action py-3 lh-sm">
-        <div class="d-flex w-100 align-items-center justify-content-between">
-          <strong class="mb-1">List group item heading</strong>
-          <small class="text-muted">Mon</small>
-        </div>
-        <div class="col-10 mb-1 small">Some placeholder content in a paragraph below the heading and date.</div>
-      </a>
+
     </div>
   </div>
 
-
+<div class="b-example-divider b-example-vr"></div>
 </main>
 
 
@@ -236,5 +202,25 @@
 
 
 
+
+
+                                                                    <script>
+                                                                    $(document).ready(function(){
+                                                                        var count = 0;
+                                                                        function add_input_user_field(count)
+                                                                        {
+                                                                            var html = '';
+
+                                                                            html += '<select class="selectpicker form-control is-valid" id="id_filter_message_picker" name="name_filter_message_picker" data-live-search="true" title="Поиск сообщения" data-hide-disabled="true" required="" ><option value="">Фильтр сообщений</option>';
+                                                                            html += '{% for i,v in UF %}<option value="{{ i }}">{{ v }}</option>{% endfor %}';
+                                                                            html+='</select></td>';
+                                                                            return html;
+                                                                        }
+
+                                                                        $('#div_filter_message_picker').append(add_input_user_field(0));
+                                                                        $('.selectpicker').selectpicker('refresh');
+
+                                                                    });
+                                                                    </script>
 
 {% endblock content%}
